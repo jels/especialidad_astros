@@ -1,0 +1,37 @@
+:host {
+  display: block;
+}
+
+.scene-zenith {
+  background-color: #040713;
+  background-image:
+    radial-gradient(1px 1px at 14% 16%, rgba(255, 255, 255, 0.4), transparent),
+    radial-gradient(1.3px 1.3px at 36% 48%, rgba(255, 255, 255, 0.45), transparent),
+    radial-gradient(1px 1px at 64% 14%, rgba(255, 255, 255, 0.4), transparent),
+    radial-gradient(1px 1px at 80% 38%, rgba(196, 181, 253, 0.45), transparent),
+    radial-gradient(1px 1px at 22% 44%, rgba(103, 232, 249, 0.4), transparent),
+    linear-gradient(180deg, #060b1b, #02050d);
+  background-size: 300px 260px, 380px 340px, 440px 400px, 500px 460px, 340px 320px, 100% 100%;
+}
+
+.mini-btn {
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.04);
+  padding: 0.3rem 0.65rem;
+  font-size: 0.6rem;
+  font-weight: 600;
+  color: #94a3b8;
+  transition: all 0.2s ease;
+}
+
+.mini-btn:hover {
+  border-color: rgba(94, 234, 212, 0.35);
+  color: #ccfbf1;
+}
+
+.mini-on {
+  border-color: rgba(94, 234, 212, 0.45);
+  background: rgba(45, 212, 191, 0.12);
+  color: #ccfbf1;
+}

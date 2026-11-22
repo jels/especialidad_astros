@@ -1,0 +1,335 @@
+<section id="sistema-solar" class="section-shell">
+  <div class="wrap">
+    <div class="grid items-end gap-6 lg:grid-cols-[1.4fr_0.6fr]" appReveal>
+      <div>
+        <div class="flex flex-wrap items-center gap-2.5">
+          <span class="mission-tag border-orange-300/25 bg-orange-400/10 text-orange-200">Misión 06 · Punto 4</span>
+          <span class="chip">🪐 Mapa orbital</span>
+        </div>
+        <h2 class="section-title mt-5">
+          Ocho vecinos,<br class="hidden sm:block" />
+          una misma <span class="grad-text-warm">estrella</span>.
+        </h2>
+        <p class="section-lede">
+          Nuestro barrio cósmico tiene ocho planetas, una estrella enorme y millones de rocas.
+          Toca cada planeta para conocerlo y apréndete el orden desde el Sol.
+        </p>
+      </div>
+      <div class="glass hidden p-4 lg:block">
+        <p class="text-[10px] font-bold tracking-[0.2em] text-slate-500 uppercase">La consigna</p>
+        <p class="mt-2 text-sm leading-relaxed text-slate-300">
+          Diagrama del sistema solar y planetas en orden.
+        </p>
+        <p class="mt-2 text-xs leading-relaxed text-slate-500">Pista: Mercurio abre la fila.</p>
+      </div>
+    </div>
+
+    <div class="mt-10 grid gap-5 lg:grid-cols-[1.35fr_0.65fr]">
+      <!-- Orrery -->
+      <div class="glass overflow-hidden" appReveal>
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 px-4 py-4 sm:px-5">
+          <div>
+            <p class="text-[10px] font-bold tracking-[0.18em] text-orange-300 uppercase">Mapa orbital interactivo</p>
+            <p class="mt-1 text-xs text-slate-500">Toca un planeta. Tamaños y distancias no a escala.</p>
+          </div>
+          <button
+            type="button"
+            (click)="togglePlay()"
+            class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3.5 py-2 text-[10px] font-semibold text-slate-300 transition-colors hover:border-orange-300/40 hover:text-orange-200"
+          >
+            {{ playing() ? '⏸ Pausar órbitas' : '▶ Mover órbitas' }}
+          </button>
+        </div>
+
+        <div class="scene-system relative overflow-hidden">
+          <div class="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_10%_50%,rgba(251,191,36,.12),transparent_38%),radial-gradient(ellipse_at_70%_50%,rgba(139,92,246,.07),transparent_55%)]"></div>
+          <svg viewBox="0 0 1000 650" class="relative h-auto w-full" role="img" aria-label="Diagrama interactivo del sistema solar con los ocho planetas en orden">
+            <defs>
+              <radialGradient id="sunSystem" cx="40%" cy="35%" r="70%">
+                <stop offset="0" stop-color="#fffbeb" />
+                <stop offset=".42" stop-color="#fde047" />
+                <stop offset=".78" stop-color="#f59e0b" />
+                <stop offset="1" stop-color="#ea580c" />
+              </radialGradient>
+              <filter id="sunSystemGlow" x="-80%" y="-80%" width="260%" height="260%">
+                <feGaussianBlur stdDeviation="16" result="b" />
+                <feMerge>
+                  <feMergeNode in="b" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+              <filter id="planetSoft" x="-60%" y="-60%" width="220%" height="220%">
+                <feGaussianBlur stdDeviation="3" result="b" />
+                <feMerge>
+                  <feMergeNode in="b" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+              @for (planet of planets; track planet.id) {
+                <radialGradient [attr.id]="planet.id + 'Grad'" cx="35%" cy="30%" r="75%">
+                  <stop offset="0" [attr.stop-color]="planet.palette[0]" />
+                  <stop offset=".55" [attr.stop-color]="planet.palette[1]" />
+                  <stop offset="1" [attr.stop-color]="planet.palette[2]" />
+                </radialGradient>
+              }
+            </defs>
+
+            <!-- Estrellas -->
+            <g fill="#e2e8f0" opacity=".55">
+              <circle cx="120" cy="70" r="1.3" class="animate-twinkle" />
+              <circle cx="300" cy="100" r="1" />
+              <circle cx="580" cy="55" r="1.4" class="animate-twinkle [animation-delay:1s]" />
+              <circle cx="850" cy="110" r="1.2" />
+              <circle cx="920" cy="520" r="1.3" class="animate-twinkle [animation-delay:.5s]" />
+              <circle cx="480" cy="560" r="1.1" />
+              <circle cx="210" cy="480" r="1" />
+              <circle cx="700" cy="600" r="1.2" />
+            </g>
+
+            <!-- Órbitas -->
+            @for (planet of planets; track planet.id) {
+              <path
+                [attr.d]="orbitPath(planet)"
+                fill="none"
+                [attr.stroke]="selectedId() === planet.id ? 'rgba(103,232,249,.55)' : 'rgba(255,255,255,.12)'"
+                [attr.stroke-width]="selectedId() === planet.id ? 1.6 : 1"
+                stroke-dasharray="2 7"
+              />
+            }
+
+            <!-- Cinturón de asteroides -->
+            @for (dot of belt; track $index) {
+              <circle [attr.cx]="dot.x" [attr.cy]="dot.y" [attr.r]="dot.r" fill="rgba(203,213,225,.3)" />
+            }
+
+            <!-- Sol -->
+            <circle [attr.cx]="sun.x" [attr.cy]="sun.y" r="92" fill="#fbbf24" opacity=".09" class="animate-pulse-soft" />
+            <circle [attr.cx]="sun.x" [attr.cy]="sun.y" r="58" fill="url(#sunSystem)" filter="url(#sunSystemGlow)" />
+            <circle [attr.cx]="sun.x - 18" [attr.cy]="sun.y - 18" r="16" fill="#fffbeb" opacity=".25" />
+            <text [attr.x]="sun.x" [attr.y]="sun.y + 92" text-anchor="middle" fill="rgba(253,224,71,.8)" font-size="17" font-weight="600" letter-spacing="3" font-family="Space Grotesk, sans-serif">SOL</text>
+
+            <!-- Planetas -->
+            @for (b of bodies(); track b.id; let i = $index) {
+              <g
+                class="cursor-pointer"
+                (click)="selectPlanet(b.id)"
+                (keydown.enter)="selectPlanet(b.id)"
+                tabindex="0"
+                role="button"
+                [attr.aria-label]="'Ver información de ' + b.name"
+              >
+                <title>{{ b.name }}</title>
+                <circle [attr.cx]="b.x" [attr.cy]="b.y" [attr.r]="b.viewR + 12" fill="transparent" />
+                <circle
+                  [attr.cx]="b.x"
+                  [attr.cy]="b.y"
+                  [attr.r]="b.viewR + 7"
+                  fill="none"
+                  stroke="#67e8f9"
+                  stroke-width="1.2"
+                  [attr.opacity]="selectedId() === b.id ? 0.85 : 0"
+                  class="animate-pulse"
+                />
+                <circle [attr.cx]="b.x" [attr.cy]="b.y" [attr.r]="b.viewR + 3" [attr.fill]="b.palette[1]" opacity=".12" />
+                @if (b.ring) {
+                  <g [attr.transform]="'rotate(-22 ' + b.x + ' ' + b.y + ')'" opacity=".65">
+                    <ellipse
+                      [attr.cx]="b.x"
+                      [attr.cy]="b.y"
+                      [attr.rx]="b.viewR * 2.05"
+                      [attr.ry]="b.viewR * 0.58"
+                      fill="none"
+                      [attr.stroke]="b.palette[0]"
+                      stroke-width="2.4"
+                    />
+                    <ellipse
+                      [attr.cx]="b.x"
+                      [attr.cy]="b.y"
+                      [attr.rx]="b.viewR * 1.6"
+                      [attr.ry]="b.viewR * 0.44"
+                      fill="none"
+                      [attr.stroke]="b.palette[0]"
+                      stroke-width="1"
+                      opacity=".7"
+                    />
+                  </g>
+                }
+                <circle [attr.cx]="b.x" [attr.cy]="b.y" [attr.r]="b.viewR" [attr.fill]="'url(#' + b.id + 'Grad)'" filter="url(#planetSoft)" />
+                <circle
+                  [attr.cx]="b.x - b.viewR * 0.25"
+                  [attr.cy]="b.y - b.viewR * 0.25"
+                  [attr.r]="b.viewR * 0.36"
+                  fill="#ffffff"
+                  opacity=".2"
+                />
+                <text
+                  [attr.x]="b.x"
+                  [attr.y]="b.y + b.viewR + 14"
+                  text-anchor="middle"
+                  [attr.fill]="selectedId() === b.id ? 'rgba(255,255,255,.95)' : 'rgba(203,213,225,.6)'"
+                  [attr.font-weight]="selectedId() === b.id ? 600 : 400"
+                  font-size="10"
+                  font-family="Space Grotesk, sans-serif"
+                >{{ b.name }}</text>
+              </g>
+            }
+
+            <!-- Leyenda -->
+            <g font-family="Space Grotesk, sans-serif" font-size="10" fill="rgba(148,163,184,.45)">
+              <circle cx="380" cy="622" r="2" fill="#fbbf24" />
+              <text x="389" y="626">Estrella</text>
+              <circle cx="470" cy="622" r="2" fill="#38bdf8" />
+              <text x="479" y="626">Planetas</text>
+              <circle cx="564" cy="622" r="1.6" fill="#cbd5e1" />
+              <text x="572" y="626">Cinturón de asteroides</text>
+              <text x="755" y="626" fill="rgba(148,163,184,.28)">· no a escala</text>
+            </g>
+          </svg>
+        </div>
+
+        <div class="border-t border-white/10 px-4 py-4 sm:px-5">
+          <div class="flex items-center justify-between gap-3">
+            <p class="text-[10px] font-bold tracking-[0.18em] text-slate-500 uppercase">En orden desde el Sol</p>
+            <p class="hidden text-[10px] text-slate-600 sm:block">Haz clic para explorar</p>
+          </div>
+          <div class="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-4 xl:grid-cols-8">
+            @for (planet of planets; track planet.id; let i = $index) {
+              <button
+                type="button"
+                (click)="selectPlanet(planet.id)"
+                class="flex items-center justify-center gap-1.5 rounded-full border px-2 py-1.5 text-[10px] font-semibold transition-all duration-300"
+                [class.border-cyan-300/50]="selectedId() === planet.id"
+                [class.bg-cyan-300/10]="selectedId() === planet.id"
+                [class.text-white]="selectedId() === planet.id"
+                [class.border-white/10]="selectedId() !== planet.id"
+                [class.bg-white/5]="selectedId() !== planet.id"
+                [class.text-slate-400]="selectedId() !== planet.id"
+              >
+                <span class="text-[9px] text-slate-600">{{ i + 1 }}</span>
+                <span class="h-2 w-2 rounded-full" [style.background]="planet.palette[1]"></span>
+                {{ planet.name }}
+              </button>
+            }
+          </div>
+        </div>
+      </div>
+
+      <!-- Panel del planeta -->
+      <div class="flex flex-col gap-4">
+        <div class="glass overflow-hidden" appReveal>
+          <div
+            class="relative h-28 overflow-hidden"
+            [style.background]="'radial-gradient(circle at 75% 20%, ' + selectedPlanet().palette[1] + '35, transparent 62%)'"
+          >
+            <div class="absolute -right-6 -bottom-12 h-36 w-36 rounded-full opacity-20 blur-xl" [style.background]="selectedPlanet().palette[1]"></div>
+            <div class="absolute top-4 left-4">
+              <p class="text-[9px] font-bold tracking-[0.2em] text-white/50 uppercase">Planeta {{ selectedIndex() + 1 }} de 8</p>
+              <h3 class="font-display mt-1 text-2xl font-semibold text-white">{{ selectedPlanet().name }}</h3>
+              <span class="mt-1.5 inline-flex rounded-full border border-white/15 bg-black/25 px-2.5 py-0.5 text-[9px] font-medium text-slate-300">
+                {{ selectedPlanet().type }}
+              </span>
+            </div>
+            <div
+              class="planet-preview absolute right-7 bottom-4 h-16 w-16 rounded-full"
+              [style.background]="'radial-gradient(circle at 33% 28%, ' + selectedPlanet().palette[0] + ', ' + selectedPlanet().palette[1] + ' 55%, ' + selectedPlanet().palette[2] + ' 100%)'"
+              [class.ringed]="selectedPlanet().ring"
+            ></div>
+          </div>
+
+          <div class="border-t border-white/10 p-4">
+            <div class="grid grid-cols-2 gap-2">
+              <div class="stat-card">
+                <p class="text-[8px] tracking-[0.12em] text-slate-500 uppercase">Diámetro</p>
+                <p class="mt-1 text-[11px] font-semibold text-white">{{ selectedPlanet().diameter }}</p>
+              </div>
+              <div class="stat-card">
+                <p class="text-[8px] tracking-[0.12em] text-slate-500 uppercase">Distancia al Sol</p>
+                <p class="mt-1 text-[11px] font-semibold text-white">{{ selectedPlanet().distance }}</p>
+              </div>
+              <div class="stat-card">
+                <p class="text-[8px] tracking-[0.12em] text-slate-500 uppercase">Un año</p>
+                <p class="mt-1 text-[11px] font-semibold text-white">{{ selectedPlanet().year }}</p>
+              </div>
+              <div class="stat-card">
+                <p class="text-[8px] tracking-[0.12em] text-slate-500 uppercase">Un día</p>
+                <p class="mt-1 text-[11px] font-semibold text-white">{{ selectedPlanet().day }}</p>
+              </div>
+            </div>
+            <div class="mt-2 flex items-center justify-between rounded-xl border border-white/10 bg-white/[0.03] px-3 py-2">
+              <span class="text-[9px] tracking-[0.12em] text-slate-500 uppercase">Lunas conocidas</span>
+              <span class="text-[11px] font-semibold text-white">{{ selectedPlanet().moons }}</span>
+            </div>
+
+            <div class="mt-3 rounded-xl border border-orange-300/15 bg-orange-300/[0.05] p-3">
+              <p class="text-[9px] font-bold tracking-[0.14em] text-orange-300 uppercase">Dato curioso</p>
+              <p class="mt-1.5 text-[11px] leading-relaxed text-slate-400">{{ selectedPlanet().fact }}</p>
+            </div>
+
+            <div class="mt-3 flex items-center justify-between">
+              <button type="button" (click)="moveSelection(-1)" class="nav-planet" aria-label="Planeta anterior">← Anterior</button>
+              <button type="button" (click)="moveSelection(1)" class="nav-planet" aria-label="Planeta siguiente">Siguiente →</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass p-5" appReveal>
+          <p class="text-[10px] font-bold tracking-[0.2em] text-slate-500 uppercase">Truco para recordar</p>
+          <p class="mt-3 font-display text-sm leading-relaxed font-medium text-white">
+            “<span class="text-amber-300">M</span>uy
+            <span class="text-amber-300">V</span>alientes
+            <span class="text-amber-300">T</span>errícolas
+            <span class="text-amber-300">M</span>iran
+            <span class="text-amber-300">J</span>úpiter
+            <span class="text-amber-300">S</span>entados
+            <span class="text-amber-300">U</span>na
+            <span class="text-amber-300">N</span>oche”.
+          </p>
+          <p class="mt-2 text-[10px] leading-relaxed text-slate-500">
+            Mercurio · Venus · Tierra · Marte · Júpiter · Saturno · Urano · Neptuno.
+          </p>
+          <div class="mt-3 flex items-start gap-2 rounded-xl border border-white/10 bg-white/[0.03] p-2.5">
+            <span class="text-xs">🪐</span>
+            <p class="text-[10px] leading-relaxed text-slate-500">
+              Plutón ya no está en la lista: desde 2006 es un <strong class="text-slate-300">planeta enano</strong>.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-5 grid gap-4 sm:grid-cols-3" appReveal>
+      <div class="glass glass-hover p-5">
+        <div class="flex items-center justify-between">
+          <p class="font-display text-2xl font-semibold text-amber-300">99,86 %</p>
+          <span class="text-lg">☀️</span>
+        </div>
+        <p class="mt-1 text-xs font-semibold text-white">de la masa está en el Sol</p>
+        <p class="mt-1.5 text-[11px] leading-relaxed text-slate-500">
+          Todo lo demás —planetas, lunas, asteroides y cometas— se reparte el 0,14 % restante.
+        </p>
+      </div>
+      <div class="glass glass-hover p-5">
+        <div class="flex items-center justify-between">
+          <p class="font-display text-2xl font-semibold text-cyan-300">4 + 4</p>
+          <span class="text-lg">🪐</span>
+        </div>
+        <p class="mt-1 text-xs font-semibold text-white">rocosos y gigantes</p>
+        <p class="mt-1.5 text-[11px] leading-relaxed text-slate-500">
+          Los cuatro cercanos son rocosos. Los cuatro lejanos son gigantes de gas o de hielo, sin
+          superficie sólida para pararse.
+        </p>
+      </div>
+      <div class="glass glass-hover p-5">
+        <div class="flex items-center justify-between">
+          <p class="font-display text-2xl font-semibold text-violet-300">↺</p>
+          <span class="text-lg">🌌</span>
+        </div>
+        <p class="mt-1 text-xs font-semibold text-white">Todos giran en el mismo sentido</p>
+        <p class="mt-1.5 text-[11px] leading-relaxed text-slate-500">
+          Nacieron del mismo disco de polvo y gas hace unos 4.600 millones de años. Salvo Venus y
+          Urano, que tienen inclinaciones raras.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>

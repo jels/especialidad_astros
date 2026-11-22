@@ -1,0 +1,50 @@
+:host {
+  display: block;
+}
+
+.scene-system {
+  background-color: #050816;
+  background-image:
+    radial-gradient(1px 1px at 12% 20%, rgba(255, 255, 255, 0.55), transparent),
+    radial-gradient(1.4px 1.4px at 36% 72%, rgba(255, 255, 255, 0.6), transparent),
+    radial-gradient(1px 1px at 62% 24%, rgba(255, 255, 255, 0.55), transparent),
+    radial-gradient(1px 1px at 84% 62%, rgba(196, 181, 253, 0.55), transparent),
+    radial-gradient(1px 1px at 55% 88%, rgba(103, 232, 249, 0.5), transparent),
+    linear-gradient(180deg, rgba(10, 14, 35, 0.55), rgba(2, 5, 16, 0.94));
+  background-size: 300px 260px, 380px 340px, 440px 400px, 500px 460px, 340px 320px, 100% 100%;
+}
+
+.planet-preview {
+  transition: all 0.45s ease;
+  box-shadow:
+    inset -8px -8px 18px rgba(0, 0, 0, 0.55),
+    0 0 26px rgba(255, 255, 255, 0.08);
+}
+
+.planet-preview.ringed::after {
+  content: '';
+  position: absolute;
+  left: -14px;
+  right: -14px;
+  top: 50%;
+  height: 12px;
+  transform: translateY(-50%) rotate(-18deg);
+  border-radius: 50%;
+  border: 3px solid rgba(253, 230, 138, 0.45);
+}
+
+.nav-planet {
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.04);
+  padding: 0.35rem 0.7rem;
+  font-size: 0.62rem;
+  font-weight: 600;
+  color: #94a3b8;
+  transition: all 0.2s ease;
+}
+
+.nav-planet:hover {
+  border-color: rgba(103, 232, 249, 0.35);
+  color: #cffafe;
+}

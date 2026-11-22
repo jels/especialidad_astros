@@ -1,0 +1,30 @@
+:host {
+  display: block;
+}
+
+.scene-milky,
+.scene-galaxy {
+  background-color: #02040c;
+  background-image:
+    radial-gradient(1px 1px at 12% 18%, rgba(255, 255, 255, 0.45), transparent),
+    radial-gradient(1.3px 1.3px at 38% 62%, rgba(255, 255, 255, 0.5), transparent),
+    radial-gradient(1px 1px at 62% 24%, rgba(255, 255, 255, 0.4), transparent),
+    radial-gradient(1px 1px at 82% 58%, rgba(196, 181, 253, 0.45), transparent),
+    radial-gradient(1px 1px at 70% 84%, rgba(103, 232, 249, 0.4), transparent),
+    linear-gradient(180deg, #020617, #02040c);
+  background-size: 300px 260px, 380px 340px, 440px 400px, 500px 460px, 340px 320px, 100% 100%;
+}
+
+.scene-galaxy {
+  background-image:
+    radial-gradient(1px 1px at 14% 22%, rgba(255, 255, 255, 0.35), transparent),
+    radial-gradient(1.4px 1.4px at 36% 70%, rgba(255, 255, 255, 0.4), transparent),
+    radial-gradient(1px 1px at 66% 18%, rgba(196, 181, 253, 0.4), transparent),
+    radial-gradient(1px 1px at 88% 62%, rgba(103, 232, 249, 0.35), transparent),
+    linear-gradient(180deg, #05040f, #02040c);
+  background-size: 300px 260px, 380px 340px, 440px 400px, 500px 460px, 100% 100%;
+}
+
+.segmented button {
+  white-space: nowrap;
+}

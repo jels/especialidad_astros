@@ -1,0 +1,22 @@
+:host {
+  display: block;
+}
+
+header.is-scrolled {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(4, 5, 14, 0.82);
+  backdrop-filter: blur(18px);
+}
+
+.marquee-track {
+  animation: marquee 46s linear infinite;
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}

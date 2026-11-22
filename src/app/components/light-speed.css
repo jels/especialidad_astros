@@ -1,0 +1,36 @@
+:host {
+  display: block;
+}
+
+.photon {
+  position: absolute;
+  top: 50%;
+  left: 14%;
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+  background: radial-gradient(circle at 40% 35%, #ffffff, #67e8f9 55%, transparent 75%);
+  box-shadow:
+    0 0 14px 4px rgba(103, 232, 249, 0.75),
+    0 0 34px 10px rgba(139, 92, 246, 0.35);
+  transform: translate(-50%, -50%);
+  opacity: 0.75;
+}
+
+.photon.flying {
+  animation: photonFly 2.2s cubic-bezier(0.3, 0.7, 0.4, 1) forwards;
+}
+
+@keyframes photonFly {
+  0% {
+    left: 14%;
+    opacity: 0.9;
+  }
+  94% {
+    opacity: 1;
+  }
+  100% {
+    left: 84%;
+    opacity: 0.2;
+  }
+}

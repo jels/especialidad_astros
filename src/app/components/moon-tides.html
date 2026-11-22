@@ -1,0 +1,339 @@
+<section id="luna" class="section-shell">
+  <div class="wrap">
+    <div class="grid items-end gap-6 lg:grid-cols-[1.4fr_0.6fr]" appReveal>
+      <div>
+        <div class="flex flex-wrap items-center gap-2.5">
+          <span class="mission-tag border-slate-200/25 bg-slate-200/10 text-slate-200">Misión 04 · Pregunta 2</span>
+          <span class="chip">🌊 Simulador de mareas</span>
+        </div>
+        <h2 class="section-title mt-5">
+          Nuestra vecina<br class="hidden sm:block" />
+          mueve los <span class="grad-text">océanos</span>.
+        </h2>
+        <p class="section-lede">
+          La Luna es el cuerpo celeste más cercano a la Tierra. Está a un viaje de luz de 1,3
+          segundos, pero su gravedad es capaz de levantar mares. Mueve la Luna y observa las mareas.
+        </p>
+      </div>
+      <div class="glass hidden p-4 lg:block">
+        <p class="text-[10px] font-bold tracking-[0.2em] text-slate-500 uppercase">La pregunta</p>
+        <p class="mt-2 text-sm leading-relaxed text-slate-300">¿Cómo influye la Luna sobre las mareas?</p>
+        <p class="mt-2 text-xs leading-relaxed text-slate-500">Prueba las cuatro fases principales.</p>
+      </div>
+    </div>
+
+    <div class="mt-10 grid gap-5 lg:grid-cols-[1.3fr_0.7fr]">
+      <!-- Simulador de mareas -->
+      <div class="glass overflow-hidden" appReveal>
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 px-4 py-4 sm:px-5">
+          <div>
+            <p class="text-[10px] font-bold tracking-[0.18em] text-cyan-300 uppercase">Laboratorio de mareas</p>
+            <p class="mt-1 text-xs text-slate-400">Toca una fase o desliza la Luna.</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <span
+              class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-[10px] font-semibold"
+              [class.border-amber-300/30]="tideFactor() > 0.72"
+              [class.bg-amber-300/10]="tideFactor() > 0.72"
+              [class.text-amber-200]="tideFactor() > 0.72"
+              [class.border-teal-300/30]="tideFactor() <= 0.72"
+              [class.bg-teal-300/10]="tideFactor() <= 0.72"
+              [class.text-teal-200]="tideFactor() <= 0.72"
+            >
+              <span class="h-1.5 w-1.5 rounded-full bg-current"></span>
+              {{ tideLabel() }}
+            </span>
+            <button
+              type="button"
+              (click)="togglePlay()"
+              class="rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-[10px] font-semibold text-slate-300 transition-colors hover:border-cyan-300/40 hover:text-cyan-200"
+            >
+              @if (playing()) { ⏸ } @else { ▶ }
+            </button>
+          </div>
+        </div>
+
+        <div class="scene-tides starfield-bg relative overflow-hidden">
+          <div class="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_10%_50%,rgba(251,191,36,.12),transparent_40%),radial-gradient(circle_at_55%_50%,rgba(34,211,238,.09),transparent_42%)]"></div>
+          <svg viewBox="0 0 900 520" class="relative h-auto w-full" role="img" aria-label="Simulación de la Tierra, la Luna y las mareas oceánicas">
+            <defs>
+              <radialGradient id="sunTide" cx="40%" cy="35%" r="70%">
+                <stop offset="0" stop-color="#fffbeb" />
+                <stop offset=".5" stop-color="#fde047" />
+                <stop offset="1" stop-color="#f59e0b" />
+              </radialGradient>
+              <radialGradient id="earthTide" cx="35%" cy="30%" r="75%">
+                <stop offset="0" stop-color="#bae6fd" />
+                <stop offset=".45" stop-color="#38bdf8" />
+                <stop offset=".85" stop-color="#1d4ed8" />
+                <stop offset="1" stop-color="#172554" />
+              </radialGradient>
+              <radialGradient id="moonTide" cx="35%" cy="30%" r="75%">
+                <stop offset="0" stop-color="#ffffff" />
+                <stop offset=".55" stop-color="#dbe4ee" />
+                <stop offset="1" stop-color="#8494a8" />
+              </radialGradient>
+              <radialGradient id="oceanGrad" cx="50%" cy="50%" r="50%">
+                <stop offset="0" stop-color="#22d3ee" stop-opacity=".5" />
+                <stop offset=".7" stop-color="#0ea5e9" stop-opacity=".35" />
+                <stop offset="1" stop-color="#22d3ee" stop-opacity=".05" />
+              </radialGradient>
+              <filter id="sunTideGlow" x="-80%" y="-80%" width="260%" height="260%">
+                <feGaussianBlur stdDeviation="10" result="b" />
+                <feMerge>
+                  <feMergeNode in="b" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+              <filter id="moonTideGlow" x="-120%" y="-120%" width="340%" height="340%">
+                <feGaussianBlur stdDeviation="4" result="b" />
+                <feMerge>
+                  <feMergeNode in="b" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+            </defs>
+
+            <!-- Estrellas -->
+            <g fill="#e2e8f0" opacity=".65">
+              <circle cx="150" cy="80" r="1.5" class="animate-twinkle" />
+              <circle cx="320" cy="60" r="1.2" />
+              <circle cx="610" cy="90" r="1.8" class="animate-twinkle [animation-delay:1s]" />
+              <circle cx="800" cy="150" r="1.3" />
+              <circle cx="700" cy="60" r="1.1" />
+              <circle cx="250" cy="440" r="1.4" class="animate-twinkle [animation-delay:2s]" />
+              <circle cx="820" cy="420" r="1.3" />
+              <circle cx="60" cy="380" r="1.2" />
+            </g>
+
+            <!-- Rayos del Sol -->
+            <g stroke="rgba(251,191,36,.12)" stroke-width="1">
+              <line x1="110" y1="200" x2="860" y2="200" />
+              <line x1="110" y1="320" x2="860" y2="320" />
+            </g>
+
+            <!-- Sol -->
+            <circle cx="62" cy="260" r="46" fill="url(#sunTide)" filter="url(#sunTideGlow)" />
+            <text x="62" y="340" text-anchor="middle" fill="rgba(253,224,71,.7)" font-size="16" letter-spacing="2" font-family="Space Grotesk, sans-serif">SOL</text>
+
+            <!-- Órbita lunar -->
+            <ellipse cx="500" cy="260" rx="250" ry="150" fill="none" stroke="rgba(165,243,252,.2)" stroke-dasharray="3 8" />
+            <text x="500" y="118" text-anchor="middle" fill="rgba(165,243,252,.38)" font-size="12" letter-spacing="2" font-family="Space Grotesk, sans-serif">ÓRBITA LUNAR</text>
+
+            <!-- Marea (elipse oceánica) -->
+            <g [attr.transform]="'rotate(' + moonAngle() + ' 500 260)'">
+              <ellipse
+                cx="500"
+                cy="260"
+                [attr.rx]="ocean().rx"
+                [attr.ry]="ocean().ry"
+                fill="url(#oceanGrad)"
+                stroke="rgba(103,232,249,.55)"
+                stroke-width="1.5"
+              />
+              <circle
+                [attr.cx]="500 + ocean().rx - 4"
+                cy="260"
+                r="4"
+                fill="#67e8f9"
+                class="animate-pulse"
+              />
+              <circle
+                [attr.cx]="500 - ocean().rx + 4"
+                cy="260"
+                r="4"
+                fill="#67e8f9"
+                class="animate-pulse"
+              />
+            </g>
+
+            <!-- Tierra -->
+            <circle cx="500" cy="260" r="55" fill="url(#earthTide)" />
+            <path d="M478 232 q16 8 10 24 q-3 13 15 17 q0 15 -20 11" stroke="#4ade80" stroke-width="7" fill="none" opacity=".6" stroke-linecap="round" />
+            <path d="M516 286 q12 3 13 13 q0 12 -14 11" stroke="#4ade80" stroke-width="5" fill="none" opacity=".4" stroke-linecap="round" />
+            <text x="500" y="352" text-anchor="middle" fill="rgba(147,197,253,.8)" font-size="16" font-weight="600" letter-spacing="2" font-family="Space Grotesk, sans-serif">TIERRA</text>
+
+            <!-- Luna -->
+            <g [attr.transform]="'translate(' + moonPoint().x + ' ' + moonPoint().y + ')'">
+              <circle r="26" fill="#94a3b8" opacity=".12" />
+              <circle r="15" fill="url(#moonTide)" filter="url(#moonTideGlow)" />
+              <circle cx="-4" cy="-3" r="2.6" fill="#94a3b8" opacity=".55" />
+              <circle cx="4" cy="4" r="2" fill="#94a3b8" opacity=".45" />
+              <text y="34" text-anchor="middle" fill="rgba(226,232,240,.8)" font-size="13" font-weight="600" letter-spacing="1.5" font-family="Space Grotesk, sans-serif">LUNA</text>
+            </g>
+
+            <!-- Etiquetas de marea -->
+            <g fill="rgba(103,232,249,.75)" font-size="11" font-family="Space Grotesk, sans-serif">
+              <text x="500" y="420" text-anchor="middle">▲ marea alta</text>
+              <text x="500" y="436" text-anchor="middle" fill="rgba(148,163,184,.6)">▼ marea baja</text>
+            </g>
+          </svg>
+
+          <div class="pointer-events-none absolute top-4 left-4 rounded-full border border-white/10 bg-black/40 px-3 py-1.5 backdrop-blur-md">
+            <span class="text-[10px] font-semibold tracking-wide text-slate-300">{{ phaseName() }} · {{ phase().toFixed(0) }}°</span>
+          </div>
+          <div class="pointer-events-none absolute top-4 right-4 hidden items-center gap-2 rounded-full border border-white/10 bg-black/40 px-3 py-1.5 backdrop-blur-md sm:flex">
+            <span class="h-1.5 w-1.5 rounded-full bg-cyan-300"></span>
+            <span class="text-[9px] tracking-[0.14em] text-slate-400 uppercase">Vista desde arriba · no a escala</span>
+          </div>
+        </div>
+
+        <div class="border-t border-white/10 px-4 py-5 sm:px-6">
+          <div class="flex flex-wrap items-center gap-2">
+            <button type="button" (click)="setPhase(0)" class="preset" [class.preset-on]="phase() === 0">🌑 Nueva</button>
+            <button type="button" (click)="setPhase(90)" class="preset" [class.preset-on]="phase() === 90">🌓 C. creciente</button>
+            <button type="button" (click)="setPhase(180)" class="preset" [class.preset-on]="phase() === 180">🌕 Llena</button>
+            <button type="button" (click)="setPhase(270)" class="preset" [class.preset-on]="phase() === 270">🌗 C. menguante</button>
+          </div>
+          <input
+            type="range"
+            min="0"
+            max="360"
+            step="1"
+            [value]="phase()"
+            (input)="onSlider($any($event.target).value)"
+            class="range-cosmic mt-4"
+            style="--range-color: #67e8f9"
+            aria-label="Posición de la Luna alrededor de la Tierra"
+          />
+          <div class="mt-3 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div class="min-w-0">
+              <div class="flex items-center justify-between gap-8 text-[10px] tracking-wide text-slate-500 sm:justify-start">
+                <span>Intensidad de la marea</span>
+                <span class="font-semibold text-cyan-200">{{ (tideFactor() * 100).toFixed(0) }}%</span>
+              </div>
+              <div class="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-white/10 sm:w-56">
+                <div
+                  class="h-full rounded-full bg-gradient-to-r from-teal-400 via-cyan-300 to-amber-300 transition-[width] duration-300"
+                  [style.width.%]="tideFactor() * 100"
+                ></div>
+              </div>
+            </div>
+            <p class="max-w-xs text-[10px] leading-relaxed text-slate-500">{{ tideCopy() }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ficha de la Luna -->
+      <div class="flex flex-col gap-4">
+        <div class="glass relative overflow-hidden p-5 sm:p-6" appReveal>
+          <div class="pointer-events-none absolute -top-16 -right-16 h-44 w-44 rounded-full bg-slate-200/10 blur-3xl"></div>
+          <div class="flex items-center justify-between">
+            <p class="text-[10px] font-bold tracking-[0.2em] text-slate-500 uppercase">Ficha lunar</p>
+            <span class="text-lg">🌕</span>
+          </div>
+          <h3 class="font-display mt-3 text-xl font-semibold text-white">La Luna</h3>
+          <p class="mt-1 text-xs leading-relaxed text-slate-500">
+            El único satélite natural de la Tierra. Sin ella, nuestras noches y nuestras costas
+            serían muy distintas.
+          </p>
+
+          <div class="mt-4 space-y-2.5">
+            <div class="rounded-2xl border border-white/10 bg-white/[0.03] p-3.5">
+              <p class="text-[9px] font-bold tracking-[0.16em] text-cyan-300 uppercase">2b · Distancia media</p>
+              <p class="font-display mt-1 text-2xl font-semibold text-white">384.400 km</p>
+              <p class="mt-0.5 text-[10px] text-slate-500">
+                Entre 363.300 km (perigeo) y 405.500 km (apogeo)
+              </p>
+            </div>
+            <div class="grid grid-cols-2 gap-2.5">
+              <div class="stat-card">
+                <p class="text-[9px] tracking-wide text-slate-500 uppercase">Diámetro</p>
+                <p class="mt-0.5 text-sm font-semibold text-white">3.475 km</p>
+              </div>
+              <div class="stat-card">
+                <p class="text-[9px] tracking-wide text-slate-500 uppercase">Una órbita</p>
+                <p class="mt-0.5 text-sm font-semibold text-white">27,3 días</p>
+              </div>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            (click)="scaleOpen.set(!scaleOpen())"
+            class="mt-4 flex w-full items-center justify-between gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-3.5 py-2.5 text-left text-[11px] font-semibold text-slate-300 transition-colors hover:border-cyan-300/30 hover:text-cyan-200"
+            [attr.aria-expanded]="scaleOpen()"
+          >
+            <span>📏 Ver la distancia a escala</span>
+            <span class="transition-transform duration-300" [class.rotate-180]="scaleOpen()">⌄</span>
+          </button>
+          @if (scaleOpen()) {
+            <div class="mt-3 rounded-xl border border-cyan-300/15 bg-cyan-400/[0.04] p-3">
+              <p class="text-[10px] text-slate-400">Entre la Tierra y la Luna caben unas <strong class="text-white">30 Tierras</strong>:</p>
+              <div class="mt-2 flex items-center gap-2">
+                <span class="h-5 w-5 shrink-0 rounded-full bg-gradient-to-br from-sky-300 via-blue-500 to-blue-900 shadow-[0_0_12px_rgba(56,189,248,.5)]"></span>
+                <div class="grid flex-1 gap-[2px]" style="grid-template-columns: repeat(30, minmax(0, 1fr))">
+                  @for (earth of earths; track earth) {
+                    <span class="aspect-square rounded-full bg-gradient-to-br from-sky-300 via-blue-500 to-blue-900 opacity-70"></span>
+                  }
+                </div>
+                <span class="h-2.5 w-2.5 shrink-0 rounded-full bg-slate-300"></span>
+              </div>
+              <p class="mt-2 text-[9px] tracking-wide text-slate-600">Tierra · 30 Tierras · Luna</p>
+            </div>
+          }
+        </div>
+
+        <div class="glass p-5" appReveal>
+          <p class="text-[10px] font-bold tracking-[0.2em] text-slate-500 uppercase">Datos que mueven mares</p>
+          <ul class="mt-3 space-y-3">
+            <li class="flex items-start gap-2.5">
+              <span class="mt-0.5 text-sm">🌀</span>
+              <p class="text-[11px] leading-relaxed text-slate-400">
+                <strong class="text-white">Siempre vemos la misma cara</strong> porque tarda lo mismo en
+                girar sobre sí misma que en orbitar la Tierra.
+              </p>
+            </li>
+            <li class="flex items-start gap-2.5">
+              <span class="mt-0.5 text-sm">📏</span>
+              <p class="text-[11px] leading-relaxed text-slate-400">
+                <strong class="text-white">Se aleja 3,8 cm por año.</strong> En millones de años se verá
+                más pequeña y las mareas serán más suaves.
+              </p>
+            </li>
+            <li class="flex items-start gap-2.5">
+              <span class="mt-0.5 text-sm">🛡️</span>
+              <p class="text-[11px] leading-relaxed text-slate-400">
+                <strong class="text-white">Estabiliza el eje terrestre</strong> y hace que nuestro clima
+                sea mucho más predecible.
+              </p>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-5 grid gap-4 md:grid-cols-3" appReveal>
+      <div class="glass glass-hover p-5">
+        <div class="flex items-center gap-2">
+          <span class="grid h-8 w-8 place-items-center rounded-lg bg-cyan-400/10 text-sm">🌊</span>
+          <p class="text-xs font-semibold text-white">Dos bultos de agua</p>
+        </div>
+        <p class="mt-2.5 text-[11px] leading-relaxed text-slate-400">
+          La gravedad lunar tira más fuerte del agua del lado cercano y menos del lado lejano. Por eso
+          se forman <strong class="text-slate-200">dos crestas opuestas</strong>, no una.
+        </p>
+      </div>
+      <div class="glass glass-hover p-5">
+        <div class="flex items-center gap-2">
+          <span class="grid h-8 w-8 place-items-center rounded-lg bg-amber-400/10 text-sm">🔁</span>
+          <p class="text-xs font-semibold text-white">Dos pleamares por día</p>
+        </div>
+        <p class="mt-2.5 text-[11px] leading-relaxed text-slate-400">
+          La Tierra gira dentro de esos dos bultos. Por eso la mayoría de las costas tienen
+          <strong class="text-slate-200">dos mareas altas y dos bajas</strong> cada ~24 h 50 min.
+        </p>
+      </div>
+      <div class="glass glass-hover p-5">
+        <div class="flex items-center gap-2">
+          <span class="grid h-8 w-8 place-items-center rounded-lg bg-violet-400/10 text-sm">☀️</span>
+          <p class="text-xs font-semibold text-white">El Sol también ayuda</p>
+        </div>
+        <p class="mt-2.5 text-[11px] leading-relaxed text-slate-400">
+          Aunque está lejísimos, su gravedad aporta cerca del <strong class="text-slate-200">46 %</strong>
+          de la fuerza de marea. Cuando se alinea con la Luna, las mareas son más intensas.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>

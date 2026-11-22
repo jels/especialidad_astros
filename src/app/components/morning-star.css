@@ -1,0 +1,19 @@
+:host {
+  display: block;
+}
+
+.scene-venus {
+  background-color: #02040c;
+  background-image:
+    radial-gradient(1px 1px at 10% 16%, rgba(255, 255, 255, 0.45), transparent),
+    radial-gradient(1.3px 1.3px at 32% 58%, rgba(255, 255, 255, 0.5), transparent),
+    radial-gradient(1px 1px at 58% 22%, rgba(255, 255, 255, 0.4), transparent),
+    radial-gradient(1px 1px at 82% 46%, rgba(196, 181, 253, 0.45), transparent),
+    radial-gradient(1px 1px at 68% 78%, rgba(103, 232, 249, 0.4), transparent),
+    linear-gradient(180deg, #020617, #02040c);
+  background-size: 300px 260px, 380px 340px, 440px 400px, 500px 460px, 340px 320px, 100% 100%;
+}
+
+.segmented button {
+  white-space: nowrap;
+}

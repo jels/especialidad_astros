@@ -1,0 +1,491 @@
+<section id="via-lactea" class="section-shell">
+  <div class="wrap">
+    <div class="grid items-end gap-6 lg:grid-cols-[1.4fr_0.6fr]" appReveal>
+      <div>
+        <div class="flex flex-wrap items-center gap-2.5">
+          <span class="mission-tag border-fuchsia-300/25 bg-fuchsia-400/10 text-fuchsia-200">Misión 09 · Punto 8</span>
+          <span class="chip">🌌 Observación virtual</span>
+        </div>
+        <h2 class="section-title mt-5">
+          El río de estrellas<br class="hidden sm:block" />
+          donde <span class="grad-text">vivimos</span>.
+        </h2>
+        <p class="section-lede">
+          La Vía Láctea no es humo ni una nube: es nuestra galaxia vista desde adentro. Baja las
+          luces de la ciudad y descubre lo que aparece cuando el cielo se vuelve realmente oscuro.
+        </p>
+      </div>
+      <div class="glass hidden p-4 lg:block">
+        <p class="text-[10px] font-bold tracking-[0.2em] text-slate-500 uppercase">La consigna</p>
+        <p class="mt-2 text-sm leading-relaxed text-slate-300">¿Qué es la Vía Láctea?</p>
+        <p class="mt-2 text-xs leading-relaxed text-slate-500">Y cómo observarla de verdad.</p>
+      </div>
+    </div>
+
+    <div class="mt-10 grid gap-5 lg:grid-cols-[1.35fr_0.65fr]">
+      <!-- Simulador -->
+      <div class="glass overflow-hidden" appReveal>
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 px-4 py-4 sm:px-5">
+          <div class="segmented">
+            <button type="button" [class.active]="view() === 'cielo'" (click)="setView('cielo')">🌌 A simple vista</button>
+            <button type="button" [class.active]="view() === 'galaxia'" (click)="setView('galaxia')">🌀 La galaxia</button>
+          </div>
+          @if (view() === 'cielo') {
+            <button
+              type="button"
+              (click)="toggleLabels()"
+              class="rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-[10px] font-semibold text-slate-300 transition-colors hover:border-fuchsia-300/40 hover:text-fuchsia-200"
+              [attr.aria-pressed]="labels()"
+            >
+              {{ labels() ? 'Ocultar etiquetas' : 'Mostrar etiquetas' }}
+            </button>
+          } @else {
+            <span class="chip !text-[10px]">Barrada · 100.000 años luz</span>
+          }
+        </div>
+
+        @if (view() === 'cielo') {
+          <div class="scene-milky relative overflow-hidden">
+            <svg viewBox="0 0 900 480" class="relative h-auto w-full" role="img" aria-label="Paisaje nocturno interactivo de la Vía Láctea con contaminación lumínica ajustable">
+              <defs>
+                <linearGradient id="skyMilky" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stop-color="#020617" />
+                  <stop offset=".55" stop-color="#050b20" />
+                  <stop offset="1" stop-color="#0a1730" />
+                </linearGradient>
+                <radialGradient id="bandGlow" cx="50%" cy="50%" r="50%">
+                  <stop offset="0" stop-color="#e2e8f0" stop-opacity=".38" />
+                  <stop offset=".32" stop-color="#c4b5fd" stop-opacity=".2" />
+                  <stop offset=".68" stop-color="#8b5cf6" stop-opacity=".08" />
+                  <stop offset="1" stop-color="#8b5cf6" stop-opacity="0" />
+                </radialGradient>
+                <radialGradient id="bandCore" cx="60%" cy="50%" r="50%">
+                  <stop offset="0" stop-color="#fde68a" stop-opacity=".28" />
+                  <stop offset=".5" stop-color="#f0abfc" stop-opacity=".12" />
+                  <stop offset="1" stop-color="#8b5cf6" stop-opacity="0" />
+                </radialGradient>
+                <linearGradient id="cityDome" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stop-color="#fb923c" stop-opacity="0" />
+                  <stop offset=".65" stop-color="#fb923c" stop-opacity=".16" />
+                  <stop offset="1" stop-color="#f59e0b" stop-opacity=".38" />
+                </linearGradient>
+                <linearGradient id="cityWash" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stop-color="#fb923c" stop-opacity="0" />
+                  <stop offset="1" stop-color="#fb923c" stop-opacity=".2" />
+                </linearGradient>
+                <filter id="milkyBlur" x="-30%" y="-60%" width="160%" height="220%">
+                  <feGaussianBlur stdDeviation="24" />
+                </filter>
+                <filter id="cityBlur" x="-30%" y="-80%" width="160%" height="260%">
+                  <feGaussianBlur stdDeviation="20" />
+                </filter>
+                <filter id="starTwinkle" x="-200%" y="-200%" width="500%" height="500%">
+                  <feGaussianBlur stdDeviation="1.2" />
+                </filter>
+              </defs>
+
+              <!-- Cielo -->
+              <rect width="900" height="480" fill="url(#skyMilky)" />
+
+              <!-- Resplandor urbano -->
+              <ellipse cx="780" cy="420" rx="240" ry="150" fill="url(#cityDome)" filter="url(#cityBlur)" [attr.opacity]="cityGlowOpacity()" />
+              <rect x="0" y="250" width="900" height="170" fill="url(#cityWash)" [attr.opacity]="cityGlowOpacity() * 0.7" />
+
+              <!-- Vía Láctea -->
+              <g transform="rotate(-24 450 250)" [attr.opacity]="milkyOpacity()">
+                <ellipse cx="450" cy="250" rx="540" ry="115" fill="url(#bandGlow)" filter="url(#milkyBlur)" />
+                <ellipse cx="470" cy="250" rx="410" ry="54" fill="url(#bandCore)" filter="url(#milkyBlur)" />
+                <path d="M 30 260 Q 240 210 430 248 T 880 232" stroke="#05060f" stroke-width="17" fill="none" opacity=".3" stroke-linecap="round" />
+                <path d="M 120 285 Q 330 250 520 276 T 850 260" stroke="#0b1020" stroke-width="9" fill="none" opacity=".28" stroke-linecap="round" />
+                @for (star of bandStars; track $index) {
+                  <circle [attr.cx]="star.x" [attr.cy]="star.y + 175" [attr.r]="star.r" fill="#f8fafc" [attr.opacity]="star.opacity" />
+                }
+              </g>
+
+              <!-- Estrellas -->
+              <g [attr.opacity]="faintStarsOpacity()">
+                @for (star of skyStars; track $index) {
+                  <circle
+                    [attr.cx]="star.x"
+                    [attr.cy]="star.y"
+                    [attr.r]="star.r"
+                    fill="#e2e8f0"
+                    [attr.opacity]="star.opacity"
+                    [class.animate-twinkle]="star.twinkle"
+                  />
+                }
+              </g>
+              <g [attr.opacity]="brightStarsOpacity()">
+                @for (star of brightStars; track $index) {
+                  <circle [attr.cx]="star.x" [attr.cy]="star.y" [attr.r]="star.r" fill="#ffffff" filter="url(#starTwinkle)" />
+                }
+              </g>
+
+              <!-- Orión / Escorpio de referencia -->
+              <g [attr.opacity]="milkyOpacity() * 0.8">
+                <circle cx="290" cy="150" r="2.4" fill="#fca5a5" />
+                <circle cx="330" cy="168" r="1.8" fill="#fff" />
+                <circle cx="318" cy="190" r="1.5" fill="#fff" />
+                <text x="258" y="138" fill="rgba(252,165,165,.6)" font-size="8" font-family="Space Grotesk, sans-serif" letter-spacing="1">ANTARES</text>
+              </g>
+
+              <!-- Etiqueta de la Vía Láctea -->
+              @if (labels() && milkyOpacity() > 0.18) {
+                <g [attr.opacity]="milkyOpacity()">
+                  <path d="M 590 125 Q 560 160 520 195" stroke="rgba(196,181,253,.5)" stroke-width="1" fill="none" stroke-dasharray="3 4" />
+                  <text x="598" y="118" fill="rgba(226,232,240,.8)" font-size="13" font-weight="600" font-family="Space Grotesk, sans-serif" letter-spacing="1">VÍA LÁCTEA</text>
+                  <text x="598" y="133" fill="rgba(196,181,253,.55)" font-size="8" font-family="Space Grotesk, sans-serif" letter-spacing="1.5">NUESTRA GALAXIA VISTA DESDE ADENTRO</text>
+                  <text x="118" y="330" fill="rgba(253,230,138,.55)" font-size="8" font-family="Space Grotesk, sans-serif" letter-spacing="1">HACIA EL CENTRO GALÁCTICO</text>
+                </g>
+              }
+
+              <!-- Silueta del horizonte -->
+              <path d="M0 420 L0 390 L80 360 L150 388 L230 348 L310 382 L390 370 L470 400 L560 388 L620 408 L900 400 L900 480 L0 480 Z" fill="#03050d" />
+              <path d="M0 430 L130 415 L260 428 L420 412 L560 430 L700 418 L900 432 L900 480 L0 480 Z" fill="#01030a" />
+
+              <!-- Ciudad -->
+              <g [attr.opacity]="0.45 + cityGlowOpacity() * 0.55">
+                <path d="M640 420 L640 375 L665 375 L665 360 L685 360 L685 420 Z" fill="#050812" />
+                <path d="M690 420 L690 388 L715 388 L715 368 L735 368 L735 420 Z" fill="#04070f" />
+                <path d="M742 420 L742 380 L770 380 L770 398 L795 398 L795 420 Z" fill="#050812" />
+                <path d="M800 420 L800 356 L814 356 L814 420 Z" fill="#04070f" />
+                <g fill="#fbbf24">
+                  <rect x="647" y="385" width="2" height="2" opacity=".7" />
+                  <rect x="654" y="394" width="2" height="2" opacity=".5" />
+                  <rect x="697" y="396" width="2" height="2" opacity=".6" />
+                  <rect x="705" y="377" width="2" height="2" opacity=".55" />
+                  <rect x="722" y="400" width="2" height="2" opacity=".7" />
+                  <rect x="750" y="391" width="2" height="2" opacity=".5" />
+                  <rect x="782" y="405" width="2" height="2" opacity=".6" />
+                  <rect x="806" y="390" width="2" height="2" opacity=".5" />
+                </g>
+              </g>
+
+              <!-- Observador -->
+              <g fill="#01030a">
+                <circle cx="448" cy="384" r="6" />
+                <path d="M441 394 q7 -4 14 0 l4 22 q-11 4 -22 0 z" />
+                <rect x="438" y="416" width="7" height="9" rx="2" />
+                <rect x="452" y="416" width="7" height="9" rx="2" />
+                <g transform="rotate(-38 468 390)">
+                  <rect x="462" y="387" width="34" height="6" rx="3" fill="#0b1224" />
+                </g>
+                <path d="M468 393 l-7 26 M468 393 l8 25 M468 393 l0 27" stroke="#01030a" stroke-width="2.4" />
+              </g>
+            </svg>
+
+            <div class="pointer-events-none absolute top-4 left-4 rounded-full border border-white/10 bg-black/40 px-3 py-1.5 backdrop-blur-md">
+              <span class="text-[9px] font-semibold tracking-[0.16em] text-slate-400 uppercase">
+                Cielo {{ pollution() <= 28 ? 'rural' : pollution() <= 62 ? 'suburbano' : 'urbano' }}
+              </span>
+            </div>
+            <div class="pointer-events-none absolute right-4 bottom-4 rounded-full border border-white/10 bg-black/40 px-3 py-1.5 backdrop-blur-md">
+              <span class="text-[9px] font-semibold text-fuchsia-200">Brillo: {{ visibility().label }}</span>
+            </div>
+          </div>
+
+          <div class="border-t border-white/10 px-4 py-5 sm:px-6">
+            <div class="flex items-center justify-between gap-4">
+              <label for="pollution" class="text-xs font-semibold text-slate-300">Contaminación lumínica</label>
+              <span class="rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[10px] font-semibold text-slate-400">
+                {{ pollution() }} %
+              </span>
+            </div>
+            <input
+              id="pollution"
+              type="range"
+              min="0"
+              max="100"
+              step="1"
+              [value]="pollution()"
+              (input)="pollution.set(+$any($event.target).value)"
+              class="range-cosmic mt-2"
+              style="--range-color: #e879f9"
+              aria-label="Nivel de contaminación lumínica"
+            />
+            <div class="flex items-center justify-between text-[9px] tracking-wide text-slate-600">
+              <span>🌄 Cielo oscuro</span>
+              <span>🏙️ Centro de la ciudad</span>
+            </div>
+
+            <div class="mt-4 flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-white/10 bg-black/25 p-4">
+              <div class="min-w-0 flex-1">
+                <div class="flex items-center gap-2">
+                  <span class="h-1.5 w-1.5 rounded-full" [class.bg-teal-300]="pollution() <= 28" [class.bg-amber-300]="pollution() > 28 && pollution() <= 62" [class.bg-rose-300]="pollution() > 62"></span>
+                  <p class="text-[10px] font-bold tracking-[0.14em] uppercase" [class.text-teal-300]="pollution() <= 28" [class.text-amber-300]="pollution() > 28 && pollution() <= 62" [class.text-rose-300]="pollution() > 62">
+                    Visibilidad {{ visibility().label }}
+                  </p>
+                </div>
+                <p class="mt-1.5 text-[11px] leading-relaxed text-slate-400">{{ visibilityCopy() }}</p>
+              </div>
+              <div class="w-full sm:w-40">
+                <div class="h-1.5 overflow-hidden rounded-full bg-white/10">
+                  <div
+                  class="h-full rounded-full bg-gradient-to-r transition-all duration-300"
+                  [class]="'h-full rounded-full bg-gradient-to-r transition-all duration-300 ' + visibility().bar"
+                  [style.width.%]="100 - pollution()"
+                ></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        } @else {
+          <div class="scene-galaxy relative overflow-hidden">
+            <div class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(139,92,246,.1),transparent_55%)]"></div>
+            <svg viewBox="0 0 900 560" class="relative h-auto w-full" role="img" aria-label="Vista desde arriba de la Vía Láctea, con la posición del Sol">
+              <defs>
+                <radialGradient id="galaxyCore" cx="50%" cy="50%" r="50%">
+                  <stop offset="0" stop-color="#fffbeb" stop-opacity=".95" />
+                  <stop offset=".25" stop-color="#fde68a" stop-opacity=".55" />
+                  <stop offset=".55" stop-color="#f59e0b" stop-opacity=".18" />
+                  <stop offset="1" stop-color="#8b5cf6" stop-opacity="0" />
+                </radialGradient>
+                <radialGradient id="galaxyHaze" cx="50%" cy="50%" r="50%">
+                  <stop offset="0" stop-color="#c4b5fd" stop-opacity=".18" />
+                  <stop offset=".55" stop-color="#8b5cf6" stop-opacity=".08" />
+                  <stop offset="1" stop-color="#22d3ee" stop-opacity="0" />
+                </radialGradient>
+                <filter id="galaxyBlur" x="-50%" y="-50%" width="200%" height="200%">
+                  <feGaussianBlur stdDeviation="13" />
+                </filter>
+                <filter id="sunMarkerGlow" x="-200%" y="-200%" width="500%" height="500%">
+                  <feGaussianBlur stdDeviation="5" result="b" />
+                  <feMerge>
+                    <feMergeNode in="b" />
+                    <feMergeNode in="SourceGraphic" />
+                  </feMerge>
+                </filter>
+              </defs>
+
+              <circle cx="450" cy="280" r="260" fill="url(#galaxyHaze)" />
+              <ellipse cx="450" cy="280" rx="292" ry="248" fill="none" stroke="rgba(196,181,253,.1)" stroke-dasharray="2 8" />
+
+              <!-- Brazos difusos -->
+              <g fill="none" stroke-linecap="round" filter="url(#galaxyBlur)" opacity=".55">
+                @for (arm of galaxyArms; track $index) {
+                  <path [attr.d]="arm.d" [attr.stroke]="arm.color" stroke-width="28" opacity=".2" />
+                  <path [attr.d]="arm.d" [attr.stroke]="arm.color" stroke-width="12" opacity=".18" />
+                }
+              </g>
+
+              <!-- Nubes de estrellas -->
+              <g filter="url(#galaxyBlur)" opacity=".7">
+                @for (cloud of galaxyClouds; track $index) {
+                  <circle [attr.cx]="cloud.x" [attr.cy]="cloud.y" [attr.r]="cloud.r" [attr.fill]="cloud.color" opacity=".12" />
+                }
+              </g>
+
+              <!-- Halo de estrellas -->
+              @for (star of galaxyDots; track $index) {
+                @if ($index % 3 === 2) {
+                  <circle [attr.cx]="star.x" [attr.cy]="star.y" [attr.r]="star.r * 0.7" fill="#c4b5fd" [attr.opacity]="star.opacity * 0.25" />
+                }
+              }
+
+              <!-- Disco / brazos -->
+              @for (star of galaxyDots; track $index) {
+                <circle
+                  [attr.cx]="star.x"
+                  [attr.cy]="star.y"
+                  [attr.r]="star.r"
+                  [attr.fill]="star.tint"
+                  [attr.opacity]="star.opacity"
+                />
+              } @empty {
+                <circle cx="450" cy="280" r="20" />
+              }
+
+              <!-- Núcleo -->
+              <circle cx="450" cy="280" r="86" fill="url(#galaxyCore)" filter="url(#galaxyBlur)" class="animate-pulse-soft" />
+              <ellipse cx="450" cy="280" rx="68" ry="21" fill="#fde68a" opacity=".5" transform="rotate(-24 450 280)" filter="url(#galaxyBlur)" />
+              <circle cx="450" cy="280" r="16" fill="#fffbeb" opacity=".9" filter="url(#galaxyBlur)" />
+
+              <!-- Órbita solar -->
+              <ellipse cx="450" cy="280" rx="148" ry="127" fill="none" stroke="rgba(253,230,138,.22)" stroke-dasharray="3 5" />
+
+              <!-- Sol -->
+              <g>
+                <line [attr.x1]="450" [attr.y1]="280" [attr.x2]="sunPosition.x" [attr.y2]="sunPosition.y" stroke="rgba(253,230,138,.3)" stroke-width="1" stroke-dasharray="2 4" />
+                <circle [attr.cx]="sunPosition.x" [attr.cy]="sunPosition.y" r="17" fill="#fbbf24" opacity=".12" />
+                <circle [attr.cx]="sunPosition.x" [attr.cy]="sunPosition.y" r="6" fill="#fbbf24" filter="url(#sunMarkerGlow)" />
+                <text [attr.x]="sunPosition.x + 13" [attr.y]="sunPosition.y - 8" fill="rgba(253,230,138,.95)" font-size="12" font-weight="600" font-family="Space Grotesk, sans-serif" stroke="#04050e" stroke-width="4" paint-order="stroke">SOL · ESTÁS ACÁ</text>
+                <text [attr.x]="sunPosition.x + 13" [attr.y]="sunPosition.y + 7" fill="rgba(253,230,138,.55)" font-size="8" font-family="Space Grotesk, sans-serif" stroke="#04050e" stroke-width="3" paint-order="stroke">brazo de Orión</text>
+              </g>
+
+              <!-- Textos -->
+              <g font-family="Space Grotesk, sans-serif">
+                <text x="450" y="238" text-anchor="middle" fill="rgba(255,251,235,.7)" font-size="10" letter-spacing="2">NÚCLEO GALÁCTICO</text>
+                <text x="450" y="252" text-anchor="middle" fill="rgba(255,251,235,.38)" font-size="7" letter-spacing="1">AGUJERO NEGRO SAGITARIO A*</text>
+                <line x1="154" y1="512" x2="746" y2="512" stroke="rgba(148,163,184,.3)" stroke-width="1" />
+                <line x1="154" y1="507" x2="154" y2="517" stroke="rgba(148,163,184,.3)" stroke-width="1" />
+                <line x1="746" y1="507" x2="746" y2="517" stroke="rgba(148,163,184,.3)" stroke-width="1" />
+                <text x="450" y="534" text-anchor="middle" fill="rgba(148,163,184,.5)" font-size="9" letter-spacing="1">DIÁMETRO APROXIMADO · 100.000 AÑOS LUZ</text>
+                <line [attr.x1]="sunPosition.x" [attr.y1]="sunPosition.y + 20" [attr.x2]="450" [attr.y2]="302" stroke="rgba(253,230,138,.22)" stroke-width="1" />
+                <text x="322" y="322" fill="rgba(253,230,138,.55)" font-size="8" font-family="Space Grotesk, sans-serif">26.000 años luz al centro</text>
+              </g>
+            </svg>
+          </div>
+          <div class="border-t border-white/10 px-4 py-4 sm:px-5">
+            <p class="text-[11px] leading-relaxed text-slate-500">
+              🌌 <strong class="text-slate-300">Estamos dentro.</strong> Por eso la vemos como una franja
+              en el cielo: miramos el disco galáctico de canto. El Sol tarda unos 230 millones de
+              años en completar una vuelta.
+            </p>
+          </div>
+        }
+      </div>
+
+      <!-- Panel de respuesta -->
+      <div class="flex flex-col gap-4">
+        <div class="glass relative overflow-hidden p-5 sm:p-6" appReveal>
+          <div class="pointer-events-none absolute -top-20 -right-16 h-48 w-48 rounded-full bg-fuchsia-400/10 blur-3xl"></div>
+          <p class="text-[10px] font-bold tracking-[0.2em] text-slate-500 uppercase">Respuesta exprés</p>
+          <h3 class="font-display mt-3 text-xl leading-snug font-semibold text-white">
+            Es nuestra <span class="text-fuchsia-300">galaxia</span>.<br />Vista desde adentro.
+          </h3>
+          <p class="mt-3 text-sm leading-relaxed text-slate-400">
+            La Vía Láctea es una galaxia espiral barrada formada por estrellas, gas y polvo. El Sol
+            y todos los puntos que ves de noche pertenecen a ella. La banda luminosa es el disco
+            galáctico visto de costado.
+          </p>
+          <div class="mt-4 rounded-xl border border-fuchsia-300/15 bg-fuchsia-300/[0.05] p-3.5">
+            <p class="text-[10px] font-bold tracking-[0.14em] text-fuchsia-300 uppercase">No es leche</p>
+            <p class="mt-1.5 text-[11px] leading-relaxed text-slate-400">
+              Los griegos la llamaron <em>galaxias</em>, “camino de leche”. El brillo viene de
+              miles de millones de estrellas demasiado lejanas para verse por separado.
+            </p>
+          </div>
+        </div>
+
+        <div class="glass p-5" appReveal>
+          <p class="text-[10px] font-bold tracking-[0.2em] text-slate-500 uppercase">La galaxia en números</p>
+          <div class="mt-3 grid grid-cols-2 gap-2.5">
+            <div class="stat-card">
+              <p class="font-display text-lg font-semibold text-white">100.000</p>
+              <p class="text-[9px] leading-snug text-slate-500">años luz de ancho</p>
+            </div>
+            <div class="stat-card">
+              <p class="font-display text-lg font-semibold text-white">~200 mil</p>
+              <p class="text-[9px] leading-snug text-slate-500">millones de estrellas</p>
+            </div>
+            <div class="stat-card">
+              <p class="font-display text-lg font-semibold text-white">26.000</p>
+              <p class="text-[9px] leading-snug text-slate-500">años luz al centro</p>
+            </div>
+            <div class="stat-card">
+              <p class="font-display text-lg font-semibold text-white">230 M</p>
+              <p class="text-[9px] leading-snug text-slate-500">años por vuelta</p>
+            </div>
+          </div>
+          <p class="mt-3 text-[10px] leading-relaxed text-slate-500">
+            La luz que ves de su centro salió hace unos 26.000 años, cuando los humanos todavía
+            éramos cazadores-recolectores.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Observación real -->
+    <div class="mt-5 grid gap-4 lg:grid-cols-[1.05fr_0.95fr]" appReveal>
+      <div class="glass relative overflow-hidden p-5 sm:p-6">
+        <div class="flex flex-wrap items-start justify-between gap-3">
+          <div>
+            <p class="text-[10px] font-bold tracking-[0.2em] text-teal-300 uppercase">Misión de observación</p>
+            <h3 class="font-display mt-1.5 text-lg font-semibold text-white sm:text-xl">Tu plan para verla de verdad</h3>
+          </div>
+          <div class="rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-[10px] font-semibold text-slate-300">
+            {{ checkedCount() }} / {{ checkItems.length }}
+          </div>
+        </div>
+        <div class="mt-4 h-1.5 overflow-hidden rounded-full bg-white/10">
+          <div class="h-full rounded-full bg-gradient-to-r from-teal-300 to-fuchsia-300 transition-[width] duration-500" [style.width.%]="(checkedCount() / checkItems.length) * 100"></div>
+        </div>
+
+        <div class="mt-4 space-y-2">
+          @for (item of checkItems; track item.title; let i = $index) {
+            <button
+              type="button"
+              (click)="toggleCheck(i)"
+              class="flex w-full items-start gap-3 rounded-xl border p-3 text-left transition-all duration-300"
+              [class.border-teal-300/25]="checks()[i]"
+              [class.bg-teal-300/10]="checks()[i]"
+              [class.border-white/10]="!checks()[i]"
+              [class.bg-white/5]="!checks()[i]"
+              [attr.aria-pressed]="checks()[i]"
+            >
+              <span
+                class="mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-full border text-[10px] font-bold transition-all"
+                [class.border-teal-300/40]="checks()[i]"
+                [class.bg-teal-300/20]="checks()[i]"
+                [class.text-teal-200]="checks()[i]"
+                [class.border-white/15]="!checks()[i]"
+                [class.text-slate-600]="!checks()[i]"
+              >
+                {{ checks()[i] ? '✓' : i + 1 }}
+              </span>
+              <span class="min-w-0 flex-1">
+                <span class="flex items-center gap-1.5 text-[11px] font-semibold" [class.text-white]="checks()[i]" [class.text-slate-300]="!checks()[i]">
+                  <span>{{ item.icon }}</span> {{ item.title }}
+                </span>
+                <span class="mt-0.5 block text-[10px] leading-relaxed text-slate-500">{{ item.desc }}</span>
+              </span>
+            </button>
+          }
+        </div>
+
+        @if (allDone()) {
+          <div class="mt-4 flex items-center gap-3 rounded-xl border border-amber-300/25 bg-amber-300/[0.07] p-3.5">
+            <span class="text-xl">🎖️</span>
+            <div>
+              <p class="text-xs font-semibold text-amber-100">¡Observador estelar!</p>
+              <p class="text-[10px] text-amber-100/60">Ya tienes el plan completo. Ahora solo falta que la noche colabore.</p>
+            </div>
+            <button type="button" (click)="resetChecks()" class="ml-auto text-[9px] text-amber-200/60 underline underline-offset-2">Reiniciar</button>
+          </div>
+        }
+      </div>
+
+      <div class="glass p-5 sm:p-6">
+        <p class="text-[10px] font-bold tracking-[0.2em] text-slate-500 uppercase">Cuándo y dónde mirar</p>
+        <div class="mt-3 space-y-3">
+          <div class="flex gap-3">
+            <span class="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-fuchsia-400/10 text-sm">🗓️</span>
+            <div>
+              <p class="text-[11px] font-semibold text-white">La mejor época</p>
+              <p class="text-[10px] leading-relaxed text-slate-500">
+                En el hemisferio sur, las noches de invierno (junio a agosto) son ideales: el centro
+                galáctico aparece alto en el cielo después del atardecer.
+              </p>
+            </div>
+          </div>
+          <div class="flex gap-3">
+            <span class="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-cyan-400/10 text-sm">🧭</span>
+            <div>
+              <p class="text-[11px] font-semibold text-white">Hacia dónde</p>
+              <p class="text-[10px] leading-relaxed text-slate-500">
+                Busca Sagitario y Escorpio: ahí se ve la parte más densa y brillante de la banda.
+                La Cruz del Sur también ayuda a orientarte en el sur.
+              </p>
+            </div>
+          </div>
+          <div class="flex gap-3">
+            <span class="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-amber-400/10 text-sm">🔦</span>
+            <div>
+              <p class="text-[11px] font-semibold text-white">Luz roja, paciencia</p>
+              <p class="text-[10px] leading-relaxed text-slate-500">
+                Tapa la linterna con papel rojo y evita el celular. Necesitas 20 minutos para adaptar
+                la vista y hasta una hora para verla con todo su detalle.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="mt-4 rounded-xl border border-white/10 bg-white/[0.03] p-3">
+          <p class="text-[10px] leading-relaxed text-slate-500">
+            🌎 <strong class="text-slate-300">Ojo:</strong> desde una ciudad grande no se ve. Necesitas
+            viajar al menos media hora hacia un lugar oscuro, sin faroles directos.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

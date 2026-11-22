@@ -1,0 +1,323 @@
+<section id="cenit" class="section-shell">
+  <div class="wrap">
+    <div class="grid items-end gap-6 lg:grid-cols-[1.4fr_0.6fr]" appReveal>
+      <div>
+        <div class="flex flex-wrap items-center gap-2.5">
+          <span class="mission-tag border-teal-300/25 bg-teal-400/10 text-teal-200">Misión 11 · Punto 10</span>
+          <span class="chip">🧭 Cúpula celeste</span>
+        </div>
+        <h2 class="section-title mt-5">
+          El arriba y el abajo<br class="hidden sm:block" />
+          de tu <span class="grad-text">cielo</span>.
+        </h2>
+        <p class="section-lede">
+          Dos direcciones invisibles que dependen de dónde estés parado: una apunta justo sobre tu
+          cabeza y la otra atraviesa el planeta hasta el otro lado. Mueve la altura y encuéntralas.
+        </p>
+      </div>
+      <div class="glass hidden p-4 lg:block">
+        <p class="text-[10px] font-bold tracking-[0.2em] text-slate-500 uppercase">La pregunta</p>
+        <p class="mt-2 text-sm leading-relaxed text-slate-300">¿Qué es el cenit y el nadir?</p>
+        <p class="mt-2 text-xs leading-relaxed text-slate-500">No son lugares: son direcciones.</p>
+      </div>
+    </div>
+
+    <div class="mt-10 grid gap-5 lg:grid-cols-[1.35fr_0.65fr]">
+      <!-- Cúpula -->
+      <div class="glass overflow-hidden" appReveal>
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 px-4 py-4 sm:px-5">
+          <div>
+            <p class="text-[10px] font-bold tracking-[0.18em] text-teal-300 uppercase">Cúpula local interactiva</p>
+            <p class="mt-1 text-xs text-slate-500">Altura medida desde el horizonte</p>
+          </div>
+          <span
+            class="inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-[10px] font-semibold"
+            [class.border-teal-300/30]="aboveHorizon()"
+            [class.bg-teal-300/10]="aboveHorizon()"
+            [class.text-teal-200]="aboveHorizon()"
+            [class.border-rose-300/30]="!aboveHorizon()"
+            [class.bg-rose-300/10]="!aboveHorizon()"
+            [class.text-rose-200]="!aboveHorizon()"
+          >
+            <span class="h-1.5 w-1.5 rounded-full bg-current"></span>
+            {{ pointName() }} · {{ altitude() }}°
+          </span>
+        </div>
+
+        <div class="scene-zenith relative overflow-hidden">
+          <div class="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_50%_0%,rgba(34,211,238,.08),transparent_55%)]"></div>
+          <svg viewBox="0 0 700 640" class="relative h-auto w-full" role="img" aria-label="Corte vertical del cielo local con el cenit arriba, el horizonte y el nadir abajo">
+            <defs>
+              <linearGradient id="domeSky" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#0b1024" />
+                <stop offset=".55" stop-color="#08182f" />
+                <stop offset="1" stop-color="#0e2b40" />
+              </linearGradient>
+              <linearGradient id="groundGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#07101c" />
+                <stop offset="1" stop-color="#02040a" />
+              </linearGradient>
+              <radialGradient id="zenithGlow" cx="50%" cy="50%" r="50%">
+                <stop offset="0" stop-color="#a5f3fc" stop-opacity=".55" />
+                <stop offset="1" stop-color="#22d3ee" stop-opacity="0" />
+              </radialGradient>
+              <radialGradient id="nadirGlow" cx="50%" cy="50%" r="50%">
+                <stop offset="0" stop-color="#fda4af" stop-opacity=".4" />
+                <stop offset="1" stop-color="#fb7185" stop-opacity="0" />
+              </radialGradient>
+              <radialGradient id="observerGlow" cx="50%" cy="50%" r="50%">
+                <stop offset="0" stop-color="#67e8f9" stop-opacity=".3" />
+                <stop offset="1" stop-color="#67e8f9" stop-opacity="0" />
+              </radialGradient>
+              <filter id="zenithBlur" x="-100%" y="-100%" width="300%" height="300%">
+                <feGaussianBlur stdDeviation="12" />
+              </filter>
+              <linearGradient id="markerGrad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#fffbeb" />
+                <stop offset="1" stop-color="#67e8f9" />
+              </linearGradient>
+            </defs>
+
+            <!-- Cielo -->
+            <path d="M 70 330 A 280 280 0 0 1 630 330 L 630 330 Z" fill="url(#domeSky)" />
+            <path d="M 70 330 A 280 280 0 0 1 630 330" fill="none" stroke="rgba(103,232,249,.2)" stroke-width="1.5" />
+            <circle cx="350" cy="330" r="280" fill="none" stroke="rgba(255,255,255,.06)" />
+
+            <!-- Estrellas -->
+            @for (star of stars; track $index) {
+              <circle [attr.cx]="star.x" [attr.cy]="star.y" [attr.r]="star.r" fill="#e2e8f0" [attr.opacity]="star.opacity" />
+            }
+
+            <!-- Suelo -->
+            <rect x="0" y="330" width="700" height="310" fill="url(#groundGrad)" />
+            <path d="M0 330 Q 130 316 260 330 T 520 330 T 700 330 L700 356 L0 356 Z" fill="#08111d" opacity=".8" />
+            <path d="M0 360 L700 360 L700 640 L0 640 Z" fill="url(#groundGrad)" opacity=".9" />
+
+            <!-- Eje vertical -->
+            <line x1="350" y1="34" x2="350" y2="620" stroke="rgba(148,163,184,.24)" stroke-width="1.2" stroke-dasharray="3 7" />
+
+            <!-- Glow cenit -->
+            <circle cx="350" cy="50" r="38" fill="url(#zenithGlow)" filter="url(#zenithBlur)" />
+            <circle cx="350" cy="50" r="4" fill="#a5f3fc" class="animate-pulse" />
+            <circle cx="350" cy="50" r="12" fill="none" stroke="rgba(165,243,252,.5)" />
+            <text x="350" y="26" text-anchor="middle" fill="rgba(207,250,254,.9)" font-size="13" font-weight="600" letter-spacing="2.5" font-family="Space Grotesk, sans-serif">CENIT · 90°</text>
+            <text x="368" y="64" fill="rgba(148,163,184,.55)" font-size="9" font-family="Space Grotesk, sans-serif">justo sobre tu cabeza</text>
+
+            <!-- Horizonte -->
+            <line x1="42" y1="330" x2="658" y2="330" stroke="rgba(103,232,249,.5)" stroke-width="1.4" />
+            <text x="658" y="320" text-anchor="end" fill="rgba(103,232,249,.6)" font-size="9" letter-spacing="2" font-family="Space Grotesk, sans-serif">HORIZONTE · 0°</text>
+
+            <!-- Glow nadir -->
+            <circle cx="350" cy="610" r="34" fill="url(#nadirGlow)" filter="url(#zenithBlur)" />
+            <circle cx="350" cy="610" r="3.5" fill="#fda4af" />
+            <circle cx="350" cy="610" r="11" fill="none" stroke="rgba(253,164,175,.45)" stroke-dasharray="2 3" />
+            <text x="350" y="590" text-anchor="middle" fill="rgba(254,205,211,.75)" font-size="11" font-weight="600" letter-spacing="2" font-family="Space Grotesk, sans-serif">NADIR · −90°</text>
+            <text x="350" y="632" text-anchor="middle" fill="rgba(148,163,184,.45)" font-size="8" letter-spacing="1" font-family="Space Grotesk, sans-serif">AL OTRO LADO DEL PLANETA</text>
+
+            <!-- Línea al marcador -->
+            <line
+              x1="350"
+              y1="330"
+              [attr.x2]="marker().x"
+              [attr.y2]="marker().y"
+              stroke="rgba(253,230,138,.35)"
+              stroke-width="1"
+              stroke-dasharray="3 4"
+            />
+            <circle cx="350" cy="330" r="26" fill="url(#observerGlow)" />
+
+            <!-- Observador -->
+            <g fill="#02050c">
+              <circle cx="350" cy="303" r="5.5" />
+              <path d="M344 311 q6 -3 12 0 l4 19 h-20 z" />
+              <rect x="340" y="329" width="6" height="9" rx="2" />
+              <rect x="354" y="329" width="6" height="9" rx="2" />
+              <path d="M347 315 l-5 9" stroke="#02050c" stroke-width="2.4" stroke-linecap="round" />
+              <path d="M353 315 l12 -9" stroke="#02050c" stroke-width="2.4" stroke-linecap="round" />
+              <circle cx="330" cy="345" r="1.6" fill="#67e8f9" opacity=".7" />
+              <circle cx="372" cy="350" r="1.2" fill="#67e8f9" opacity=".5" />
+            </g>
+            <text x="350" y="362" text-anchor="middle" fill="rgba(148,163,184,.55)" font-size="8" letter-spacing="2" font-family="Space Grotesk, sans-serif">TÚ</text>
+
+            <!-- Marcador de estrella -->
+            <g>
+              <circle [attr.cx]="marker().x" [attr.cy]="marker().y" r="28" fill="#fde68a" opacity=".08" class="animate-pulse-soft" />
+              <circle [attr.cx]="marker().x" [attr.cy]="marker().y" r="10" fill="none" stroke="rgba(253,230,138,.35)" [attr.stroke-dasharray]="aboveHorizon() ? '0' : '2 3'" />
+              <circle [attr.cx]="marker().x" [attr.cy]="marker().y" r="4.5" fill="url(#markerGrad)" />
+              <line [attr.x1]="marker().x - 14" [attr.y1]="marker().y" [attr.x2]="marker().x + 14" [attr.y2]="marker().y" stroke="#fde68a" stroke-width=".9" opacity=".6" />
+              <line [attr.x1]="marker().x" [attr.y1]="marker().y - 14" [attr.x2]="marker().x" [attr.y2]="marker().y + 14" stroke="#fde68a" stroke-width=".9" opacity=".6" />
+              <text
+                [attr.x]="marker().x + 22"
+                [attr.y]="marker().y - 10"
+                fill="rgba(254,243,199,.9)"
+                font-size="11"
+                font-family="Space Grotesk, sans-serif"
+                stroke="#02050c"
+                stroke-width="3"
+                paint-order="stroke"
+              >{{ pointName() }}</text>
+              <text
+                [attr.x]="marker().x + 22"
+                [attr.y]="marker().y + 4"
+                fill="rgba(253,230,138,.55)"
+                font-size="8"
+                font-family="Space Grotesk, sans-serif"
+                stroke="#02050c"
+                stroke-width="3"
+                paint-order="stroke"
+              >altura {{ altitude() }}°</text>
+            </g>
+
+            <!-- Leyenda -->
+            <g font-family="Space Grotesk, sans-serif" font-size="8" fill="rgba(148,163,184,.4)">
+              <text x="24" y="380">ZONA VISIBLE DEL CIELO</text>
+              <text x="24" y="398">EL OTRO LADO DE LA TIERRA</text>
+            </g>
+          </svg>
+
+          <div class="pointer-events-none absolute bottom-4 left-4 rounded-full border border-white/10 bg-black/40 px-3 py-1.5 backdrop-blur-md">
+            <span class="text-[9px] tracking-[0.14em] text-slate-500 uppercase">Corte vertical · no a escala</span>
+          </div>
+        </div>
+
+        <div class="border-t border-white/10 px-4 py-5 sm:px-6">
+          <div class="flex flex-wrap items-center justify-between gap-3">
+            <label for="altitude" class="text-xs font-semibold text-slate-300">Altura sobre el horizonte</label>
+            <div class="flex flex-wrap gap-1.5">
+              <button type="button" (click)="setAltitude(90)" class="mini-btn" [class.mini-on]="altitude() === 90">Cenit</button>
+              <button type="button" (click)="setAltitude(0)" class="mini-btn" [class.mini-on]="altitude() === 0">Horizonte</button>
+              <button type="button" (click)="setAltitude(-90)" class="mini-btn" [class.mini-on]="altitude() === -90">Nadir</button>
+            </div>
+          </div>
+          <input
+            id="altitude"
+            type="range"
+            min="-90"
+            max="90"
+            step="1"
+            [value]="altitude()"
+            (input)="onSlider($any($event.target).value)"
+            class="range-cosmic mt-2"
+            style="--range-color: #5eead4"
+            aria-label="Altura del marcador sobre el horizonte"
+          />
+          <div class="flex items-center justify-between text-[9px] tracking-wide text-slate-600">
+            <span>−90° · Nadir</span>
+            <span>0° · Horizonte</span>
+            <span>+90° · Cenit</span>
+          </div>
+          <p class="mt-3 text-[11px] leading-relaxed text-slate-400">{{ explanation() }}</p>
+        </div>
+      </div>
+
+      <!-- Panel -->
+      <div class="flex flex-col gap-4">
+        <div class="glass relative overflow-hidden p-5 sm:p-6" appReveal>
+          <div class="pointer-events-none absolute -top-20 -right-16 h-48 w-48 rounded-full bg-teal-300/10 blur-3xl"></div>
+          <p class="text-[10px] font-bold tracking-[0.2em] text-slate-500 uppercase">Respuesta exprés</p>
+          <h3 class="font-display mt-3 text-xl leading-snug font-semibold text-white">
+            Dos puntos<br /><span class="text-teal-300">imaginarios</span>.
+          </h3>
+          <div class="mt-4 space-y-3">
+            <div class="rounded-xl border border-teal-300/20 bg-teal-300/[0.05] p-3.5">
+              <div class="flex items-center justify-between">
+                <p class="text-[10px] font-bold tracking-[0.14em] text-teal-300 uppercase">Cenit</p>
+                <span class="text-[10px] text-teal-200/50">90°</span>
+              </div>
+              <p class="mt-1.5 text-[11px] leading-relaxed text-slate-400">
+                Punto del cielo que está <strong class="text-slate-200">exactamente sobre tu cabeza</strong>,
+                en vertical con tu posición. Si miras al cenit, miras hacia arriba sin inclinarte.
+              </p>
+            </div>
+            <div class="rounded-xl border border-rose-300/20 bg-rose-300/[0.05] p-3.5">
+              <div class="flex items-center justify-between">
+                <p class="text-[10px] font-bold tracking-[0.14em] text-rose-300 uppercase">Nadir</p>
+                <span class="text-[10px] text-rose-200/50">−90°</span>
+              </div>
+              <p class="mt-1.5 text-[11px] leading-relaxed text-slate-400">
+                Punto <strong class="text-slate-200">opuesto al cenit</strong>: está debajo de tus pies,
+                al otro lado del centro de la Tierra. Es el cenit de tu antípoda.
+              </p>
+            </div>
+          </div>
+          <div class="mt-3 rounded-xl border border-white/10 bg-white/[0.03] p-3">
+            <p class="text-[10px] leading-relaxed text-slate-500">
+              ⚠️ No son estrellas ni lugares físicos: son <strong class="text-slate-300">direcciones</strong>
+              que cambian cuando te moves. El cenit de una persona en Japón no es el mismo que el tuyo.
+            </p>
+          </div>
+        </div>
+
+        <div class="glass p-5" appReveal>
+          <p class="text-[10px] font-bold tracking-[0.2em] text-slate-500 uppercase">Tu antípoda</p>
+          <svg viewBox="0 0 300 220" class="mt-3 w-full" role="img" aria-label="La Tierra con dos observadores opuestos y sus direcciones cenit y nadir">
+            <defs>
+              <radialGradient id="earthZen" cx="35%" cy="30%" r="75%">
+                <stop offset="0" stop-color="#bae6fd" />
+                <stop offset=".5" stop-color="#2563eb" />
+                <stop offset="1" stop-color="#0b1f45" />
+              </radialGradient>
+            </defs>
+            <circle cx="150" cy="110" r="72" fill="url(#earthZen)" />
+            <path d="M113 78 q20 8 12 28 q-2 12 14 18 q0 14 -20 12" stroke="#4ade80" stroke-width="6" fill="none" opacity=".5" stroke-linecap="round" />
+            <circle cx="150" cy="36" r="4" fill="#fbbf24" />
+            <text x="162" y="39" fill="rgba(253,230,138,.8)" font-size="8" font-family="Space Grotesk, sans-serif">TÚ</text>
+            <circle cx="150" cy="184" r="4" fill="#fda4af" />
+            <text x="162" y="193" fill="rgba(253,164,175,.75)" font-size="8" font-family="Space Grotesk, sans-serif">ANTÍPODA</text>
+            <line x1="150" y1="10" x2="150" y2="210" stroke="rgba(255,255,255,.15)" stroke-dasharray="3 4" />
+            <line x1="150" y1="36" x2="150" y2="18" stroke="rgba(94,234,212,.7)" stroke-width="1.2" marker-end="url(#tinyZenArrow)" />
+            <line x1="150" y1="184" x2="150" y2="202" stroke="rgba(253,164,175,.7)" stroke-width="1.2" marker-end="url(#tinyZenArrow2)" />
+            <text x="160" y="20" text-anchor="end" fill="rgba(94,234,212,.8)" font-size="8" font-family="Space Grotesk, sans-serif">CENIT DE A</text>
+            <text x="160" y="204" text-anchor="end" fill="rgba(253,164,175,.8)" font-size="8" font-family="Space Grotesk, sans-serif">NADIR DE A</text>
+            <defs>
+              <marker id="tinyZenArrow" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+                <path d="M0 0 L10 5 L0 10z" fill="rgba(94,234,212,.8)" />
+              </marker>
+              <marker id="tinyZenArrow2" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+                <path d="M0 0 L10 5 L0 10z" fill="rgba(253,164,175,.8)" />
+              </marker>
+            </defs>
+          </svg>
+          <p class="mt-2 text-[11px] leading-relaxed text-slate-400">
+            Tu nadir apunta hacia donde está el cenit de tu antípoda: la persona que vive en el
+            extremo opuesto del planeta. Es la misma línea, en direcciones contrarias.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-5 grid gap-4 sm:grid-cols-3" appReveal>
+      <div class="glass glass-hover p-5">
+        <div class="flex items-center justify-between">
+          <p class="font-display text-2xl font-semibold text-teal-300">90°</p>
+          <span class="text-lg">🔭</span>
+        </div>
+        <p class="mt-1 text-xs font-semibold text-white">altura del cenit</p>
+        <p class="mt-1.5 text-[11px] leading-relaxed text-slate-500">
+          Se mide desde el horizonte: 0° es el horizonte y 90° es justo arriba de tu cabeza.
+        </p>
+      </div>
+      <div class="glass glass-hover p-5">
+        <div class="flex items-center justify-between">
+          <p class="font-display text-2xl font-semibold text-rose-300">−90°</p>
+          <span class="text-lg">🌍</span>
+        </div>
+        <p class="mt-1 text-xs font-semibold text-white">altura del nadir</p>
+        <p class="mt-1.5 text-[11px] leading-relaxed text-slate-500">
+          Por debajo del horizonte. Para verlo tendrías que atravesar la Tierra en línea recta.
+        </p>
+      </div>
+      <div class="glass glass-hover p-5">
+        <div class="flex items-center justify-between">
+          <p class="font-display text-2xl font-semibold text-violet-300">Cambia</p>
+          <span class="text-lg">📍</span>
+        </div>
+        <p class="mt-1 text-xs font-semibold text-white">cuando te moves</p>
+        <p class="mt-1.5 text-[11px] leading-relaxed text-slate-500">
+          El cenit depende de tu ubicación. De hecho, mientras la Tierra gira, el cenit viaja con
+          vos y las estrellas parecen moverse.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>

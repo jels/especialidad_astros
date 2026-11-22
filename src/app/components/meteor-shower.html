@@ -1,0 +1,160 @@
+<section id="meteoros" class="section-shell">
+  <div class="wrap">
+    <div class="grid items-end gap-6 lg:grid-cols-[1.4fr_0.6fr]" appReveal>
+      <div>
+        <div class="flex flex-wrap items-center gap-2.5">
+          <span class="mission-tag border-amber-300/25 bg-amber-400/10 text-amber-200">Misión 02 · Pregunta 1b</span>
+          <span class="chip">☄️ Cielo interactivo</span>
+        </div>
+        <h2 class="section-title mt-5">
+          Deseos que cruzan<br class="hidden sm:block" />
+          el <span class="grad-text-warm">cielo</span>.
+        </h2>
+        <p class="section-lede">
+          Esa raya de luz que dura un segundo no es una estrella cayendo. Es una piedra espacial
+          chocando contra nuestra atmósfera a miles de kilómetros por hora. Toca el cielo y descubre
+          qué es una estrella fugaz.
+        </p>
+      </div>
+      <div class="glass hidden p-4 lg:block">
+        <p class="text-[10px] font-bold tracking-[0.2em] text-slate-500 uppercase">La pregunta</p>
+        <p class="mt-2 text-sm leading-relaxed text-slate-300">¿Qué es una estrella fugaz?</p>
+        <p class="mt-2 text-xs leading-relaxed text-slate-500">Respuesta corta: no es una estrella.</p>
+      </div>
+    </div>
+
+    <div class="mt-10 grid gap-5 lg:grid-cols-[1.35fr_0.85fr]">
+      <!-- Cielo interactivo -->
+      <div class="glass overflow-hidden" appReveal>
+        <div class="relative">
+          <canvas
+            #canvas
+            (click)="makeWish($event)"
+            class="block h-[360px] w-full cursor-crosshair touch-pan-y sm:h-[500px]"
+            role="img"
+            aria-label="Cielo nocturno interactivo con estrellas y meteoros. Haz clic para pedir un deseo."
+          ></canvas>
+
+          <div class="pointer-events-none absolute inset-x-0 top-0 flex items-start justify-between p-4 sm:p-5">
+            <span class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/35 px-3 py-1.5 backdrop-blur-md">
+              <span class="h-1.5 w-1.5 animate-pulse rounded-full bg-amber-300"></span>
+              <span class="text-[10px] font-semibold tracking-[0.14em] text-slate-300 uppercase">Atmósfera · 100 km de altura</span>
+            </span>
+            <span class="rounded-full border border-white/10 bg-black/35 px-3 py-1.5 text-[10px] font-semibold text-amber-200 backdrop-blur-md">
+              {{ wishes() }} {{ wishes() === 1 ? 'deseo' : 'deseos' }}
+            </span>
+          </div>
+
+          <div class="pointer-events-none absolute inset-x-0 bottom-0 p-4 sm:p-5">
+            <div class="max-w-md rounded-2xl border border-white/10 bg-black/45 px-4 py-3 backdrop-blur-md">
+              <p class="text-[9px] font-bold tracking-[0.18em] text-amber-300 uppercase">Último deseo lanzado</p>
+              <p class="mt-1 text-xs leading-snug text-slate-200 sm:text-sm">{{ wishMessage() }}</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap items-center justify-between gap-3 border-t border-white/10 px-4 py-4 sm:px-5">
+          <p class="text-[11px] leading-relaxed text-slate-500">
+            👆 Toca cualquier punto del cielo. Cada toque lanza un meteoro de verdad (bueno, en la
+            pantalla).
+          </p>
+          <button type="button" (click)="makeWish()" class="btn-primary !px-5 !py-2.5 text-xs">
+            ☄️ Pedir un deseo
+          </button>
+        </div>
+      </div>
+
+      <!-- Explicación -->
+      <div class="flex flex-col gap-4" appReveal>
+        <div class="glass relative overflow-hidden p-5 sm:p-6">
+          <div class="pointer-events-none absolute -top-20 -right-16 h-48 w-48 rounded-full bg-amber-400/10 blur-3xl"></div>
+          <p class="text-[10px] font-bold tracking-[0.2em] text-slate-500 uppercase">Respuesta exprés</p>
+          <h3 class="font-display mt-3 text-xl leading-tight font-semibold text-white">
+            No es una estrella.<br /><span class="text-amber-300">Es una roca incendiándose.</span>
+          </h3>
+          <p class="mt-3 text-sm leading-relaxed text-slate-400">
+            Una <strong class="text-white">estrella fugaz</strong> es un <strong class="text-white">meteoro</strong>:
+            el destello que produce un fragmento de roca o polvo espacial al entrar a gran velocidad
+            en la atmósfera terrestre. La fricción y la compresión del aire lo calientan tanto que
+            brilla.
+          </p>
+
+          <div class="mt-5 space-y-2">
+            <div class="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.03] p-3">
+              <span class="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-slate-500/15 text-base">🪨</span>
+              <div>
+                <p class="text-xs font-semibold text-white">Meteoroide</p>
+                <p class="text-[11px] text-slate-500">La roca viajando por el espacio.</p>
+              </div>
+            </div>
+            <div class="flex justify-center text-slate-600">↓</div>
+            <div class="flex items-center gap-3 rounded-2xl border border-amber-300/20 bg-amber-300/[0.06] p-3">
+              <span class="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-amber-400/15 text-base">🔥</span>
+              <div>
+                <p class="text-xs font-semibold text-amber-100">Meteoro</p>
+                <p class="text-[11px] text-amber-100/60">La estrella fugaz: la raya de luz en el cielo.</p>
+              </div>
+            </div>
+            <div class="flex justify-center text-slate-600">↓</div>
+            <div class="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.03] p-3">
+              <span class="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-orange-500/15 text-base">💥</span>
+              <div>
+                <p class="text-xs font-semibold text-white">Meteorito</p>
+                <p class="text-[11px] text-slate-500">El resto que logra llegar al suelo.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-4 grid grid-cols-2 gap-2.5">
+            <div class="stat-card">
+              <p class="font-display text-lg font-semibold text-white">11–72</p>
+              <p class="text-[10px] text-slate-500">km por segundo</p>
+            </div>
+            <div class="stat-card">
+              <p class="font-display text-lg font-semibold text-white">80–120</p>
+              <p class="text-[10px] text-slate-500">km de altura</p>
+            </div>
+          </div>
+          <p class="mt-3 text-[10px] leading-relaxed text-slate-500">
+            La mayoría son del tamaño de un grano de arena. En una noche de lluvia buena puedes ver
+            decenas por hora.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lluvias famosas -->
+    <div class="mt-5 grid gap-4 sm:grid-cols-3" appReveal>
+      <div class="glass glass-hover p-5">
+        <div class="flex items-center justify-between">
+          <span class="text-2xl">🌠</span>
+          <span class="chip !py-0.5 !text-[10px]">Agosto</span>
+        </div>
+        <p class="mt-3 text-sm font-semibold text-white">Perseidas</p>
+        <p class="mt-1 text-[11px] leading-relaxed text-slate-500">
+          Restos del cometa Swift-Tuttle. En el hemisferio norte son las reinas del verano.
+        </p>
+      </div>
+      <div class="glass glass-hover p-5">
+        <div class="flex items-center justify-between">
+          <span class="text-2xl">✨</span>
+          <span class="chip !py-0.5 !text-[10px]">Diciembre</span>
+        </div>
+        <p class="mt-3 text-sm font-semibold text-white">Gemínidas</p>
+        <p class="mt-1 text-[11px] leading-relaxed text-slate-500">
+          De las más intensas del año. No vienen de un cometa clásico, sino del asteroide Faetón.
+        </p>
+      </div>
+      <div class="glass glass-hover p-5">
+        <div class="flex items-center justify-between">
+          <span class="text-2xl">☄️</span>
+          <span class="chip !py-0.5 !text-[10px]">Enero</span>
+        </div>
+        <p class="mt-3 text-sm font-semibold text-white">Cuadrántidas</p>
+        <p class="mt-1 text-[11px] leading-relaxed text-slate-500">
+          Pico corto e intenso. Abrígate: las mejores horas suelen ser después de medianoche.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>

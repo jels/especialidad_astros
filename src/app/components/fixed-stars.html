@@ -1,0 +1,327 @@
+<section id="estrellas" class="section-shell">
+  <div class="wrap">
+    <div class="grid items-end gap-6 lg:grid-cols-[1.4fr_0.6fr]" appReveal>
+      <div>
+        <div class="flex flex-wrap items-center gap-2.5">
+          <span class="mission-tag border-indigo-300/25 bg-indigo-400/10 text-indigo-200">Misión 07 · Punto 5</span>
+          <span class="chip">✨ Mapa del cielo austral</span>
+        </div>
+        <h2 class="section-title mt-5">
+          Cinco puntos brillantes<br class="hidden sm:block" />
+          con <span class="grad-text">nombre propio</span>.
+        </h2>
+        <p class="section-lede">
+          No todas las luces del cielo son iguales. Estas cinco estrellas se ven a simple vista y
+          tienen historia, distancia y hasta color propio. Tócalas para identificarlas.
+        </p>
+      </div>
+      <div class="glass hidden p-4 lg:block">
+        <p class="text-[10px] font-bold tracking-[0.2em] text-slate-500 uppercase">La consigna</p>
+        <p class="mt-2 text-sm leading-relaxed text-slate-300">Identificar cinco estrellas fijas.</p>
+        <p class="mt-2 text-xs leading-relaxed text-slate-500">Y descubrir qué las diferencia de un planeta.</p>
+      </div>
+    </div>
+
+    <div class="mt-10 grid gap-5 lg:grid-cols-[1.35fr_0.65fr]">
+      <!-- Mapa -->
+      <div class="glass overflow-hidden" appReveal>
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 px-4 py-4 sm:px-5">
+          <div>
+            <p class="text-[10px] font-bold tracking-[0.18em] text-indigo-300 uppercase">Mapa estelar interactivo</p>
+            <p class="mt-1 text-xs text-slate-500">5 estrellas · hemisferio sur · posiciones simplificadas</p>
+          </div>
+          <button
+            type="button"
+            (click)="toggleNames()"
+            class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3.5 py-2 text-[10px] font-semibold text-slate-300 transition-colors hover:border-indigo-300/40 hover:text-indigo-200"
+            [attr.aria-pressed]="showNames()"
+          >
+            <span class="h-1.5 w-1.5 rounded-full bg-indigo-300"></span>
+            {{ showNames() ? 'Ocultar nombres' : 'Mostrar nombres' }}
+          </button>
+        </div>
+
+        <div class="scene-stars relative overflow-hidden">
+          <div class="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_50%_50%,rgba(139,92,246,.1),transparent_55%)]"></div>
+          <svg viewBox="0 0 900 540" class="relative h-auto w-full" role="img" aria-label="Mapa interactivo con cinco estrellas fijas: Sirio, Canopo, Alfa Centauri, Achernar y Acrux">
+            <defs>
+              <linearGradient id="milkyFaint" x1="0" x2="1" y1="0" y2="1">
+                <stop offset="0" stop-color="#8b5cf6" stop-opacity="0" />
+                <stop offset=".4" stop-color="#a78bfa" stop-opacity=".12" />
+                <stop offset=".7" stop-color="#67e8f9" stop-opacity=".08" />
+                <stop offset="1" stop-color="#8b5cf6" stop-opacity="0" />
+              </linearGradient>
+              <filter id="starBloom" x="-200%" y="-200%" width="500%" height="500%">
+                <feGaussianBlur stdDeviation="5" result="b" />
+                <feMerge>
+                  <feMergeNode in="b" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+            </defs>
+
+            <!-- Banda de la Vía Láctea -->
+            <g transform="rotate(-16 450 270)">
+              <rect x="-120" y="210" width="1140" height="150" fill="url(#milkyFaint)" />
+            </g>
+
+            <!-- Estrellas de fondo -->
+            @for (star of fieldStars; track $index) {
+              <circle
+                [attr.cx]="star.x"
+                [attr.cy]="star.y"
+                [attr.r]="star.r"
+                fill="#e2e8f0"
+                [attr.opacity]="star.opacity"
+              />
+            }
+
+            <!-- Constelaciones de referencia -->
+            <g fill="none" stroke="rgba(196,181,253,.25)" stroke-width="1" stroke-dasharray="3 4">
+              <polyline points="410,246 448,268 486,258 520,286 562,316" />
+              <polyline points="448,268 428,300" />
+              <polyline points="642,420 600,382 576,438 630,470 658,414 642,420" />
+              <polyline points="214,300 262,332 315,370 308,406" />
+              <polyline points="262,332 330,284" />
+              <polyline points="350,70 350,236" />
+              <polyline points="296,166 406,166" />
+              <polyline points="350,166 405,166" />
+              <polyline points="772,380 742,330 692,292 704,242 756,206" />
+            </g>
+            <g font-family="Space Grotesk, sans-serif" font-size="11" letter-spacing="2" fill="rgba(196,181,253,.35)">
+              <text x="374" y="84">CRUZ DEL SUR</text>
+              <text x="590" y="500">CARINA</text>
+              <text x="196" y="424">CENTAURO</text>
+              <text x="572" y="330">CAN MAYOR</text>
+              <text x="690" y="222">ERIDANO</text>
+            </g>
+
+            <!-- Estrellas principales -->
+            @for (star of stars; track star.id; let i = $index) {
+              <g
+                class="cursor-pointer"
+                (click)="selectStar(star.id)"
+                (keydown.enter)="selectStar(star.id)"
+                tabindex="0"
+                role="button"
+                [attr.aria-label]="'Seleccionar ' + star.name + ', en ' + star.constellation"
+              >
+                <title>{{ star.name }} · {{ star.constellation }}</title>
+                <circle [attr.cx]="star.x" [attr.cy]="star.y" r="24" fill="transparent" />
+                <circle
+                  [attr.cx]="star.x"
+                  [attr.cy]="star.y"
+                  r="13"
+                  [attr.fill]="star.glow"
+                  opacity=".12"
+                />
+                <circle
+                  [attr.cx]="star.x"
+                  [attr.cy]="star.y"
+                  [attr.r]="selectedId() === star.id ? 8 : 5.8"
+                  [attr.fill]="star.color"
+                  filter="url(#starBloom)"
+                />
+                <circle
+                  [attr.cx]="star.x"
+                  [attr.cy]="star.y"
+                  [attr.r]="selectedId() === star.id ? 17 : 12"
+                  fill="none"
+                  stroke="rgba(103,232,249,.65)"
+                  stroke-width="1"
+                  [attr.opacity]="selectedId() === star.id ? 0.9 : 0"
+                  class="animate-pulse"
+                />
+                @if (showNames()) {
+                  <text
+                    [attr.x]="star.x + 15"
+                    [attr.y]="star.y + 4"
+                    [attr.fill]="selectedId() === star.id ? '#ffffff' : star.color"
+                    font-size="16"
+                    font-weight="500"
+                    font-family="Space Grotesk, sans-serif"
+                    stroke="#050816"
+                    stroke-width="4"
+                    paint-order="stroke"
+                  >{{ star.name }}</text>
+                  <text
+                    [attr.x]="star.x + 15"
+                    [attr.y]="star.y + 18"
+                    fill="rgba(148,163,184,.55)"
+                    font-size="10"
+                    letter-spacing="1.5"
+                    font-family="Space Grotesk, sans-serif"
+                    stroke="#050816"
+                    stroke-width="3"
+                    paint-order="stroke"
+                  >{{ star.constellation }}</text>
+                }
+                <text
+                  [attr.x]="star.x - 15"
+                  [attr.y]="star.y - 12"
+                  text-anchor="end"
+                  fill="rgba(148,163,184,.4)"
+                  font-size="9"
+                  font-family="Space Grotesk, sans-serif"
+                >{{ i + 1 }}</text>
+              </g>
+            }
+
+            <!-- Brújula -->
+            <g font-family="Space Grotesk, sans-serif" font-size="11" fill="rgba(148,163,184,.45)">
+              <text x="446" y="26" text-anchor="middle">N</text>
+              <text x="446" y="528" text-anchor="middle">S</text>
+              <text x="866" y="276">E</text>
+              <text x="20" y="276">O</text>
+            </g>
+          </svg>
+
+          <div class="pointer-events-none absolute bottom-4 left-4 rounded-xl border border-white/10 bg-black/40 px-3 py-2 backdrop-blur-md">
+            <p class="text-[9px] tracking-[0.14em] text-slate-500 uppercase">Seleccionada</p>
+            <p class="mt-0.5 text-xs font-semibold text-white">{{ selected().name }} · {{ selected().constellation }}</p>
+          </div>
+        </div>
+
+        <div class="border-t border-white/10 px-4 py-4 sm:px-5">
+          <div class="hide-scrollbar flex gap-2 overflow-x-auto">
+            @for (star of stars; track star.id; let i = $index) {
+              <button
+                type="button"
+                (click)="selectStar(star.id)"
+                class="flex shrink-0 items-center gap-2 rounded-full border px-3 py-1.5 text-[10px] font-semibold transition-all"
+                [class.border-indigo-300/50]="selectedId() === star.id"
+                [class.bg-indigo-300/10]="selectedId() === star.id"
+                [class.text-white]="selectedId() === star.id"
+                [class.border-white/10]="selectedId() !== star.id"
+                [class.bg-white/5]="selectedId() !== star.id"
+                [class.text-slate-400]="selectedId() !== star.id"
+              >
+                <span class="text-[9px] text-slate-600">{{ i + 1 }}</span>
+                {{ star.name }}
+              </button>
+            }
+          </div>
+          <p class="mt-3 border-t border-white/10 pt-3 text-[10px] leading-relaxed text-slate-600">
+            🔭 Las cinco se ven a simple vista. En la magnitud, un número más bajo significa más
+            brillo: Sirio (−1,46) es la más brillante de todas. Haz clic en cada punto del mapa para
+            cambiar la ficha.
+          </p>
+        </div>
+      </div>
+
+      <!-- Ficha de estrella -->
+      <div class="flex flex-col gap-4">
+        <div class="glass relative overflow-hidden p-5 sm:p-6" appReveal>
+          <div class="pointer-events-none absolute -top-16 -right-14 h-44 w-44 rounded-full bg-indigo-400/10 blur-3xl"></div>
+          <div class="flex items-center justify-between">
+            <p class="text-[10px] font-bold tracking-[0.2em] text-slate-500 uppercase">Ficha estelar</p>
+            <span class="text-lg">✨</span>
+          </div>
+          <h3 class="font-display mt-2 text-2xl font-semibold text-white">{{ selected().name }}</h3>
+          <p class="text-xs text-indigo-300">{{ selected().constellation }}</p>
+
+          <div class="mt-4 grid grid-cols-2 gap-2.5">
+            <div class="stat-card">
+              <p class="text-[8px] tracking-[0.14em] text-slate-500 uppercase">Brillo aparente</p>
+              <p class="mt-1 text-sm font-semibold text-white">{{ selected().magnitude }}</p>
+              <p class="text-[8px] text-slate-600">magnitud (menor = más brillante)</p>
+            </div>
+            <div class="stat-card">
+              <p class="text-[8px] tracking-[0.14em] text-slate-500 uppercase">Distancia</p>
+              <p class="mt-1 text-sm font-semibold text-white">{{ selected().distance }}</p>
+              <p class="text-[8px] text-slate-600">de la Tierra</p>
+            </div>
+          </div>
+
+          <div class="mt-3">
+            <div class="flex items-center justify-between text-[9px] tracking-wide text-slate-500 uppercase">
+              <span>Brillo comparado</span>
+              <span>{{ brightness() }}%</span>
+            </div>
+            <div class="mt-1.5 h-1.5 overflow-hidden rounded-full bg-white/10">
+              <div class="h-full rounded-full bg-gradient-to-r from-indigo-400 to-amber-200 transition-[width] duration-500" [style.width.%]="brightness()"></div>
+            </div>
+          </div>
+
+          <div class="mt-4 rounded-xl border border-indigo-300/15 bg-indigo-300/[0.05] p-3.5">
+            <p class="text-[9px] font-bold tracking-[0.14em] text-indigo-300 uppercase">Cómo encontrarla</p>
+            <p class="mt-1.5 text-[11px] leading-relaxed text-slate-400">{{ selected().howTo }}</p>
+          </div>
+          <p class="mt-3 text-[11px] leading-relaxed text-slate-500">
+            <span class="font-semibold text-slate-300">Dato:</span> {{ selected().fact }}
+          </p>
+        </div>
+
+        <div class="glass p-5" appReveal>
+          <p class="text-[10px] font-bold tracking-[0.2em] text-slate-500 uppercase">Las cinco, de un vistazo</p>
+          <div class="mt-3 space-y-1.5">
+            @for (star of stars; track star.id) {
+              <button type="button" (click)="selectStar(star.id)" class="flex w-full items-center justify-between rounded-lg px-2 py-1.5 text-left transition-colors hover:bg-white/5" [class.bg-white/5]="selectedId() === star.id">
+                <span class="flex items-center gap-2 text-[11px]" [class.text-white]="selectedId() === star.id" [class.text-slate-400]="selectedId() !== star.id">
+                  <span class="h-1.5 w-1.5 rounded-full" [style.background]="star.color"></span>
+                  {{ star.name }}
+                </span>
+                <span class="text-[9px] text-slate-600">{{ star.constellation }}</span>
+              </button>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Planeta vs estrella -->
+    <div class="glass mt-5 overflow-hidden" appReveal>
+      <div class="border-b border-white/10 px-5 py-5 sm:px-6">
+        <p class="text-[10px] font-bold tracking-[0.2em] text-cyan-300 uppercase">La gran diferencia</p>
+        <h3 class="font-display mt-2 text-xl font-semibold text-white sm:text-2xl">
+          ¿Planeta o estrella fija? <span class="text-slate-500">No es lo mismo.</span>
+        </h3>
+        <p class="mt-2 max-w-3xl text-xs leading-relaxed text-slate-400 sm:text-sm">
+          “Estrella fija” es un nombre histórico: no significa que esté quieta, sino que desde la
+          Tierra <strong class="text-slate-200">parece mantener su posición</strong> respecto de las demás.
+          Los planetas, en cambio, se desplazan entre las constelaciones.
+        </p>
+      </div>
+      <div class="relative grid gap-4 p-5 sm:p-6 md:grid-cols-2">
+        <div class="comparison-card comparison-planet">
+          <div class="flex items-center gap-3">
+            <span class="grid h-11 w-11 place-items-center rounded-2xl border border-sky-300/25 bg-sky-400/10 text-xl">🪐</span>
+            <div>
+              <p class="text-[10px] font-bold tracking-[0.18em] text-sky-300 uppercase">Planeta</p>
+              <p class="text-sm font-semibold text-white">Un mundo que orbita</p>
+            </div>
+          </div>
+          <ul class="mt-4 space-y-2.5">
+            <li class="flex gap-2 text-[11px] leading-relaxed text-slate-400"><span class="text-sky-300">01</span> No produce luz propia: <strong class="text-slate-200">refleja</strong> la luz de una estrella.</li>
+            <li class="flex gap-2 text-[11px] leading-relaxed text-slate-400"><span class="text-sky-300">02</span> Orbita alrededor de una estrella y recorre el cielo con el tiempo.</li>
+            <li class="flex gap-2 text-[11px] leading-relaxed text-slate-400"><span class="text-sky-300">03</span> Su brillo suele ser más estable, sin titilar tanto.</li>
+            <li class="flex gap-2 text-[11px] leading-relaxed text-slate-400"><span class="text-sky-300">04</span> Puede ser rocoso, gaseoso o de hielo. La Tierra es un planeta.</li>
+          </ul>
+        </div>
+        <div class="comparison-card comparison-star">
+          <div class="flex items-center gap-3">
+            <span class="grid h-11 w-11 place-items-center rounded-2xl border border-amber-300/25 bg-amber-400/10 text-xl">✨</span>
+            <div>
+              <p class="text-[10px] font-bold tracking-[0.18em] text-amber-300 uppercase">Estrella fija</p>
+              <p class="text-sm font-semibold text-white">Una bola de plasma que brilla</p>
+            </div>
+          </div>
+          <ul class="mt-4 space-y-2.5">
+            <li class="flex gap-2 text-[11px] leading-relaxed text-slate-400"><span class="text-amber-300">01</span> Produce su propia energía mediante <strong class="text-slate-200">fusión nuclear</strong>.</li>
+            <li class="flex gap-2 text-[11px] leading-relaxed text-slate-400"><span class="text-amber-300">02</span> Aunque se mueve por la galaxia, a simple vista parece “fija”.</li>
+            <li class="flex gap-2 text-[11px] leading-relaxed text-slate-400"><span class="text-amber-300">03</span> Titila porque su luz atraviesa capas de aire en movimiento.</li>
+            <li class="flex gap-2 text-[11px] leading-relaxed text-slate-400"><span class="text-amber-300">04</span> El Sol es una estrella. Sirio, Canopo y Acrux también.</li>
+          </ul>
+        </div>
+        <div class="absolute top-1/2 left-1/2 z-10 hidden h-12 w-12 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-white/15 bg-[#080b1c] font-display text-[10px] font-bold text-slate-400 shadow-xl md:grid">
+          VS
+        </div>
+      </div>
+      <div class="border-t border-white/10 bg-white/[0.02] px-5 py-3.5 sm:px-6">
+        <p class="text-[11px] leading-relaxed text-slate-500">
+          🔭 <strong class="text-slate-300">Clave:</strong> una estrella fija brilla con luz propia; un planeta solo nos devuelve la luz del Sol. Y sí, las estrellas también se mueven: solo que están tan lejos que necesitamos años para notar el cambio.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>

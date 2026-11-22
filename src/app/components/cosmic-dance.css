@@ -1,0 +1,45 @@
+:host {
+  display: block;
+}
+
+.scene-dance {
+  background-color: #040713;
+  background-image:
+    radial-gradient(1px 1px at 14% 22%, rgba(255, 255, 255, 0.55), transparent),
+    radial-gradient(1.4px 1.4px at 38% 65%, rgba(255, 255, 255, 0.6), transparent),
+    radial-gradient(1px 1px at 63% 20%, rgba(255, 255, 255, 0.55), transparent),
+    radial-gradient(1px 1px at 88% 58%, rgba(196, 181, 253, 0.55), transparent),
+    radial-gradient(1px 1px at 72% 84%, rgba(103, 232, 249, 0.5), transparent),
+    linear-gradient(180deg, rgba(10, 14, 35, 0.5), rgba(2, 5, 16, 0.94));
+  background-size: 300px 260px, 380px 340px, 440px 400px, 500px 460px, 340px 320px, 100% 100%;
+}
+
+.control-btn {
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.04);
+  padding: 0.42rem 0.8rem;
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: #cbd5e1;
+  transition: all 0.25s ease;
+}
+
+.control-btn:hover {
+  border-color: rgba(103, 232, 249, 0.35);
+  color: #ecfeff;
+  transform: translateY(-1px);
+}
+
+.position-card {
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.03);
+  padding: 0.8rem;
+  transition: all 0.25s ease;
+}
+
+.position-card:hover {
+  border-color: rgba(103, 232, 249, 0.3);
+  background: rgba(34, 211, 238, 0.05);
+}

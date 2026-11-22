@@ -1,0 +1,359 @@
+<section id="danza" class="section-shell">
+  <div class="wrap">
+    <div class="grid items-end gap-6 lg:grid-cols-[1.4fr_0.6fr]" appReveal>
+      <div>
+        <div class="flex flex-wrap items-center gap-2.5">
+          <span class="mission-tag border-sky-300/25 bg-sky-400/10 text-sky-200">Misión 05 · Punto 3</span>
+          <span class="chip">🌍 Diagrama animado</span>
+        </div>
+        <h2 class="section-title mt-5">
+          La <span class="grad-text">danza cósmica</span><br class="hidden sm:block" />
+          de tres cuerpos.
+        </h2>
+        <p class="section-lede">
+          El Sol, la Tierra y la Luna se mueven sin parar. Reproduce la órbita, ajusta la velocidad
+          y alinea los tres cuerpos para ver dónde se ubican en un eclipse solar y en uno lunar.
+        </p>
+      </div>
+      <div class="glass hidden p-4 lg:block">
+        <p class="text-[10px] font-bold tracking-[0.2em] text-slate-500 uppercase">La consigna</p>
+        <p class="mt-2 text-sm leading-relaxed text-slate-300">
+          Posiciones y movimientos relativos de la Tierra, el Sol y la Luna.
+        </p>
+      </div>
+    </div>
+
+    <div class="mt-10 grid gap-5 lg:grid-cols-[1.35fr_0.65fr]">
+      <div class="glass overflow-hidden" appReveal>
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 px-4 py-4 sm:px-5">
+          <div class="flex items-center gap-2">
+            <span class="relative flex h-2 w-2">
+              <span class="absolute inline-flex h-full w-full rounded-full bg-cyan-300 opacity-50" [class.animate-ping]="playing()"></span>
+              <span class="relative inline-flex h-2 w-2 rounded-full bg-cyan-300"></span>
+            </span>
+            <span class="text-[10px] font-bold tracking-[0.16em] text-slate-400 uppercase">Mapa orbital interactivo</span>
+          </div>
+          <span
+            class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-[10px] font-semibold"
+            [class.border-cyan-300/30]="alignment() === 'solar'"
+            [class.bg-cyan-300/10]="alignment() === 'solar'"
+            [class.text-cyan-200]="alignment() === 'solar'"
+            [class.border-rose-300/30]="alignment() === 'lunar'"
+            [class.bg-rose-300/10]="alignment() === 'lunar'"
+            [class.text-rose-200]="alignment() === 'lunar'"
+            [class.border-white/10]="alignment() === 'none'"
+            [class.bg-white/5]="alignment() === 'none'"
+            [class.text-slate-400]="alignment() === 'none'"
+          >
+            @if (alignment() === 'solar') { ☀️ Posible eclipse solar }
+            @else if (alignment() === 'lunar') { 🌕 Posible eclipse lunar }
+            @else { ✦ {{ alignmentText() }} }
+          </span>
+        </div>
+
+        <div class="scene-dance relative overflow-hidden">
+          <div class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(251,191,36,.1),transparent_32%),radial-gradient(circle_at_50%_50%,rgba(139,92,246,.08),transparent_60%)]"></div>
+          <svg viewBox="0 0 960 600" class="relative h-auto w-full" role="img" aria-label="Diagrama animado del Sol, la Tierra y la Luna con sus órbitas">
+            <defs>
+              <radialGradient id="sunDance" cx="40%" cy="35%" r="70%">
+                <stop offset="0" stop-color="#fffbeb" />
+                <stop offset=".45" stop-color="#fde047" />
+                <stop offset=".8" stop-color="#f59e0b" />
+                <stop offset="1" stop-color="#d97706" />
+              </radialGradient>
+              <radialGradient id="earthDance" cx="35%" cy="30%" r="75%">
+                <stop offset="0" stop-color="#bae6fd" />
+                <stop offset=".45" stop-color="#38bdf8" />
+                <stop offset=".85" stop-color="#1d4ed8" />
+                <stop offset="1" stop-color="#172554" />
+              </radialGradient>
+              <radialGradient id="moonDance" cx="35%" cy="30%" r="75%">
+                <stop offset="0" stop-color="#ffffff" />
+                <stop offset=".55" stop-color="#dbe4ee" />
+                <stop offset="1" stop-color="#8494a8" />
+              </radialGradient>
+              <filter id="sunGlowDance" x="-80%" y="-80%" width="260%" height="260%">
+                <feGaussianBlur stdDeviation="15" result="b" />
+                <feMerge>
+                  <feMergeNode in="b" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+              <filter id="earthGlowDance" x="-60%" y="-60%" width="220%" height="220%">
+                <feGaussianBlur stdDeviation="7" result="b" />
+                <feMerge>
+                  <feMergeNode in="b" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+              <marker id="orbitArrow" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="rgba(103,232,249,.8)" />
+              </marker>
+              <marker id="spinArrow" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="rgba(196,181,253,.9)" />
+              </marker>
+            </defs>
+
+            <!-- Estrellas -->
+            <g fill="#e2e8f0" opacity=".6">
+              <circle cx="90" cy="110" r="1.4" class="animate-twinkle" />
+              <circle cx="210" cy="70" r="1.1" />
+              <circle cx="760" cy="90" r="1.6" class="animate-twinkle [animation-delay:1.2s]" />
+              <circle cx="880" cy="180" r="1.2" />
+              <circle cx="120" cy="480" r="1.5" />
+              <circle cx="820" cy="500" r="1.4" class="animate-twinkle [animation-delay:.6s]" />
+              <circle cx="700" cy="550" r="1.1" />
+              <circle cx="310" cy="520" r="1.2" />
+            </g>
+
+            <!-- Línea de alineación -->
+            <line
+              [attr.x1]="sun.x"
+              [attr.y1]="sun.y"
+              [attr.x2]="moonPoint().x"
+              [attr.y2]="moonPoint().y"
+              stroke="rgba(253,230,138,.65)"
+              stroke-width="1.6"
+              stroke-dasharray="4 6"
+              [attr.opacity]="alignment() === 'none' ? 0 : 0.9"
+            />
+
+            <!-- Órbita terrestre -->
+            <path
+              [attr.d]="orbitPath()"
+              fill="none"
+              stroke="rgba(103,232,249,.24)"
+              stroke-width="1.5"
+              stroke-dasharray="2 8"
+              marker-end="url(#orbitArrow)"
+            />
+            <text x="480" y="94" text-anchor="middle" fill="rgba(165,243,252,.42)" font-size="13" letter-spacing="2.5" font-family="Space Grotesk, sans-serif">ÓRBITA DE LA TIERRA · 365,25 DÍAS</text>
+
+            <!-- Sol -->
+            <circle [attr.cx]="sun.x" [attr.cy]="sun.y" r="72" fill="#fbbf24" opacity=".1" class="animate-pulse-soft" />
+            <circle [attr.cx]="sun.x" [attr.cy]="sun.y" r="48" fill="url(#sunDance)" filter="url(#sunGlowDance)" />
+            <circle [attr.cx]="sun.x - 14" [attr.cy]="sun.y - 14" r="14" fill="#fffbeb" opacity=".2" />
+            <text [attr.x]="sun.x" [attr.y]="sun.y + 78" text-anchor="middle" fill="rgba(253,224,71,.75)" font-size="16" font-weight="600" letter-spacing="2" font-family="Space Grotesk, sans-serif">SOL</text>
+
+            <!-- Tierra -->
+            <g>
+              <circle [attr.cx]="earthPoint().x" [attr.cy]="earthPoint().y" r="38" fill="#38bdf8" opacity=".1" />
+              <ellipse
+                [attr.cx]="earthPoint().x"
+                [attr.cy]="earthPoint().y"
+                rx="96"
+                ry="70"
+                fill="none"
+                stroke="rgba(196,181,253,.3)"
+                stroke-dasharray="2 5"
+              />
+              <g [attr.transform]="'rotate(-23.5 ' + earthPoint().x + ' ' + earthPoint().y + ')'" opacity=".5">
+                <line
+                  [attr.x1]="earthPoint().x"
+                  [attr.y1]="earthPoint().y - 38"
+                  [attr.x2]="earthPoint().x"
+                  [attr.y2]="earthPoint().y + 38"
+                  stroke="#c4b5fd"
+                  stroke-width="1"
+                  stroke-dasharray="3 3"
+                />
+              </g>
+              <circle [attr.cx]="earthPoint().x" [attr.cy]="earthPoint().y" r="21" fill="url(#earthDance)" filter="url(#earthGlowDance)" />
+              <path
+                [attr.d]="'M ' + (earthPoint().x - 8) + ' ' + (earthPoint().y - 7) + ' q 7 4 5 11 q -2 6 6 7'"
+                stroke="#4ade80"
+                stroke-width="3"
+                fill="none"
+                opacity=".6"
+                stroke-linecap="round"
+              />
+              <circle
+                [attr.cx]="earthPoint().x"
+                [attr.cy]="earthPoint().y"
+                r="32"
+                fill="none"
+                stroke="rgba(196,181,253,.5)"
+                stroke-width="1"
+                stroke-dasharray="4 4"
+                marker-end="url(#spinArrow)"
+              />
+              <text
+                [attr.x]="earthPoint().x"
+                [attr.y]="earthPoint().y + 52"
+                text-anchor="middle"
+                fill="rgba(147,197,253,.85)"
+                font-size="14"
+                font-weight="600"
+                letter-spacing="1.5"
+                font-family="Space Grotesk, sans-serif"
+              >TIERRA</text>
+
+              <!-- Luna -->
+              <line
+                [attr.x1]="earthPoint().x"
+                [attr.y1]="earthPoint().y"
+                [attr.x2]="moonPoint().x"
+                [attr.y2]="moonPoint().y"
+                stroke="rgba(255,255,255,.12)"
+                stroke-width="1"
+              />
+              <circle
+                [attr.cx]="moonPoint().x"
+                [attr.cy]="moonPoint().y"
+                [attr.r]="alignment() === 'none' ? 8 : 11"
+                fill="url(#moonDance)"
+                [attr.stroke]="alignment() === 'none' ? 'rgba(255,255,255,.2)' : '#fde68a'"
+                stroke-width="1.5"
+              />
+              <circle
+                [attr.cx]="moonPoint().x"
+                [attr.cy]="moonPoint().y"
+                r="18"
+                fill="none"
+                stroke="rgba(253,230,138,.6)"
+                [attr.opacity]="alignment() === 'none' ? 0 : 1"
+                class="animate-pulse"
+              />
+              <text
+                [attr.x]="moonPoint().x"
+                [attr.y]="moonPoint().y - 20"
+                text-anchor="middle"
+                fill="rgba(226,232,240,.85)"
+                font-size="11"
+                font-weight="600"
+                letter-spacing="1.5"
+                font-family="Space Grotesk, sans-serif"
+              >LUNA</text>
+            </g>
+
+            <!-- Leyenda inferior -->
+            <g font-family="Space Grotesk, sans-serif" font-size="11" fill="rgba(148,163,184,.55)">
+              <circle cx="330" cy="566" r="3" fill="#fbbf24" />
+              <text x="341" y="570">Sol</text>
+              <circle cx="398" cy="566" r="3" fill="#38bdf8" />
+              <text x="409" y="570">Tierra</text>
+              <circle cx="472" cy="566" r="3" fill="#e2e8f0" />
+              <text x="483" y="570">Luna</text>
+              <text x="580" y="570" fill="rgba(148,163,184,.35)">· movimientos exagerados para observar</text>
+            </g>
+          </svg>
+
+          <div class="pointer-events-none absolute right-4 bottom-4 hidden rounded-xl border border-white/10 bg-black/40 px-3 py-2 backdrop-blur-md sm:block">
+            <p class="text-[9px] tracking-[0.14em] text-slate-500 uppercase">Velocidad</p>
+            <p class="mt-0.5 text-xs font-semibold text-cyan-200">{{ speed() }}× · {{ playing() ? 'en movimiento' : 'en pausa' }}</p>
+          </div>
+        </div>
+
+        <div class="border-t border-white/10 px-4 py-4 sm:px-5">
+          <div class="flex flex-wrap items-center justify-between gap-3">
+            <div class="flex flex-wrap gap-2">
+              <button type="button" (click)="alignSolar()" class="control-btn !border-cyan-300/25 !bg-cyan-300/10 !text-cyan-100">
+                ☀️ Eclipse solar
+              </button>
+              <button type="button" (click)="alignLunar()" class="control-btn !border-rose-300/25 !bg-rose-300/10 !text-rose-100">
+                🌕 Eclipse lunar
+              </button>
+              <button type="button" (click)="releaseOrbit()" class="control-btn">⟲ Órbita libre</button>
+            </div>
+            <div class="flex items-center gap-2">
+              <div class="flex rounded-full border border-white/10 bg-black/25 p-0.5">
+                @for (value of speedOptions; track value) {
+                  <button
+                    type="button"
+                    (click)="setSpeed(value)"
+                    class="rounded-full px-2.5 py-1 text-[10px] font-semibold transition-colors"
+                    [class.bg-white/10]="speed() === value"
+                    [class.text-white]="speed() === value"
+                    [class.text-slate-500]="speed() !== value"
+                  >
+                    {{ value }}×
+                  </button>
+                }
+              </div>
+              <button
+                type="button"
+                (click)="togglePlay()"
+                class="grid h-9 w-9 place-items-center rounded-full bg-gradient-to-br from-cyan-300 to-violet-400 text-sm text-slate-950 transition-transform hover:scale-105"
+                [attr.aria-label]="playing() ? 'Pausar animación' : 'Reproducir animación'"
+              >
+                {{ playing() ? '❚❚' : '▶' }}
+              </button>
+            </div>
+          </div>
+          <p class="mt-3 text-[10px] leading-relaxed text-slate-600">
+            💡 Los tamaños y distancias no están a escala: si lo estuvieran, necesitaríamos una
+            pantalla gigantesca. Lo importante es el orden y la dirección de los movimientos.
+          </p>
+        </div>
+      </div>
+
+      <!-- Panel lateral -->
+      <div class="flex flex-col gap-4">
+        <div class="glass p-5" appReveal>
+          <p class="text-[10px] font-bold tracking-[0.2em] text-slate-500 uppercase">Lo que estás viendo</p>
+          <div class="mt-3 space-y-3">
+            @for (motion of motions; track motion.name) {
+              <div class="flex items-start gap-3">
+                <span class="grid h-8 w-8 shrink-0 place-items-center rounded-lg border border-white/10 bg-white/5 text-xs">{{ motion.icon }}</span>
+                <div class="min-w-0 flex-1">
+                  <div class="flex flex-wrap items-baseline justify-between gap-1">
+                    <p class="text-[11px] font-semibold text-white">{{ motion.name }}</p>
+                    <p class="text-[10px] font-semibold text-cyan-300">{{ motion.value }}</p>
+                  </div>
+                  <p class="text-[10px] text-slate-500">{{ motion.note }}</p>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+
+        <div class="glass p-5" appReveal>
+          <p class="text-[10px] font-bold tracking-[0.2em] text-slate-500 uppercase">Dónde ocurre cada eclipse</p>
+          <button type="button" (click)="alignSolar()" class="position-card mt-3 w-full text-left">
+            <div class="flex items-center justify-between gap-2">
+              <span class="text-[10px] font-bold tracking-wide text-cyan-300 uppercase">Solar</span>
+              <span class="text-slate-600">ver en el mapa →</span>
+            </div>
+            <div class="mt-2 flex items-center gap-1.5 text-xs font-semibold text-white">
+              <span class="grid h-5 w-5 place-items-center rounded-full bg-amber-300/20 text-[10px]">☀️</span>
+              Sol <span class="text-slate-600">→</span>
+              <span class="grid h-5 w-5 place-items-center rounded-full bg-slate-200/10 text-[10px]">🌑</span>
+              Luna <span class="text-slate-600">→</span>
+              <span class="grid h-5 w-5 place-items-center rounded-full bg-blue-400/20 text-[10px]">🌍</span>
+              Tierra
+            </div>
+            <p class="mt-1.5 text-[10px] leading-relaxed text-slate-500">
+              La Luna tapa el Sol. Debe estar en Luna nueva.
+            </p>
+          </button>
+          <button type="button" (click)="alignLunar()" class="position-card mt-2 w-full text-left">
+            <div class="flex items-center justify-between gap-2">
+              <span class="text-[10px] font-bold tracking-wide text-rose-300 uppercase">Lunar</span>
+              <span class="text-slate-600">ver en el mapa →</span>
+            </div>
+            <div class="mt-2 flex items-center gap-1.5 text-xs font-semibold text-white">
+              <span class="grid h-5 w-5 place-items-center rounded-full bg-amber-300/20 text-[10px]">☀️</span>
+              Sol <span class="text-slate-600">→</span>
+              <span class="grid h-5 w-5 place-items-center rounded-full bg-blue-400/20 text-[10px]">🌍</span>
+              Tierra <span class="text-slate-600">→</span>
+              <span class="grid h-5 w-5 place-items-center rounded-full bg-slate-200/10 text-[10px]">🌕</span>
+              Luna
+            </div>
+            <p class="mt-1.5 text-[10px] leading-relaxed text-slate-500">
+              La sombra de la Tierra cubre la Luna. Debe estar en Luna llena.
+            </p>
+          </button>
+        </div>
+
+        <div class="glass border-violet-300/20 bg-violet-400/[0.035] p-5" appReveal>
+          <p class="text-[10px] font-bold tracking-[0.2em] text-violet-300 uppercase">La clave</p>
+          <p class="mt-2 text-xs leading-relaxed text-slate-400">
+            La órbita de la Luna está inclinada <strong class="text-white">5,1°</strong> respecto de
+            la órbita terrestre. Por eso, aunque se alinee una vez al mes, casi siempre la sombra
+            pasa un poco por arriba o por abajo.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
