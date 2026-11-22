@@ -8,15 +8,6 @@ header.is-scrolled {
   backdrop-filter: blur(18px);
 }
 
-.marquee-track {
-  animation: marquee 46s linear infinite;
-}
-
-@keyframes marquee {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
+header nav a.nav-active {
+  color: #ffffff;
 }

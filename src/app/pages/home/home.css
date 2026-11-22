@@ -1,0 +1,20 @@
+:host {
+  display: block;
+}
+
+.marquee-track {
+  animation: marquee 46s linear infinite;
+}
+
+.mission-link:hover .mission-arrow {
+  transform: translateX(3px);
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}

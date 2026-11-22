@@ -1,4 +1,5 @@
 import { Component, computed, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { RevealDirective } from '../directives/reveal';
 
 interface Question {
@@ -11,7 +12,7 @@ interface Question {
 
 @Component({
   selector: 'app-space-quiz',
-  imports: [RevealDirective],
+  imports: [RevealDirective, RouterLink],
   templateUrl: './space-quiz.html',
   styleUrl: './space-quiz.css',
 })

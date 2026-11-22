@@ -4,6 +4,8 @@ Sitio web educativo e interactivo de astronomía para adolescentes, desarrollado
 
 Responde de forma visual los diez puntos del trabajo práctico de Astronomía con simuladores, diagramas SVG, mapas estelares, animaciones y un test final.
 
+La portada funciona como centro de misiones. Cada punto tiene su propia URL y su propia página, con un botón **Empezar misión** desde el inicio y navegación anterior/siguiente al final de cada recorrido.
+
 ## Cómo ejecutar
 
 ```bash
@@ -20,6 +22,25 @@ npm run build
 ```
 
 Los archivos quedan en `dist/exploradores-del-cielo/browser`.
+
+## Rutas principales
+
+| Ruta | Vista |
+| --- | --- |
+| `/` | Portada: hero y ruta de las 11 misiones |
+| `/misiones/eclipses` | Misión 01 · Eclipses |
+| `/misiones/estrellas-fugaces` | Misión 02 · Estrellas fugaces |
+| `/misiones/velocidad-de-la-luz` | Misión 03 · Velocidad de la luz |
+| `/misiones/luna-y-mareas` | Misión 04 · La Luna y las mareas |
+| `/misiones/danza-cosmica` | Misión 05 · La danza cósmica |
+| `/misiones/sistema-solar` | Misión 06 · El sistema solar |
+| `/misiones/estrellas-fijas` | Misión 07 · Estrellas fijas |
+| `/misiones/constelaciones` | Misión 08 · Constelaciones |
+| `/misiones/via-lactea` | Misión 09 · Vía Láctea |
+| `/misiones/lucero-venus` | Misión 10 · El lucero |
+| `/misiones/cenit-y-nadir` | Misión 11 · Cenit y nadir |
+| `/misiones/test-final` | Test final de 13 preguntas |
+| `/test-final` | Redirección al test final |
 
 ## Contenido y recorrido
 
@@ -40,10 +61,12 @@ Los archivos quedan en `dist/exploradores-del-cielo/browser`.
 
 ## Detalles técnicos
 
-- **Angular standalone** con signals y control flow (`@if`, `@for`).
+- **Angular standalone** con signals, control flow (`@if`, `@for`) y **Angular Router**.
+- **Carga diferida** de la portada y de las páginas de misión.
 - **Tailwind CSS 4** mediante `@tailwindcss/postcss`.
 - **SVG a mano** para todos los diagramas astronómicos y constelaciones.
 - **Canvas 2D** para el cielo estrellado global y la lluvia de meteoros.
+- **Router con scroll al inicio** y restauración de posición; títulos de página dinámicos.
 - **IntersectionObserver** para revelar secciones y pausar animaciones fuera de pantalla.
 - **Diseño responsive** probado en 320, 390 y 1440 px, sin scroll horizontal.
 - **Accesibilidad**: controles nativos, etiquetas ARIA, foco visible, textos alternativos y respeto por `prefers-reduced-motion`.
@@ -53,7 +76,11 @@ Los archivos quedan en `dist/exploradores-del-cielo/browser`.
 
 ```text
 src/app/
-├── app.ts / app.html          # shell, hero, navegación, índice, footer
+├── app.ts / app.html          # shell: header, índice, footer y router-outlet
+├── app.routes.ts              # portada y páginas de misión
+├── pages/
+│   ├── home/                  # portada con hero, pasos y las 11 tarjetas de misión
+│   └── mission-page/          # layout con breadcrumb, componente y navegación
 ├── components/
 │   ├── eclipse-lab           # misión 01
 │   ├── meteor-shower         # misión 02
@@ -70,6 +97,7 @@ src/app/
 │   ├── space-quiz            # test final
 │   └── starfield             # fondo estrellado global
 ├── data/
+│   ├── missions.ts           # títulos, rutas y descripciones
 │   ├── planets.ts
 │   └── constellations.ts
 └── directives/reveal.ts
