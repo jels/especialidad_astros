@@ -3,7 +3,7 @@ import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { map } from 'rxjs';
-import { ALL_MISSIONS, MISSIONS } from '../../data/missions';
+import { ALL_MISSIONS } from '../../data/missions';
 import { EclipseLab } from '../../components/eclipse-lab';
 import { MeteorShower } from '../../components/meteor-shower';
 import { LightSpeed } from '../../components/light-speed';
@@ -41,8 +41,6 @@ export class MissionPage {
   private readonly route = inject(ActivatedRoute);
   private readonly title = inject(Title);
   private readonly destroyRef = inject(DestroyRef);
-
-  protected readonly missionCount = MISSIONS.length;
 
   protected readonly slug = toSignal(
     this.route.paramMap.pipe(map((params) => params.get('slug') ?? '')),

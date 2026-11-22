@@ -80,7 +80,7 @@ src/app/
 ├── app.routes.ts              # portada y páginas de misión
 ├── pages/
 │   ├── home/                  # portada con hero, pasos y las 11 tarjetas de misión
-│   └── mission-page/          # layout con breadcrumb, componente y navegación
+│   └── mission-page/          # layout de misión y navegación anterior/siguiente
 ├── components/
 │   ├── eclipse-lab           # misión 01
 │   ├── meteor-shower         # misión 02

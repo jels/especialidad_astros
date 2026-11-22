@@ -1,31 +1,6 @@
 @if (mission(); as mission) {
   <div class="mission-page">
-    <div class="wrap pt-28 sm:pt-32">
-      <div class="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-4">
-        <a
-          routerLink="/"
-          class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3.5 py-2 text-[10px] font-semibold text-slate-400 transition-all hover:border-cyan-300/35 hover:text-white"
-        >
-          <span aria-hidden="true">←</span> Inicio
-        </a>
-
-        <div class="flex flex-wrap items-center gap-3">
-          <span class="text-[9px] font-bold tracking-[0.2em] text-slate-500 uppercase">
-            {{ mission.isTest ? 'Test final · Repaso' : 'Misión ' + mission.num + ' de ' + missionCount }}
-          </span>
-          <a
-            routerLink="/"
-            fragment="misiones"
-            class="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.03] px-3.5 py-2 text-[10px] font-semibold text-slate-400 transition-all hover:border-cyan-300/35 hover:text-white"
-          >
-            Todas las misiones
-            <span aria-hidden="true">↗</span>
-          </a>
-        </div>
-      </div>
-    </div>
-
-    <div class="-mt-6 sm:-mt-8">
+    <div class="pt-8">
       @switch (mission.id) {
         @case ('eclipses') {
           <app-eclipse-lab />
@@ -67,7 +42,7 @@
     </div>
 
     <!-- Navegación entre misiones -->
-    <div class="wrap pb-16 sm:pb-20">
+    <div class="wrap pb-10 pt-2 sm:pb-20 sm:pt-4">
       <div class="grid gap-3 sm:grid-cols-2">
         @if (previous(); as previousMission) {
           <a

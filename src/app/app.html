@@ -13,7 +13,7 @@
     class="fixed inset-x-0 top-0 z-50 transition-all duration-500"
     [class.is-scrolled]="scrolled()"
   >
-    <div class="wrap flex h-[74px] items-center justify-between gap-4">
+    <div class="wrap flex h-[66px] items-center justify-between gap-4 sm:h-[74px]">
       <a routerLink="/" class="group flex items-center gap-3" aria-label="Cosmos 101, ir al inicio">
         <span
           class="relative grid h-10 w-10 place-items-center rounded-full border border-white/15 bg-white/5 transition-transform duration-500 group-hover:rotate-45"
@@ -156,8 +156,8 @@
   </main>
 
   <footer class="border-t border-white/10 bg-black/20">
-    <div class="wrap py-12">
-      <div class="grid gap-10 md:grid-cols-[1.2fr_1fr_1fr]">
+    <div class="wrap py-8 sm:py-12">
+      <div class="grid gap-8 md:grid-cols-[1.2fr_1fr_1fr] md:gap-10">
         <div>
           <a routerLink="/" class="flex items-center gap-3" aria-label="Cosmos 101, ir al inicio">
             <span class="grid h-9 w-9 place-items-center rounded-full border border-white/15 bg-white/5">
@@ -196,7 +196,7 @@
           </ul>
         </div>
       </div>
-      <div class="mt-10 flex flex-col items-start justify-between gap-3 border-t border-white/10 pt-6 sm:flex-row sm:items-center">
+      <div class="mt-8 flex flex-col items-start justify-between gap-3 border-t border-white/10 pt-5 sm:flex-row sm:items-center">
         <p class="text-[11px] text-slate-600">© 2026 Cosmos 101 · Hecho para aprender mirando hacia arriba.</p>
         <p class="text-[11px] text-slate-600">Angular + Tailwind · sin telescopio, solo curiosidad 🔭</p>
       </div>
