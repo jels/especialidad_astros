@@ -14,23 +14,10 @@
   background-size: 300px 260px, 380px 340px, 440px 400px, 500px 460px, 340px 320px, 100% 100%;
 }
 
-.planet-preview {
+.planet-photo-thumb {
+  mix-blend-mode: screen;
+  filter: drop-shadow(0 0 22px rgba(255, 255, 255, 0.14));
   transition: all 0.45s ease;
-  box-shadow:
-    inset -8px -8px 18px rgba(0, 0, 0, 0.55),
-    0 0 26px rgba(255, 255, 255, 0.08);
-}
-
-.planet-preview.ringed::after {
-  content: '';
-  position: absolute;
-  left: -14px;
-  right: -14px;
-  top: 50%;
-  height: 12px;
-  transform: translateY(-50%) rotate(-18deg);
-  border-radius: 50%;
-  border: 3px solid rgba(253, 230, 138, 0.45);
 }
 
 .nav-planet {

@@ -1,0 +1,1326 @@
+<div
+  class="presentation-deck relative z-10 flex h-dvh flex-col overflow-hidden"
+  role="region"
+  aria-label="Presentación interactiva Cosmos 101"
+  (pointerdown)="startSwipe($event)"
+  (pointerup)="endSwipe($event)"
+>
+  <div
+    class="pointer-events-none absolute inset-0 opacity-70"
+    style="
+      background:
+        radial-gradient(circle at 20% 12%, rgba(139, 92, 246, 0.18), transparent 38%),
+        radial-gradient(circle at 82% 70%, rgba(34, 211, 238, 0.1), transparent 34%),
+        radial-gradient(circle at 55% 100%, rgba(251, 113, 133, 0.08), transparent 45%);
+    "
+  ></div>
+
+  <!-- Barra de la presentación -->
+  <header
+    class="relative z-10 flex flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:px-10"
+  >
+    <a
+      routerLink="/"
+      class="flex items-center gap-2.5"
+      aria-label="Salir de la presentación e ir al inicio"
+    >
+      <span class="grid h-8 w-8 place-items-center rounded-full border border-white/15 bg-white/5">
+        <span
+          class="h-2.5 w-2.5 rounded-full bg-gradient-to-br from-amber-200 to-violet-500 shadow-[0_0_12px_rgba(251,191,36,.7)]"
+        ></span>
+      </span>
+      <span class="leading-none">
+        <span class="font-display block text-[10px] font-bold tracking-[0.16em] text-white"
+          >COSMOS<span class="text-cyan-300">101</span></span
+        >
+        <span class="mt-1 block text-[7px] font-semibold tracking-[0.28em] text-slate-500 uppercase"
+          >Modo presentación</span
+        >
+      </span>
+    </a>
+
+    <div class="flex items-center gap-2">
+      <span
+        class="hidden text-[9px] font-bold tracking-[0.18em] text-slate-500 uppercase md:inline"
+        >{{ slide().label }}</span
+      >
+      <span
+        class="rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1 font-mono text-[10px] font-semibold text-slate-300"
+      >
+        {{ pad(current() + 1) }} / {{ pad(total) }}
+      </span>
+      <button
+        type="button"
+        (click)="toggleFullscreen()"
+        class="grid h-9 w-9 place-items-center rounded-full border border-white/10 bg-white/[0.04] text-slate-300 transition-colors hover:border-cyan-300/40 hover:text-white"
+        [attr.aria-label]="
+          isFullscreen() ? 'Salir de pantalla completa' : 'Entrar en pantalla completa'
+        "
+        title="Pantalla completa (F)"
+      >
+        @if (isFullscreen()) {
+          ⤡
+        } @else {
+          ⛶
+        }
+      </button>
+      <a
+        routerLink="/"
+        class="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.04] px-3 py-2 text-[10px] font-semibold text-slate-300 transition-colors hover:border-rose-300/35 hover:text-white"
+      >
+        Salir <span class="text-slate-500">✕</span>
+      </a>
+    </div>
+  </header>
+
+  <main class="relative z-10 min-h-0 flex-1 overflow-y-auto px-4 pb-2 sm:px-6 lg:px-10">
+    <p class="sr-only" aria-live="polite">
+      Diapositiva {{ current() + 1 }} de {{ total }}: {{ slide().title }}
+    </p>
+
+    @if (current() === 0) {
+      <!-- PORTADA -->
+      <div
+        class="slide-anim grid min-h-full content-center items-center gap-5 py-3 lg:grid-cols-[1.1fr_0.9fr] lg:gap-8"
+      >
+        <div>
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="mission-tag border-violet-300/30 bg-violet-400/10 text-violet-200">
+              <span class="h-1.5 w-1.5 rounded-full bg-violet-300"></span> Presentación interactiva
+            </span>
+            <span class="chip !text-[9px]">Para proyectar</span>
+          </div>
+          <h1
+            class="font-display mt-4 text-4xl leading-[1.02] font-semibold tracking-tight text-white sm:text-6xl xl:text-7xl"
+          >
+            EL CIELO<br />
+            <span class="grad-text">EN 12 PARADAS.</span>
+          </h1>
+          <p class="mt-4 max-w-xl text-sm leading-relaxed text-slate-400 sm:text-base">
+            Un recorrido visual por eclipses, mareas, planetas, estrellas y galaxias.
+            <span class="text-slate-200"
+              >Cada parada tiene un interactivo y tres datos para contar.</span
+            >
+          </p>
+          <div class="mt-6 flex flex-wrap items-center gap-2.5">
+            <button type="button" (click)="next()" class="btn-primary group">
+              Comenzar
+              <span class="transition-transform group-hover:translate-x-1" aria-hidden="true"
+                >→</span
+              >
+            </button>
+            <a routerLink="/" fragment="misiones" class="btn-ghost">Ver las misiones completas</a>
+          </div>
+          <div class="mt-6 flex flex-wrap gap-2">
+            <span class="chip">🌘 11 temas</span>
+            <span class="chip">🖱️ 12 interactivos</span>
+            <span class="chip">⌨️ Flechas para navegar</span>
+          </div>
+        </div>
+
+        <div class="intro-orbit" aria-hidden="true">
+          <div class="intro-glow"></div>
+          <div class="intro-sun"></div>
+          <div class="intro-ring intro-ring-1"></div>
+          <div class="intro-ring intro-ring-2"></div>
+          <div class="intro-ring intro-ring-3"></div>
+          <span class="intro-planet intro-p1"></span>
+          <span class="intro-planet intro-p2"></span>
+          <span class="intro-planet intro-p3"></span>
+          <span class="intro-label intro-label-1">Tú estás acá</span>
+          <span class="intro-label intro-label-2">Mira arriba</span>
+        </div>
+      </div>
+    } @else if (current() === total - 1) {
+      <!-- CIERRE -->
+      <div
+        class="slide-anim mx-auto flex min-h-full w-full max-w-4xl flex-col justify-center py-8 text-center"
+      >
+        <span class="mission-tag border-cyan-300/25 bg-cyan-400/10 text-cyan-200"
+          >Fin de la presentación</span
+        >
+        <h1
+          class="font-display mt-5 text-4xl leading-[1.05] font-semibold text-white sm:text-6xl xl:text-7xl"
+        >
+          EL UNIVERSO<br />
+          <span class="grad-text">NO ESTÁ LEJOS.</span>
+        </h1>
+        <p class="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-slate-400 sm:text-base">
+          Empieza a 1,3 segundos de distancia. La próxima vez que salgas de noche, mira la Luna,
+          busca tres estrellas y recuerda todo esto.
+        </p>
+        <div class="mt-7 flex flex-wrap justify-center gap-2.5">
+          <button type="button" (click)="restart()" class="btn-primary">Volver a empezar ↺</button>
+          <a routerLink="/" fragment="misiones" class="btn-ghost">Explorar misiones</a>
+          <a routerLink="/misiones/test-final" class="btn-ghost">Hacer el test final</a>
+        </div>
+        <p class="mt-7 text-[10px] tracking-[0.24em] text-slate-600 uppercase">
+          Gracias por mirar arriba ✦
+        </p>
+      </div>
+    } @else {
+      <!-- DIAPOSITIVA DE TEMA -->
+      <div class="slide-anim flex min-h-full flex-col py-2">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <span class="mission-tag border-cyan-300/25 bg-cyan-400/10 text-cyan-200">{{
+            slide().kicker
+          }}</span>
+          <span class="text-[9px] font-semibold tracking-[0.18em] text-slate-600 uppercase">
+            {{ slide().label }}
+          </span>
+        </div>
+        <h1
+          class="font-display mt-2 text-[1.75rem] leading-[1.05] font-semibold text-white sm:text-4xl xl:text-5xl"
+        >
+          {{ slide().title }}
+        </h1>
+        <p class="mt-1.5 text-xs text-slate-400 sm:text-sm">{{ slide().subtitle }}</p>
+
+        <div
+          class="pres-layout mt-3 grid min-h-0 flex-1 gap-3 sm:mt-4 sm:gap-4 lg:grid-cols-[1.28fr_0.72fr]"
+          [class.pres-tall]="slide().id === 'constelaciones'"
+          [class.pres-eclipse]="slide().id === 'eclipses'"
+        >
+          <section
+            class="pres-visual"
+            [class.glass]="
+              slide().id !== 'eclipses' &&
+              slide().id !== 'luna' &&
+              slide().id !== 'danza' &&
+              slide().id !== 'estrellas'
+            "
+            [class.pres-visual-plain]="
+              slide().id === 'eclipses' ||
+              slide().id === 'luna' ||
+              slide().id === 'danza' ||
+              slide().id === 'estrellas'
+            "
+            [class.pres-visual-moon]="slide().id === 'luna'"
+            [class.pres-visual-dance]="slide().id === 'danza'"
+            [class.pres-visual-stars]="slide().id === 'estrellas'"
+            [class.pres-visual-constellations]="slide().id === 'constelaciones'"
+          >
+            @switch (slide().id) {
+              @case ('eclipses') {
+                <app-eclipse-lab [presentation]="true" class="block h-full min-h-0" />
+              }
+              @case ('meteoros') {
+                <div class="flex h-full flex-col gap-2">
+                  <div
+                    class="pres-sky starfield-bg relative flex-1 overflow-hidden rounded-2xl border border-white/5"
+                  >
+                    <div class="pres-sky-glow"></div>
+                    <div class="pres-hill"></div>
+                    @for (star of skyStars; track $index) {
+                      <span
+                        class="pres-sky-star"
+                        [style.left.%]="star.x"
+                        [style.top.%]="star.y"
+                        [style.width.px]="star.size"
+                        [style.height.px]="star.size"
+                        [style.opacity]="star.opacity"
+                      ></span>
+                    }
+                    @for (meteor of meteors(); track meteor.id) {
+                      <span
+                        class="pres-meteor"
+                        [style.top.%]="meteor.top"
+                        [style.left.%]="meteor.left"
+                        [style.animation-delay.ms]="meteor.delay"
+                      ></span>
+                    }
+                    <span
+                      class="absolute top-3 left-3 rounded-full border border-white/10 bg-black/35 px-2.5 py-1 text-[9px] font-semibold tracking-[0.14em] text-slate-400 uppercase"
+                    >
+                      Atmósfera · 100 km
+                    </span>
+                    <span
+                      class="absolute right-3 bottom-3 rounded-full border border-white/10 bg-black/35 px-2.5 py-1 text-[9px] font-semibold text-amber-200"
+                    >
+                      {{ meteorCount() }} {{ meteorCount() === 1 ? 'meteoro' : 'meteoros' }}
+                    </span>
+                  </div>
+                  <div class="flex flex-wrap items-center justify-between gap-2">
+                    <p class="text-[10px] text-slate-500">
+                      La lluvia corre sola. Puedes pausarla o lanzar una extra.
+                    </p>
+                    <div class="flex items-center gap-1.5">
+                      <button
+                        type="button"
+                        class="pres-option"
+                        (click)="meteorPlaying.set(!meteorPlaying())"
+                      >
+                        {{ meteorPlaying() ? '⏸ Pausar lluvia' : '▶ Lluvia automática' }}
+                      </button>
+                      <button
+                        type="button"
+                        (click)="launchMeteor()"
+                        class="btn-primary !px-4 !py-2 text-[10px]"
+                      >
+                        ☄️ Lanzar meteoro
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              }
+
+              @case ('luz') {
+                <div class="flex h-full flex-col justify-between gap-3">
+                  <div class="light-stage">
+                    <div class="light-earth"></div>
+                    <div
+                      class="light-orbit"
+                      [style.animation-play-state]="lightPlaying() ? 'running' : 'paused'"
+                    >
+                      <span class="light-dot"></span>
+                    </div>
+                    <span class="light-caption">7,5 vueltas a la Tierra en 1 segundo</span>
+                  </div>
+                  <div class="flex flex-wrap items-center justify-between gap-2">
+                    <span
+                      class="text-[10px] font-semibold tracking-[0.14em] text-slate-500 uppercase"
+                      >Destino</span
+                    >
+                    <div class="flex flex-wrap items-center gap-1.5">
+                      <div class="segmented !p-0.5">
+                        @for (dest of destinations; track dest.name; let i = $index) {
+                          <button
+                            type="button"
+                            [class.active]="destinationIndex() === i"
+                            (click)="destinationIndex.set(i)"
+                          >
+                            {{ dest.emoji }} {{ dest.name }}
+                          </button>
+                        }
+                      </div>
+                      <button
+                        type="button"
+                        class="pres-option"
+                        (click)="lightPlaying.set(!lightPlaying())"
+                      >
+                        {{ lightPlaying() ? '⏸ Órbita' : '▶ Órbita' }}
+                      </button>
+                    </div>
+                  </div>
+                  <div class="rounded-2xl border border-cyan-300/20 bg-cyan-300/[0.05] p-4">
+                    <p class="text-[10px] text-slate-400">
+                      Un rayo de luz hasta {{ destination().name }} tarda
+                    </p>
+                    <p class="font-display mt-1 text-4xl font-semibold text-white sm:text-5xl">
+                      {{ lightTime() }}
+                    </p>
+                    <p class="mt-1 text-[10px] text-slate-500">
+                      {{ destination().distance.toLocaleString('es-AR') }} km
+                    </p>
+                  </div>
+                </div>
+              }
+
+              @case ('luna') {
+                <app-moon-tides [presentation]="true" class="block h-full min-h-0" />
+              }
+              @case ('danza') {
+                <app-cosmic-dance [presentation]="true" class="block h-full min-h-0" />
+              }
+              @case ('sistema') {
+                <div class="flex h-full min-h-0 flex-col gap-2">
+                  <div class="flex flex-wrap items-center justify-between gap-2">
+                    <span class="text-[9px] tracking-[0.14em] text-slate-500 uppercase"
+                      >Mapa orbital · sistema en movimiento</span
+                    >
+                    <div class="flex flex-wrap items-center gap-1.5">
+                      @if (!scaleMode()) {
+                        <button
+                          type="button"
+                          class="pres-option"
+                          (click)="solarPlaying.set(!solarPlaying())"
+                        >
+                          {{ solarPlaying() ? '⏸ Pausar órbitas' : '▶ Reanudar órbitas' }}
+                        </button>
+                      }
+                      <button
+                        type="button"
+                        class="pres-option"
+                        [class.pres-option-active]="scaleMode()"
+                        (click)="toggleScale()"
+                      >
+                        {{ scaleMode() ? '🗺️ Volver al mapa' : '📏 Escala con la Tierra' }}
+                      </button>
+                    </div>
+                  </div>
+
+                  @if (scaleMode()) {
+                    <div class="flex min-h-0 flex-1 flex-col justify-center gap-3">
+                      <div class="text-center">
+                        <p
+                          class="text-[10px] font-semibold tracking-[0.16em] text-slate-400 uppercase"
+                        >
+                          Tamaños relativos de los planetas
+                        </p>
+                        <p class="mt-0.5 text-[9px] text-slate-600">Diámetro · Tierra = 1</p>
+                      </div>
+                      <div class="planet-scale-row">
+                        @for (planet of scaleGiants; track planet.id) {
+                          <div class="planet-scale-item">
+                            <div
+                              class="planet-scale-disc"
+                              [style.width]="
+                                'calc(' + planetRatios[planet.id] + ' * clamp(8px, 2.2vh, 26px))'
+                              "
+                              [style.height]="
+                                'calc(' + planetRatios[planet.id] + ' * clamp(8px, 2.2vh, 26px))'
+                              "
+                            >
+                              <img
+                                [src]="planetImage(planet.id)"
+                                [alt]="'Fotografía real de ' + planet.name"
+                                loading="lazy"
+                              />
+                            </div>
+                            <span>{{ planet.name }}</span>
+                          </div>
+                        }
+                      </div>
+                      <div class="planet-scale-row">
+                        @for (planet of scaleRocky; track planet.id) {
+                          <div class="planet-scale-item" [class.is-earth]="planet.id === 'tierra'">
+                            <div
+                              class="planet-scale-disc"
+                              [style.width]="
+                                'calc(' + planetRatios[planet.id] + ' * clamp(8px, 2.2vh, 26px))'
+                              "
+                              [style.height]="
+                                'calc(' + planetRatios[planet.id] + ' * clamp(8px, 2.2vh, 26px))'
+                              "
+                            >
+                              <img
+                                [src]="planetImage(planet.id)"
+                                [alt]="'Fotografía real de ' + planet.name"
+                                loading="lazy"
+                              />
+                            </div>
+                            <span [class.text-cyan-200]="planet.id === 'tierra'">{{
+                              planet.name
+                            }}</span>
+                          </div>
+                        }
+                      </div>
+                      <p class="text-center text-[9px] text-slate-500">
+                        Júpiter es 11,2 veces más ancho que la Tierra; Mercurio, solo 0,38.
+                      </p>
+                    </div>
+                  } @else {
+                    <div
+                      class="relative min-h-0 flex-1 overflow-hidden rounded-2xl border border-white/5 bg-[#050816]"
+                    >
+                      <div class="starfield-bg absolute inset-0 opacity-40"></div>
+                      <svg
+                        viewBox="0 0 1000 650"
+                        preserveAspectRatio="xMidYMid meet"
+                        class="absolute inset-0 h-full w-full"
+                        role="img"
+                        aria-label="Sistema solar en movimiento; toca un planeta para ver su información"
+                      >
+                        <defs>
+                          <radialGradient id="presSunSystem" cx="40%" cy="35%" r="70%">
+                            <stop offset="0" stop-color="#fffbeb" />
+                            <stop offset=".42" stop-color="#fde047" />
+                            <stop offset=".78" stop-color="#f59e0b" />
+                            <stop offset="1" stop-color="#ea580c" />
+                          </radialGradient>
+                          @for (planet of planets; track planet.id) {
+                            <radialGradient
+                              [attr.id]="'pres-' + planet.id"
+                              cx="35%"
+                              cy="30%"
+                              r="75%"
+                            >
+                              <stop offset="0" [attr.stop-color]="planet.palette[0]" />
+                              <stop offset=".55" [attr.stop-color]="planet.palette[1]" />
+                              <stop offset="1" [attr.stop-color]="planet.palette[2]" />
+                            </radialGradient>
+                          }
+                          <filter id="presSystemGlow" x="-80%" y="-80%" width="260%" height="260%">
+                            <feGaussianBlur stdDeviation="14" result="b" />
+                            <feMerge>
+                              <feMergeNode in="b" />
+                              <feMergeNode in="SourceGraphic" />
+                            </feMerge>
+                          </filter>
+                        </defs>
+
+                        <g fill="#e2e8f0" opacity=".4">
+                          <circle cx="120" cy="80" r="1.2" />
+                          <circle cx="300" cy="90" r="1" />
+                          <circle cx="690" cy="70" r="1.4" />
+                          <circle cx="890" cy="180" r="1.1" />
+                          <circle cx="820" cy="560" r="1.3" />
+                          <circle cx="200" cy="560" r="1" />
+                        </g>
+
+                        @for (planet of planets; track planet.id) {
+                          <path
+                            [attr.d]="solarOrbitPath(planet)"
+                            fill="none"
+                            stroke="rgba(255,255,255,.12)"
+                            stroke-dasharray="2 7"
+                          />
+                        }
+
+                        <circle
+                          cx="500"
+                          cy="325"
+                          r="86"
+                          fill="#fbbf24"
+                          opacity=".09"
+                          class="animate-pulse-soft"
+                        />
+                        <circle
+                          cx="500"
+                          cy="325"
+                          r="54"
+                          fill="url(#presSunSystem)"
+                          filter="url(#presSystemGlow)"
+                        />
+                        <circle cx="482" cy="307" r="16" fill="#fffbeb" opacity=".25" />
+                        <text
+                          x="500"
+                          y="415"
+                          text-anchor="middle"
+                          fill="rgba(253,224,71,.8)"
+                          font-size="15"
+                          font-weight="600"
+                          letter-spacing="2"
+                          font-family="Space Grotesk, sans-serif"
+                        >
+                          SOL
+                        </text>
+
+                        @for (body of solarBodies(); track body.id) {
+                          <g
+                            class="cursor-pointer outline-none"
+                            (click)="selectPlanet(body.id)"
+                            (keydown.enter)="selectPlanet(body.id)"
+                            tabindex="0"
+                            role="button"
+                            [attr.aria-label]="'Ver información de ' + body.name"
+                          >
+                            <title>{{ body.name }}</title>
+                            <circle
+                              [attr.cx]="body.x"
+                              [attr.cy]="body.y"
+                              [attr.r]="body.viewR + 14"
+                              fill="transparent"
+                            />
+                            <circle
+                              [attr.cx]="body.x"
+                              [attr.cy]="body.y"
+                              [attr.r]="body.viewR + 4"
+                              [attr.fill]="body.palette[1]"
+                              opacity=".12"
+                            />
+                            @if (body.ring) {
+                              <g
+                                [attr.transform]="'rotate(-22 ' + body.x + ' ' + body.y + ')'"
+                                opacity=".65"
+                              >
+                                <ellipse
+                                  [attr.cx]="body.x"
+                                  [attr.cy]="body.y"
+                                  [attr.rx]="body.viewR * 2.05"
+                                  [attr.ry]="body.viewR * 0.58"
+                                  fill="none"
+                                  [attr.stroke]="body.palette[0]"
+                                  stroke-width="2.4"
+                                />
+                              </g>
+                            }
+                            <circle
+                              [attr.cx]="body.x"
+                              [attr.cy]="body.y"
+                              [attr.r]="body.viewR"
+                              [attr.fill]="'url(#pres-' + body.id + ')'"
+                            />
+                            <circle
+                              [attr.cx]="body.x - body.viewR * 0.25"
+                              [attr.cy]="body.y - body.viewR * 0.25"
+                              [attr.r]="body.viewR * 0.34"
+                              fill="#fff"
+                              opacity=".2"
+                            />
+                            <text
+                              [attr.x]="body.x"
+                              [attr.y]="body.y + body.viewR + 15"
+                              text-anchor="middle"
+                              fill="rgba(203,213,225,.65)"
+                              font-size="11"
+                              font-family="Space Grotesk, sans-serif"
+                            >
+                              {{ body.name }}
+                            </text>
+                          </g>
+                        }
+
+                        <g
+                          font-family="Space Grotesk, sans-serif"
+                          font-size="10"
+                          fill="rgba(148,163,184,.45)"
+                        >
+                          <circle cx="390" cy="620" r="2" fill="#fbbf24" />
+                          <text x="400" y="624">Estrella</text>
+                          <circle cx="484" cy="620" r="2" fill="#38bdf8" />
+                          <text x="494" y="624">Planetas</text>
+                          <text x="720" y="624" fill="rgba(148,163,184,.27)">
+                            toca un planeta · no a escala
+                          </text>
+                        </g>
+                      </svg>
+
+                      <div
+                        class="pointer-events-none absolute top-3 left-3 rounded-full border border-white/10 bg-black/40 px-2.5 py-1 text-[8px] tracking-[0.13em] text-slate-400 uppercase backdrop-blur-sm"
+                      >
+                        {{ solarPlaying() ? 'Órbitas activas' : 'Órbitas en pausa' }}
+                      </div>
+                      <div
+                        class="pointer-events-none absolute right-3 bottom-3 rounded-full border border-white/10 bg-black/40 px-2.5 py-1 text-[8px] text-slate-400 backdrop-blur-sm"
+                      >
+                        Toca un planeta para ver su ficha
+                      </div>
+
+                      @if (planetModalOpen()) {
+                        <div
+                          class="absolute inset-0 z-20 flex items-center justify-center bg-[#04050e]/82 p-3 backdrop-blur-sm"
+                          (click)="closePlanetInfo()"
+                        >
+                          <div
+                            class="pres-planet-modal glass relative max-h-full w-full max-w-2xl overflow-y-auto p-4 sm:p-5"
+                            (click)="$event.stopPropagation()"
+                          >
+                            <button
+                              type="button"
+                              (click)="closePlanetInfo()"
+                              class="absolute top-3 right-3 z-10 grid h-8 w-8 place-items-center rounded-full border border-white/15 bg-white/5 text-white transition-all hover:rotate-90 hover:border-cyan-300/40"
+                              aria-label="Cerrar información del planeta"
+                            >
+                              ✕
+                            </button>
+                            <div class="grid gap-4 sm:grid-cols-[0.8fr_1.2fr]">
+                              <div class="planet-modal-photo">
+                                <img
+                                  [src]="planetImage(selectedPlanet().id)"
+                                  [alt]="'Fotografía real de ' + selectedPlanet().name"
+                                />
+                              </div>
+                              <div>
+                                <p
+                                  class="text-[9px] font-bold tracking-[0.18em] text-cyan-300 uppercase"
+                                >
+                                  Planeta {{ selectedPlanetIndex() + 1 }} de 8
+                                </p>
+                                <h3 class="font-display mt-1 text-2xl font-semibold text-white">
+                                  {{ selectedPlanet().name }}
+                                </h3>
+                                <p class="text-[10px] tracking-[0.14em] text-slate-500 uppercase">
+                                  {{ selectedPlanet().type }}
+                                </p>
+                                <div class="mt-3 grid grid-cols-2 gap-2">
+                                  <div class="pres-mini-stat">
+                                    <p>Diámetro</p>
+                                    <strong>{{ selectedPlanet().diameter }}</strong>
+                                  </div>
+                                  <div class="pres-mini-stat">
+                                    <p>Distancia al Sol</p>
+                                    <strong>{{ selectedPlanet().distance }}</strong>
+                                  </div>
+                                  <div class="pres-mini-stat">
+                                    <p>Un año</p>
+                                    <strong>{{ selectedPlanet().year }}</strong>
+                                  </div>
+                                  <div class="pres-mini-stat">
+                                    <p>Un día</p>
+                                    <strong>{{ selectedPlanet().day }}</strong>
+                                  </div>
+                                </div>
+                                <p
+                                  class="mt-3 rounded-lg border border-white/10 bg-white/[0.03] p-2.5 text-[10px] leading-relaxed text-slate-400"
+                                >
+                                  {{ selectedPlanet().fact }}
+                                </p>
+                                <button
+                                  type="button"
+                                  (click)="closePlanetInfo()"
+                                  class="mt-3 w-full rounded-full border border-cyan-300/25 bg-cyan-300/10 px-4 py-2 text-[10px] font-semibold text-cyan-100 transition-colors hover:bg-cyan-300/15"
+                                >
+                                  ← Volver al sistema en movimiento
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      }
+                    </div>
+                  }
+                </div>
+              }
+
+              @case ('estrellas') {
+                <app-fixed-stars [presentation]="true" class="block h-full min-h-0" />
+              }
+              @case ('constelaciones') {
+                <div class="flex h-full min-h-0 flex-col gap-2">
+                  <div class="flex flex-wrap items-center gap-1.5">
+                    @for (tab of constellations; track tab.id; let i = $index) {
+                      <button
+                        type="button"
+                        class="pres-option"
+                        [class.pres-option-active]="constellationIndex() === i"
+                        (click)="setConstellation(i)"
+                      >
+                        {{ tab.name }}
+                      </button>
+                    }
+                    <div class="ml-auto flex items-center gap-1.5">
+                      <span
+                        class="rounded-full border border-white/10 bg-white/5 px-2 py-1 text-[9px] font-semibold text-slate-400"
+                      >
+                        {{ constellationIndex() + 1 }} / {{ constellations.length }}
+                      </span>
+                      <button
+                        type="button"
+                        class="pres-option"
+                        (click)="constellationPlaying.set(!constellationPlaying())"
+                      >
+                        {{ constellationPlaying() ? '⏸ Pausa' : '▶ Auto' }}
+                      </button>
+                    </div>
+                  </div>
+                  <div
+                    class="pres-constellation-case relative min-h-0 flex-1 overflow-hidden rounded-2xl border border-white/5 bg-[#040713]"
+                  >
+                    <div class="absolute inset-0 p-4">
+                      @for (item of constellationItems(); track item.id) {
+                        <app-constellation-diagram [constellation]="item" [detailed]="true" />
+                      }
+                    </div>
+                    <span
+                      class="pointer-events-none absolute top-3 left-3 rounded-full border border-white/10 bg-black/45 px-2.5 py-1 text-[9px] font-semibold tracking-wide text-white backdrop-blur-sm"
+                    >
+                      {{ constellation().name }} · {{ constellation().latin }}
+                    </span>
+                    <span
+                      class="pointer-events-none absolute top-3 right-3 hidden rounded-full border border-white/10 bg-black/45 px-2.5 py-1 text-[8px] tracking-[0.12em] text-slate-400 uppercase backdrop-blur-sm sm:block"
+                    >
+                      {{ constellation().season }}
+                    </span>
+                    <div
+                      class="pointer-events-none absolute bottom-3 left-3 flex flex-wrap items-center gap-1"
+                    >
+                      @for (star of constellation().stars; track star.key) {
+                        @if (star.label) {
+                          <span
+                            class="rounded-full border border-white/10 bg-black/50 px-2 py-0.5 text-[8px] text-slate-400 backdrop-blur-sm"
+                            >{{ star.name }}</span
+                          >
+                        }
+                      }
+                    </div>
+                  </div>
+                </div>
+              }
+
+              @case ('via-lactea') {
+                <div class="flex h-full min-h-0 flex-col gap-2">
+                  <div class="flex flex-wrap items-center justify-between gap-2">
+                    <div class="segmented !p-0.5">
+                      <button
+                        type="button"
+                        [class.active]="milkyView() === 'cielo'"
+                        (click)="setMilkyView('cielo')"
+                      >
+                        🌌 A simple vista
+                      </button>
+                      <button
+                        type="button"
+                        [class.active]="milkyView() === 'galaxia'"
+                        (click)="setMilkyView('galaxia')"
+                      >
+                        🌀 La galaxia
+                      </button>
+                    </div>
+                    <span class="text-[9px] tracking-[0.13em] text-slate-500 uppercase">
+                      {{
+                        milkyView() === 'cielo'
+                          ? 'Contaminación lumínica'
+                          : 'Vía Láctea · vista desde arriba'
+                      }}
+                    </span>
+                  </div>
+
+                  @if (milkyView() === 'cielo') {
+                    <div class="pres-milky">
+                      <div class="pres-milky-band" [style.opacity]="milkyOpacity()"></div>
+                      <div class="pres-milky-stars" [style.opacity]="starOpacity()">
+                        @for (star of milkyStars; track $index) {
+                          <span
+                            class="pres-milky-star"
+                            [style.left.%]="star.x"
+                            [style.top.%]="star.y"
+                            [style.width.px]="star.size"
+                            [style.height.px]="star.size"
+                            [style.opacity]="star.opacity"
+                          ></span>
+                        }
+                      </div>
+                      <div class="pres-milky-city" [style.opacity]="pollution() / 100"></div>
+                      <div class="pres-milky-horizon"></div>
+                      @if (milkyOpacity() > 0.2) {
+                        <span class="pres-milky-label">VÍA LÁCTEA</span>
+                      }
+                      <span
+                        class="absolute right-3 bottom-3 rounded-full border border-white/10 bg-black/40 px-2.5 py-1 text-[9px] font-semibold text-fuchsia-200 backdrop-blur-sm"
+                      >
+                        Visibilidad
+                        {{ pollution() < 30 ? 'alta' : pollution() < 65 ? 'media' : 'baja' }}
+                      </span>
+                    </div>
+                    <div class="flex items-center justify-between gap-3">
+                      <span class="text-[10px] font-semibold text-slate-400"
+                        >Contaminación lumínica</span
+                      >
+                      <span class="text-[10px] font-semibold text-fuchsia-200"
+                        >{{ pollution() }}%</span
+                      >
+                    </div>
+                    <input
+                      type="range"
+                      min="0"
+                      max="100"
+                      step="1"
+                      [value]="pollution()"
+                      (input)="pollution.set(+$any($event.target).value)"
+                      class="range-cosmic"
+                      style="--range-color: #e879f9"
+                      aria-label="Nivel de contaminación lumínica"
+                    />
+                  } @else {
+                    <div
+                      class="relative min-h-0 flex-1 overflow-hidden rounded-2xl border border-white/5 bg-[#040713]"
+                    >
+                      <svg
+                        viewBox="0 0 900 560"
+                        class="absolute inset-0 h-full w-full"
+                        role="img"
+                        aria-label="La Vía Láctea vista desde arriba, con la posición del Sol"
+                      >
+                        <defs>
+                          <radialGradient id="presGalaxyCore" cx="50%" cy="50%" r="50%">
+                            <stop offset="0" stop-color="#fffbeb" stop-opacity=".95" />
+                            <stop offset=".25" stop-color="#fde68a" stop-opacity=".55" />
+                            <stop offset=".55" stop-color="#f59e0b" stop-opacity=".18" />
+                            <stop offset="1" stop-color="#8b5cf6" stop-opacity="0" />
+                          </radialGradient>
+                          <radialGradient id="presGalaxyHaze" cx="50%" cy="50%" r="50%">
+                            <stop offset="0" stop-color="#c4b5fd" stop-opacity=".2" />
+                            <stop offset=".55" stop-color="#8b5cf6" stop-opacity=".09" />
+                            <stop offset="1" stop-color="#22d3ee" stop-opacity="0" />
+                          </radialGradient>
+                          <filter id="presGalaxyBlur" x="-50%" y="-50%" width="200%" height="200%">
+                            <feGaussianBlur stdDeviation="13" />
+                          </filter>
+                          <filter id="presSunGalaxy" x="-200%" y="-200%" width="500%" height="500%">
+                            <feGaussianBlur stdDeviation="5" result="b" />
+                            <feMerge>
+                              <feMergeNode in="b" />
+                              <feMergeNode in="SourceGraphic" />
+                            </feMerge>
+                          </filter>
+                        </defs>
+                        <circle cx="450" cy="280" r="260" fill="url(#presGalaxyHaze)" />
+                        <ellipse
+                          cx="450"
+                          cy="280"
+                          rx="292"
+                          ry="248"
+                          fill="none"
+                          stroke="rgba(196,181,253,.1)"
+                          stroke-dasharray="2 8"
+                        />
+                        <g
+                          fill="none"
+                          stroke-linecap="round"
+                          filter="url(#presGalaxyBlur)"
+                          opacity=".55"
+                        >
+                          @for (arm of galaxyArms; track $index) {
+                            <path
+                              [attr.d]="arm.d"
+                              [attr.stroke]="arm.color"
+                              stroke-width="28"
+                              opacity=".2"
+                            />
+                            <path
+                              [attr.d]="arm.d"
+                              [attr.stroke]="arm.color"
+                              stroke-width="12"
+                              opacity=".18"
+                            />
+                          }
+                        </g>
+                        @for (star of galaxyDots; track $index) {
+                          <circle
+                            [attr.cx]="star.x"
+                            [attr.cy]="star.y"
+                            [attr.r]="star.r"
+                            [attr.fill]="star.tint"
+                            [attr.opacity]="star.opacity"
+                          />
+                        }
+                        <circle
+                          cx="450"
+                          cy="280"
+                          r="86"
+                          fill="url(#presGalaxyCore)"
+                          filter="url(#presGalaxyBlur)"
+                          class="animate-pulse-soft"
+                        />
+                        <ellipse
+                          cx="450"
+                          cy="280"
+                          rx="68"
+                          ry="21"
+                          fill="#fde68a"
+                          opacity=".5"
+                          transform="rotate(-24 450 280)"
+                          filter="url(#presGalaxyBlur)"
+                        />
+                        <circle
+                          cx="450"
+                          cy="280"
+                          r="15"
+                          fill="#fffbeb"
+                          opacity=".9"
+                          filter="url(#presGalaxyBlur)"
+                        />
+                        <ellipse
+                          cx="450"
+                          cy="280"
+                          rx="148"
+                          ry="127"
+                          fill="none"
+                          stroke="rgba(253,230,138,.22)"
+                          stroke-dasharray="3 5"
+                        />
+                        <line
+                          [attr.x1]="450"
+                          [attr.y1]="280"
+                          [attr.x2]="galaxySun.x"
+                          [attr.y2]="galaxySun.y"
+                          stroke="rgba(253,230,138,.3)"
+                          stroke-dasharray="2 4"
+                        />
+                        <circle
+                          [attr.cx]="galaxySun.x"
+                          [attr.cy]="galaxySun.y"
+                          r="17"
+                          fill="#fbbf24"
+                          opacity=".12"
+                        />
+                        <circle
+                          [attr.cx]="galaxySun.x"
+                          [attr.cy]="galaxySun.y"
+                          r="6"
+                          fill="#fbbf24"
+                          filter="url(#presSunGalaxy)"
+                        />
+                        <text
+                          [attr.x]="galaxySun.x + 13"
+                          [attr.y]="galaxySun.y - 8"
+                          fill="rgba(253,230,138,.95)"
+                          font-size="12"
+                          font-weight="600"
+                          font-family="Space Grotesk, sans-serif"
+                          stroke="#04050e"
+                          stroke-width="4"
+                          paint-order="stroke"
+                        >
+                          SOL · ESTÁS ACÁ
+                        </text>
+                        <text
+                          [attr.x]="galaxySun.x + 13"
+                          [attr.y]="galaxySun.y + 7"
+                          fill="rgba(253,230,138,.55)"
+                          font-size="8"
+                          font-family="Space Grotesk, sans-serif"
+                          stroke="#04050e"
+                          stroke-width="3"
+                          paint-order="stroke"
+                        >
+                          brazo de Orión
+                        </text>
+                        <text
+                          x="450"
+                          y="238"
+                          text-anchor="middle"
+                          fill="rgba(255,251,235,.7)"
+                          font-size="10"
+                          letter-spacing="2"
+                          font-family="Space Grotesk, sans-serif"
+                        >
+                          NÚCLEO GALÁCTICO
+                        </text>
+                        <text
+                          x="450"
+                          y="252"
+                          text-anchor="middle"
+                          fill="rgba(255,251,235,.38)"
+                          font-size="7"
+                          letter-spacing="1"
+                          font-family="Space Grotesk, sans-serif"
+                        >
+                          AGUJERO NEGRO SAGITARIO A*
+                        </text>
+                        <line x1="154" y1="512" x2="746" y2="512" stroke="rgba(148,163,184,.3)" />
+                        <line x1="154" y1="507" x2="154" y2="517" stroke="rgba(148,163,184,.3)" />
+                        <line x1="746" y1="507" x2="746" y2="517" stroke="rgba(148,163,184,.3)" />
+                        <text
+                          x="450"
+                          y="534"
+                          text-anchor="middle"
+                          fill="rgba(148,163,184,.5)"
+                          font-size="9"
+                          letter-spacing="1"
+                          font-family="Space Grotesk, sans-serif"
+                        >
+                          DIÁMETRO APROXIMADO · 100.000 AÑOS LUZ
+                        </text>
+                      </svg>
+                    </div>
+                    <p class="text-center text-[9px] text-slate-500">
+                      La banda de la Vía Láctea es el disco de nuestra galaxia visto desde dentro.
+                    </p>
+                  }
+                </div>
+              }
+
+              @case ('venus') {
+                <div class="flex h-full flex-col gap-2">
+                  <div class="pres-venus">
+                    <div class="pres-venus-day" [style.opacity]="venusDaylight()"></div>
+                    <div class="pres-venus-twilight" [style.opacity]="venusTwilight()"></div>
+                    <div class="pres-venus-stars" [style.opacity]="venusNight()"></div>
+                    <div class="pres-venus-sun" [style.bottom.%]="venusSunBottom()"></div>
+                    <div
+                      class="pres-venus-dot"
+                      [style.opacity]="venusOpacity()"
+                      [style.left.%]="venusMode() === 'amanecer' ? 32 : 68"
+                    ></div>
+                    <div class="pres-venus-horizon"></div>
+                    @if (venusVisible()) {
+                      <span
+                        class="pres-venus-label"
+                        [style.left.%]="venusMode() === 'amanecer' ? 38 : 74"
+                        >Venus</span
+                      >
+                    }
+                    <span class="pres-venus-clock">{{
+                      venusMode() === 'amanecer' ? '05:30' : '19:30'
+                    }}</span>
+                  </div>
+                  <div class="flex flex-wrap items-center justify-between gap-2">
+                    <div class="segmented !p-0.5">
+                      <button
+                        type="button"
+                        [class.active]="venusMode() === 'amanecer'"
+                        (click)="setVenusMode('amanecer')"
+                      >
+                        🌅 Amanecer
+                      </button>
+                      <button
+                        type="button"
+                        [class.active]="venusMode() === 'atardecer'"
+                        (click)="setVenusMode('atardecer')"
+                      >
+                        🌇 Atardecer
+                      </button>
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                      <button
+                        type="button"
+                        class="pres-option"
+                        (click)="venusPlaying.set(!venusPlaying())"
+                      >
+                        {{ venusPlaying() ? '⏸ Pausar' : '▶ Animar' }}
+                      </button>
+                      <span class="chip !py-1 !text-[9px]">{{
+                        venusVisible() ? 'Venus visible' : 'Oculto por el Sol'
+                      }}</span>
+                    </div>
+                  </div>
+                  <input
+                    type="range"
+                    min="0"
+                    max="100"
+                    step="1"
+                    [value]="venusTime()"
+                    (input)="venusTime.set(+$any($event.target).value); venusPlaying.set(false)"
+                    class="range-cosmic"
+                    style="--range-color: #fbbf24"
+                    aria-label="Hora alrededor del amanecer o atardecer"
+                  />
+                </div>
+              }
+
+              @case ('cenit') {
+                <div
+                  class="relative h-full min-h-0 overflow-hidden rounded-2xl border border-white/5 bg-[#040713]"
+                >
+                  <svg
+                    viewBox="0 0 660 400"
+                    class="absolute inset-0 h-full w-full"
+                    role="img"
+                    aria-label="Cúpula celeste con cenit y nadir"
+                  >
+                    <defs>
+                      <linearGradient id="presDome" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0" stop-color="#0b1024" />
+                        <stop offset="1" stop-color="#0b2b3f" />
+                      </linearGradient>
+                    </defs>
+                    <path
+                      d="M 90 236 A 240 240 0 0 1 570 236"
+                      fill="url(#presDome)"
+                      stroke="rgba(103,232,249,.25)"
+                    />
+                    <path
+                      d="M 90 236 A 240 240 0 0 1 570 236"
+                      fill="none"
+                      stroke="rgba(103,232,249,.2)"
+                    />
+                    <line x1="60" y1="236" x2="600" y2="236" stroke="rgba(103,232,249,.5)" />
+                    <rect x="0" y="236" width="660" height="164" fill="#03050d" />
+                    <line
+                      x1="330"
+                      y1="30"
+                      x2="330"
+                      y2="380"
+                      stroke="rgba(148,163,184,.25)"
+                      stroke-dasharray="3 7"
+                    />
+                    <circle cx="330" cy="48" r="22" fill="rgba(103,232,249,.09)" />
+                    <circle cx="330" cy="48" r="4" fill="#67e8f9" />
+                    <circle cx="330" cy="380" r="4" fill="#fb7185" />
+                    <circle
+                      cx="330"
+                      cy="380"
+                      r="16"
+                      fill="none"
+                      stroke="rgba(251,113,133,.4)"
+                      stroke-dasharray="2 3"
+                    />
+                    <circle cx="330" cy="236" r="7" fill="#02050c" stroke="#67e8f9" />
+                    <line
+                      x1="330"
+                      y1="236"
+                      x2="330"
+                      [attr.y2]="zenithMarkerY()"
+                      stroke="rgba(253,230,138,.55)"
+                      stroke-dasharray="3 4"
+                    />
+                    <circle cx="330" [attr.cy]="zenithMarkerY()" r="5" fill="#fde68a" />
+                    <text
+                      x="330"
+                      y="26"
+                      text-anchor="middle"
+                      fill="rgba(207,250,254,.8)"
+                      font-size="12"
+                      letter-spacing="2"
+                      font-family="Space Grotesk, sans-serif"
+                    >
+                      CENIT · 90°
+                    </text>
+                    <text
+                      x="330"
+                      y="370"
+                      text-anchor="middle"
+                      fill="rgba(254,205,211,.6)"
+                      font-size="10"
+                      letter-spacing="1.5"
+                      font-family="Space Grotesk, sans-serif"
+                    >
+                      NADIR · −90°
+                    </text>
+                    <text
+                      x="118"
+                      y="224"
+                      fill="rgba(103,232,249,.55)"
+                      font-size="9"
+                      letter-spacing="1.5"
+                      font-family="Space Grotesk, sans-serif"
+                    >
+                      HORIZONTE
+                    </text>
+                    <text
+                      x="330"
+                      y="268"
+                      text-anchor="middle"
+                      fill="rgba(148,163,184,.6)"
+                      font-size="9"
+                      letter-spacing="1.5"
+                      font-family="Space Grotesk, sans-serif"
+                    >
+                      {{ zenithLabel() }}
+                    </text>
+                  </svg>
+                  <div
+                    class="absolute top-2 right-2 z-10 flex flex-wrap items-center gap-1 rounded-xl border border-white/10 bg-black/45 p-1 backdrop-blur-md"
+                  >
+                    <button
+                      type="button"
+                      class="pres-option"
+                      (click)="zenithPlaying.set(!zenithPlaying())"
+                    >
+                      {{ zenithPlaying() ? '⏸ Auto' : '▶ Auto' }}
+                    </button>
+                    <button
+                      type="button"
+                      class="pres-option"
+                      [class.pres-option-active]="altitude() === 90"
+                      (click)="altitude.set(90); zenithPlaying.set(false)"
+                    >
+                      Cenit
+                    </button>
+                    <button
+                      type="button"
+                      class="pres-option"
+                      [class.pres-option-active]="altitude() === 0"
+                      (click)="altitude.set(0); zenithPlaying.set(false)"
+                    >
+                      Horizonte
+                    </button>
+                    <button
+                      type="button"
+                      class="pres-option"
+                      [class.pres-option-active]="altitude() === -90"
+                      (click)="altitude.set(-90); zenithPlaying.set(false)"
+                    >
+                      Nadir
+                    </button>
+                    <span
+                      class="rounded-full bg-white/5 px-2 py-1 text-[9px] font-semibold text-teal-200"
+                      >{{ altitude() }}°</span
+                    >
+                  </div>
+                </div>
+              }
+
+              @case ('mito') {
+                <div class="grid h-full grid-cols-1 gap-2 sm:grid-cols-2">
+                  @for (myth of myths; track myth.statement; let i = $index) {
+                    <button
+                      type="button"
+                      (click)="toggleMyth(i)"
+                      class="pres-myth"
+                      [class.pres-myth-open]="revealedMyths()[i]"
+                    >
+                      <span class="flex items-center justify-between gap-2">
+                        <span
+                          class="font-display text-[10px] font-bold tracking-wider text-slate-600"
+                          >0{{ i + 1 }}</span
+                        >
+                        @if (!revealedMyths()[i]) {
+                          <span class="text-[9px] font-semibold text-cyan-300">Revelar →</span>
+                        } @else {
+                          <span
+                            class="rounded-full px-2 py-0.5 text-[8px] font-bold tracking-[0.1em] uppercase"
+                            [class.text-emerald-200]="myth.answer === 'DATO'"
+                            [class.text-rose-200]="myth.answer === 'MITO'"
+                            [class.bg-emerald-300/10]="myth.answer === 'DATO'"
+                            [class.bg-rose-300/10]="myth.answer === 'MITO'"
+                            >{{ myth.answer }}</span
+                          >
+                        }
+                      </span>
+                      <span class="mt-2 block text-xs leading-relaxed font-medium text-slate-200">{{
+                        myth.statement
+                      }}</span>
+                      @if (revealedMyths()[i]) {
+                        <span class="mt-2 block text-[10px] leading-relaxed text-slate-400">{{
+                          myth.detail
+                        }}</span>
+                      }
+                    </button>
+                  }
+                </div>
+              }
+            }
+          </section>
+
+          <aside class="pres-rail glass">
+            <p class="text-[9px] font-bold tracking-[0.2em] text-cyan-300 uppercase">Dato clave</p>
+            <p
+              class="font-display mt-2 text-3xl leading-none font-semibold text-white sm:text-4xl xl:text-5xl"
+            >
+              {{ slide().big }}
+            </p>
+            <p class="mt-2 text-[17px] leading-relaxed text-slate-500">{{ slide().bigLabel }}</p>
+            <div class="my-4 h-px w-full bg-white/10"></div>
+            <ul class="space-y-2.5">
+              @for (fact of slide().facts; track $index) {
+                <li class="flex gap-2 text-[17px] leading-relaxed text-slate-400 sm:text-[18px]">
+                  <span class="mt-0.5 text-cyan-300">✦</span>
+                  <span>{{ fact }}</span>
+                </li>
+              }
+            </ul>
+            <div class="mt-auto pt-3">
+              <p class="text-[9px] leading-relaxed text-slate-600">
+                🖱️ Toca los controles del panel para mostrarlo en vivo.
+              </p>
+            </div>
+          </aside>
+        </div>
+      </div>
+    }
+  </main>
+
+  <!-- Controles -->
+  <footer
+    class="relative z-10 flex flex-wrap items-center justify-between gap-2 px-4 py-3 sm:px-6 lg:px-10"
+  >
+    <div class="flex flex-1 items-center gap-2 sm:gap-3">
+      <button
+        type="button"
+        (click)="prev()"
+        [disabled]="current() === 0"
+        class="pres-nav-btn"
+        aria-label="Diapositiva anterior"
+      >
+        ←
+      </button>
+      <div class="flex flex-1 items-center justify-center gap-1.5">
+        @for (item of slides; track item.id; let i = $index) {
+          <button
+            type="button"
+            (click)="goTo(i)"
+            class="pres-dot"
+            [class.is-active]="current() === i"
+            [attr.aria-label]="'Ir a la diapositiva ' + (i + 1) + ': ' + item.label"
+            [attr.aria-current]="current() === i ? 'step' : null"
+          ></button>
+        }
+      </div>
+      <button
+        type="button"
+        (click)="next()"
+        [disabled]="current() === total - 1"
+        class="pres-nav-btn"
+        aria-label="Siguiente diapositiva"
+      >
+        →
+      </button>
+    </div>
+    <p class="hidden text-[9px] tracking-[0.14em] text-slate-600 uppercase lg:block">
+      ← → mover · Espacio avanzar · F pantalla completa
+    </p>
+  </footer>
+</div>

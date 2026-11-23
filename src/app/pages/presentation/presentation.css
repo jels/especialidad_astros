@@ -1,0 +1,907 @@
+:host {
+  display: block;
+}
+
+.presentation-deck {
+  background:
+    radial-gradient(ellipse at 20% 0%, rgba(139, 92, 246, 0.08), transparent 44%),
+    radial-gradient(ellipse at 85% 80%, rgba(34, 211, 238, 0.05), transparent 40%);
+}
+
+.presentation-deck > header,
+.presentation-deck > footer {
+  position: relative;
+  flex-shrink: 0;
+  z-index: 30;
+  background: rgba(4, 5, 14, 0.72);
+  backdrop-filter: blur(16px);
+}
+
+.presentation-deck > header {
+  top: 0;
+}
+
+.presentation-deck > footer {
+  bottom: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.slide-anim {
+  animation: presSlideIn 0.42s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes presSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Portada */
+.intro-orbit {
+  position: relative;
+  width: min(100%, 58vh, 560px);
+  aspect-ratio: 1;
+  margin: auto;
+}
+
+.intro-glow {
+  position: absolute;
+  inset: 12%;
+  border-radius: 999px;
+  background: radial-gradient(
+    circle,
+    rgba(139, 92, 246, 0.35),
+    rgba(34, 211, 238, 0.08) 45%,
+    transparent 70%
+  );
+  filter: blur(25px);
+}
+
+.intro-sun {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 74px;
+  height: 74px;
+  border-radius: 999px;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle at 35% 30%, #fffbeb, #fde047 38%, #f59e0b 75%, #ea580c);
+  box-shadow:
+    0 0 36px 10px rgba(251, 191, 36, 0.35),
+    0 0 80px 20px rgba(245, 158, 11, 0.15);
+}
+
+.intro-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border: 1px dashed rgba(255, 255, 255, 0.14);
+  border-radius: 999px;
+  transform: translate(-50%, -50%);
+}
+
+.intro-ring-1 {
+  width: 42%;
+  height: 42%;
+}
+
+.intro-ring-2 {
+  width: 68%;
+  height: 68%;
+}
+
+.intro-ring-3 {
+  width: 94%;
+  height: 94%;
+  border-color: rgba(103, 232, 249, 0.12);
+}
+
+.intro-planet {
+  position: absolute;
+  border-radius: 999px;
+  box-shadow: 0 0 16px currentColor;
+}
+
+.intro-p1 {
+  top: 24%;
+  left: 13%;
+  width: 17px;
+  height: 17px;
+  background: #38bdf8;
+  color: rgba(56, 189, 248, 0.6);
+}
+
+.intro-p2 {
+  right: 12%;
+  bottom: 30%;
+  width: 12px;
+  height: 12px;
+  background: #fb923c;
+  color: rgba(251, 146, 60, 0.6);
+}
+
+.intro-p3 {
+  top: 14%;
+  right: 27%;
+  width: 9px;
+  height: 9px;
+  background: #fde68a;
+  color: rgba(253, 230, 138, 0.6);
+}
+
+.intro-label {
+  position: absolute;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(4, 5, 14, 0.65);
+  backdrop-filter: blur(8px);
+  border-radius: 999px;
+  padding: 0.3rem 0.6rem;
+  font-size: 0.52rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #94a3b8;
+}
+
+.intro-label-1 {
+  left: 2%;
+  bottom: 11%;
+}
+
+.intro-label-2 {
+  top: 8%;
+  left: 27%;
+  color: #c4b5fd;
+}
+
+/* Diapositivas */
+.pres-layout {
+  min-height: 0;
+}
+
+.pres-visual {
+  display: flex;
+  min-width: 0;
+  min-height: 290px;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 0.8rem;
+}
+
+.pres-visual.pres-visual-plain {
+  min-height: 0;
+  overflow: visible;
+  padding: 0;
+}
+
+@media (max-width: 1023px) {
+  .pres-visual.pres-visual-plain {
+    min-height: 360px;
+  }
+
+  .pres-visual.pres-visual-moon {
+    min-height: 460px;
+  }
+
+  .pres-visual.pres-visual-dance {
+    min-height: 460px;
+  }
+
+  .pres-visual.pres-visual-stars {
+    min-height: 440px;
+  }
+
+  .pres-visual.pres-visual-constellations {
+    min-height: 440px;
+  }
+}
+
+.pres-rail {
+  display: flex;
+  min-height: 200px;
+  flex-direction: column;
+  padding: 1rem;
+}
+
+@media (min-width: 1024px) {
+  .pres-layout {
+    grid-template-rows: minmax(0, 1fr);
+  }
+
+  .pres-visual,
+  .pres-rail {
+    height: 100%;
+    min-height: 0;
+  }
+}
+
+@media (min-width: 640px) {
+  .pres-visual {
+    min-height: 330px;
+    padding: 1rem;
+  }
+  .pres-rail {
+    padding: 1.25rem;
+  }
+}
+
+/* Controles generales */
+.pres-nav-btn {
+  display: grid;
+  height: 2.25rem;
+  width: 2.25rem;
+  flex-shrink: 0;
+  place-items: center;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  color: #cbd5e1;
+  transition: all 0.2s ease;
+}
+
+.pres-nav-btn:hover:not(:disabled) {
+  border-color: rgba(103, 232, 249, 0.4);
+  background: rgba(34, 211, 238, 0.1);
+  color: #fff;
+}
+
+.pres-nav-btn:disabled {
+  cursor: default;
+  opacity: 0.25;
+}
+
+.pres-dot {
+  height: 6px;
+  width: 6px;
+  flex-shrink: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.22);
+  transition: all 0.25s ease;
+}
+
+.pres-dot:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.pres-dot.is-active {
+  width: 22px;
+  background: linear-gradient(90deg, #67e8f9, #c4b5fd);
+  box-shadow: 0 0 12px rgba(139, 92, 246, 0.55);
+}
+
+.pres-option {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 999px;
+  padding: 0.38rem 0.7rem;
+  font-size: 0.62rem;
+  font-weight: 600;
+  color: #94a3b8;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.pres-option:hover {
+  border-color: rgba(103, 232, 249, 0.35);
+  color: #ecfeff;
+}
+
+.pres-option-active {
+  border-color: rgba(103, 232, 249, 0.5);
+  background: rgba(34, 211, 238, 0.12);
+  color: #cffafe;
+}
+
+/* Meteoros */
+.pres-sky {
+  min-height: 220px;
+  background:
+    radial-gradient(1px 1px at 15% 20%, rgba(255, 255, 255, 0.5), transparent),
+    radial-gradient(1px 1px at 68% 15%, rgba(255, 255, 255, 0.55), transparent),
+    radial-gradient(1px 1px at 42% 55%, rgba(196, 181, 253, 0.5), transparent),
+    radial-gradient(1px 1px at 84% 48%, rgba(103, 232, 249, 0.45), transparent),
+    linear-gradient(180deg, #050817, #130f2b);
+}
+
+.pres-sky-glow {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    120deg,
+    transparent 15%,
+    rgba(139, 92, 246, 0.16) 45%,
+    transparent 70%
+  );
+  filter: blur(20px);
+}
+
+.pres-hill {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 24%;
+  background: #02040a;
+  clip-path: polygon(
+    0 70%,
+    16% 32%,
+    32% 66%,
+    47% 24%,
+    62% 61%,
+    78% 36%,
+    100% 70%,
+    100% 100%,
+    0 100%
+  );
+}
+
+.pres-sky-star {
+  position: absolute;
+  display: block;
+  border-radius: 999px;
+  background: white;
+}
+
+.pres-meteor {
+  position: absolute;
+  z-index: 5;
+  width: 90px;
+  height: 2px;
+  transform-origin: left center;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0), #fff 70%, #67e8f9);
+  border-radius: 999px;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+  opacity: 0;
+  animation: presMeteor 0.9s linear forwards;
+}
+
+@keyframes presMeteor {
+  0% {
+    opacity: 0;
+    transform: translate(-20px, -20px) rotate(32deg) scaleX(0.2);
+  }
+  15% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(140px, 110px) rotate(32deg) scaleX(1);
+  }
+}
+
+/* Luz */
+.light-stage {
+  position: relative;
+  display: grid;
+  min-height: 160px;
+  place-items: center;
+  flex: 1;
+}
+
+.light-earth {
+  height: 82px;
+  width: 82px;
+  border-radius: 999px;
+  background: radial-gradient(circle at 34% 30%, #bae6fd, #38bdf8 45%, #1d4ed8 85%, #172554);
+  box-shadow:
+    0 0 32px rgba(56, 189, 248, 0.25),
+    inset -10px -10px 18px rgba(0, 0, 0, 0.45);
+}
+
+.light-orbit {
+  position: absolute;
+  height: 156px;
+  width: 156px;
+  border: 1px dashed rgba(103, 232, 249, 0.25);
+  border-radius: 999px;
+  animation: presSpin 1.6s linear infinite;
+}
+
+.light-dot {
+  position: absolute;
+  top: -4px;
+  left: calc(50% - 4px);
+  height: 8px;
+  width: 8px;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow:
+    0 0 12px 4px rgba(103, 232, 249, 0.7),
+    0 0 30px 10px rgba(139, 92, 246, 0.35);
+}
+
+.light-caption {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 100%;
+  transform: translateX(-50%);
+  text-align: center;
+  font-size: 0.58rem;
+  letter-spacing: 0.04em;
+  color: #64748b;
+}
+
+@keyframes presSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Sistema solar */
+.planet-photo-stage {
+  position: relative;
+  display: grid;
+  min-height: 0;
+  width: 100%;
+  flex: 1 1 0;
+  place-items: center;
+  overflow: hidden;
+}
+
+.planet-photo-glow {
+  position: absolute;
+  width: min(70%, 340px);
+  aspect-ratio: 1;
+  border-radius: 999px;
+  filter: blur(38px);
+}
+
+.planet-photo {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  max-height: 100%;
+  max-width: 100%;
+  object-fit: contain;
+  mix-blend-mode: screen;
+  filter: drop-shadow(0 0 35px rgba(255, 255, 255, 0.08));
+  animation: planetFloat 7s ease-in-out infinite;
+}
+
+@keyframes planetFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+.planet-scale-row {
+  display: flex;
+  width: 100%;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.planet-scale-item {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  font-size: 0.5rem;
+  color: #64748b;
+}
+
+.planet-scale-item span {
+  white-space: nowrap;
+}
+
+@media (min-width: 768px) {
+  .planet-scale-row {
+    flex-wrap: nowrap;
+  }
+}
+
+.planet-scale-disc {
+  position: relative;
+  border-radius: 999px;
+  overflow: visible;
+}
+
+.planet-scale-disc img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  mix-blend-mode: screen;
+}
+
+.planet-showcase {
+  position: relative;
+  display: grid;
+  min-height: 160px;
+  flex: 1;
+  place-items: center;
+}
+
+.planet-preview-xl {
+  position: relative;
+  height: 122px;
+  width: 122px;
+  border-radius: 999px;
+  box-shadow:
+    inset -16px -16px 28px rgba(0, 0, 0, 0.55),
+    0 0 36px rgba(255, 255, 255, 0.08);
+}
+
+.planet-preview-xl.is-ringed::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  height: 28px;
+  width: 190px;
+  transform: translate(-50%, -50%) rotate(-20deg);
+  border-radius: 50%;
+  border: 4px solid rgba(253, 230, 138, 0.42);
+}
+
+.planet-showcase-label {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #e2e8f0;
+}
+
+.pres-planet-chip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  white-space: nowrap;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
+  padding: 0.35rem 0.2rem;
+  font-size: 0.52rem;
+  font-weight: 600;
+  color: #64748b;
+  transition: all 0.2s ease;
+}
+
+.pres-planet-chip:hover {
+  border-color: rgba(103, 232, 249, 0.3);
+  color: #e2e8f0;
+}
+
+.pres-planet-chip-active {
+  border-color: rgba(103, 232, 249, 0.5);
+  background: rgba(34, 211, 238, 0.09);
+  color: #fff;
+}
+
+.pres-mini-stat {
+  border-radius: 0.65rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.025);
+  padding: 0.45rem 0.55rem;
+}
+
+.pres-mini-stat p {
+  font-size: 0.48rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #64748b;
+}
+
+.pres-mini-stat strong {
+  display: block;
+  margin-top: 0.18rem;
+  font-size: 0.64rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.pres-planet-modal {
+  background: rgba(8, 11, 28, 0.96);
+  box-shadow: 0 30px 80px -30px rgba(0, 0, 0, 0.9);
+}
+
+.planet-modal-photo {
+  display: grid;
+  min-height: 160px;
+  place-items: center;
+  overflow: hidden;
+  border-radius: 0.9rem;
+  background: radial-gradient(circle at 50% 45%, rgba(139, 92, 246, 0.14), rgba(2, 4, 12, 0.7));
+}
+
+.planet-modal-photo img {
+  width: 100%;
+  max-height: 220px;
+  object-fit: contain;
+  mix-blend-mode: screen;
+  filter: drop-shadow(0 0 24px rgba(255, 255, 255, 0.1));
+}
+
+/* Estrellas */
+
+@media (min-width: 1024px) {
+  .pres-layout.pres-tall .pres-visual,
+  .pres-layout.pres-tall .pres-rail {
+    min-height: 405px;
+  }
+
+  .pres-layout.pres-eclipse .pres-visual {
+    padding-top: 0.55rem;
+    padding-bottom: 0.55rem;
+  }
+}
+
+/* Constelaciones */
+.pres-constellation-case app-constellation-diagram {
+  display: block;
+  height: 100%;
+  width: 100%;
+}
+
+.pres-constellation-case ::ng-deep svg {
+  height: 100%;
+  width: 100%;
+}
+
+.pres-constellation-case ::ng-deep text {
+  font-size: 18px !important;
+}
+
+.pres-constellation-case ::ng-deep .const-line {
+  stroke-width: 2 !important;
+  stroke-opacity: 0.85 !important;
+}
+
+/* Vía Láctea */
+.pres-milky {
+  position: relative;
+  flex: 1;
+  min-height: 220px;
+  overflow: hidden;
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: linear-gradient(180deg, #020617, #07112a 65%, #0a1730);
+}
+
+.pres-milky-band {
+  position: absolute;
+  top: 36%;
+  left: -18%;
+  width: 136%;
+  height: 34%;
+  transform: rotate(-20deg);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(196, 181, 253, 0.3),
+    rgba(253, 230, 138, 0.2),
+    transparent
+  );
+  filter: blur(14px);
+}
+
+.pres-milky-stars {
+  position: absolute;
+  inset: 0;
+}
+
+.pres-milky-star {
+  position: absolute;
+  display: block;
+  border-radius: 999px;
+  background: #e2e8f0;
+}
+
+.pres-milky-city {
+  position: absolute;
+  right: -5%;
+  bottom: 0;
+  left: 35%;
+  height: 28%;
+  background: radial-gradient(
+    ellipse at 60% 100%,
+    rgba(251, 146, 60, 0.55),
+    rgba(251, 146, 60, 0.04) 58%,
+    transparent 75%
+  );
+}
+
+.pres-milky-horizon {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 25%;
+  background: #02040a;
+  clip-path: polygon(
+    0 66%,
+    18% 37%,
+    34% 64%,
+    55% 25%,
+    73% 58%,
+    88% 40%,
+    100% 63%,
+    100% 100%,
+    0 100%
+  );
+}
+
+.pres-milky-label {
+  position: absolute;
+  top: 20%;
+  right: 13%;
+  transform: rotate(-20deg);
+  font-size: 0.55rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  color: rgba(228, 231, 255, 0.7);
+}
+
+/* Venus */
+.pres-venus {
+  position: relative;
+  flex: 1;
+  min-height: 230px;
+  overflow: hidden;
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: linear-gradient(180deg, #020617, #06102a);
+}
+
+.pres-venus-day,
+.pres-venus-twilight,
+.pres-venus-stars,
+.pres-venus-horizon {
+  position: absolute;
+  inset: 0;
+}
+
+.pres-venus-day {
+  background: linear-gradient(180deg, #0369a1, #38bdf8 55%, #fde68a);
+  transition: opacity 0.3s ease;
+}
+
+.pres-venus-twilight {
+  background: linear-gradient(
+    180deg,
+    rgba(76, 29, 149, 0.1),
+    rgba(249, 115, 22, 0.5) 72%,
+    rgba(253, 230, 138, 0.75)
+  );
+  transition: opacity 0.3s ease;
+}
+
+.pres-venus-stars {
+  background:
+    radial-gradient(1px 1px at 15% 20%, #fff, transparent),
+    radial-gradient(1px 1px at 68% 15%, #fff, transparent),
+    radial-gradient(1px 1px at 42% 45%, #fff, transparent),
+    radial-gradient(1px 1px at 84% 30%, #c4b5fd, transparent);
+  background-size:
+    150px 130px,
+    190px 160px,
+    230px 200px,
+    280px 240px;
+  transition: opacity 0.3s ease;
+}
+
+.pres-venus-sun {
+  position: absolute;
+  left: 50%;
+  height: 44px;
+  width: 44px;
+  transform: translateX(-50%);
+  border-radius: 999px;
+  background: radial-gradient(circle at 40% 35%, #fffbeb, #fde047 55%, #f59e0b);
+  box-shadow: 0 0 40px 15px rgba(251, 191, 36, 0.3);
+  transition: bottom 0.25s ease;
+}
+
+.pres-venus-horizon {
+  top: auto;
+  height: 34%;
+  background: #02040a;
+  clip-path: polygon(
+    0 60%,
+    16% 25%,
+    33% 58%,
+    52% 20%,
+    72% 54%,
+    88% 32%,
+    100% 58%,
+    100% 100%,
+    0 100%
+  );
+}
+
+.pres-venus-dot {
+  position: absolute;
+  top: 35%;
+  height: 7px;
+  width: 7px;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow:
+    0 0 10px 3px rgba(255, 255, 255, 0.9),
+    0 0 24px 8px rgba(253, 230, 138, 0.4);
+  transition:
+    opacity 0.3s ease,
+    left 0.3s ease;
+}
+
+.pres-venus-label {
+  position: absolute;
+  top: 30%;
+  font-size: 0.52rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #fef3c7;
+}
+
+.pres-venus-clock {
+  position: absolute;
+  top: 0.7rem;
+  left: 0.8rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 0.25rem 0.55rem;
+  font-size: 0.52rem;
+  color: #cbd5e1;
+}
+
+/* Mito o dato */
+.pres-myth {
+  display: flex;
+  min-height: 108px;
+  flex-direction: column;
+  border-radius: 0.9rem;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  background: rgba(255, 255, 255, 0.025);
+  padding: 0.7rem;
+  text-align: left;
+  transition: all 0.25s ease;
+}
+
+.pres-myth:hover {
+  border-color: rgba(103, 232, 249, 0.3);
+  background: rgba(34, 211, 238, 0.04);
+}
+
+.pres-myth-open {
+  border-color: rgba(103, 232, 249, 0.25);
+  background: rgba(34, 211, 238, 0.06);
+}
+
+/* Ajustes de pantalla baja */
+@media (max-height: 760px) and (min-width: 1024px) {
+  .presentation-deck > header {
+    padding-top: 0.45rem;
+    padding-bottom: 0.45rem;
+  }
+  .presentation-deck > footer {
+    padding-top: 0.45rem;
+    padding-bottom: 0.45rem;
+  }
+  .pres-visual {
+    min-height: 265px;
+  }
+  .pres-rail {
+    padding: 0.9rem;
+  }
+}

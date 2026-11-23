@@ -5,6 +5,7 @@ import {
   OnDestroy,
   inject,
   computed,
+  input,
   signal,
 } from '@angular/core';
 import { RevealDirective } from '../directives/reveal';
@@ -16,8 +17,11 @@ type Alignment = 'solar' | 'lunar' | 'none';
   imports: [RevealDirective],
   templateUrl: './cosmic-dance.html',
   styleUrl: './cosmic-dance.css',
+  host: { '[class.dance-presentation]': 'presentation()' },
 })
 export class CosmicDance implements AfterViewInit, OnDestroy {
+  readonly presentation = input(false);
+
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
   private observer?: IntersectionObserver;
 
@@ -34,10 +38,25 @@ export class CosmicDance implements AfterViewInit, OnDestroy {
   protected readonly speedOptions = [1, 2, 4];
 
   protected readonly motions = [
-    { icon: '🔄', name: 'Rotación de la Tierra', value: '23 h 56 min', note: 'un giro sobre su eje' },
+    {
+      icon: '🔄',
+      name: 'Rotación de la Tierra',
+      value: '23 h 56 min',
+      note: 'un giro sobre su eje',
+    },
     { icon: '🌍', name: 'Traslación terrestre', value: '365,25 días', note: 'una vuelta al Sol' },
-    { icon: '🌕', name: 'Revolución lunar', value: '27,3 días', note: 'una vuelta alrededor de la Tierra' },
-    { icon: '📐', name: 'Inclinaciones', value: '23,5° / 5,1°', note: 'eje terrestre / órbita lunar' },
+    {
+      icon: '🌕',
+      name: 'Revolución lunar',
+      value: '27,3 días',
+      note: 'una vuelta alrededor de la Tierra',
+    },
+    {
+      icon: '📐',
+      name: 'Inclinaciones',
+      value: '23,5° / 5,1°',
+      note: 'eje terrestre / órbita lunar',
+    },
   ];
 
   private raf = 0;
@@ -85,6 +104,11 @@ export class CosmicDance implements AfterViewInit, OnDestroy {
     this.reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (this.reduced) {
       this.playing.set(false);
+      return;
+    }
+
+    if (this.presentation()) {
+      this.start();
       return;
     }
 

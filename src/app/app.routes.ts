@@ -22,6 +22,12 @@ export const routes: Routes = [
     pathMatch: 'full',
   },
   {
+    path: 'presentacion',
+    title: 'Presentación interactiva · Cosmos 101',
+    loadComponent: () =>
+      import('./pages/presentation/presentation').then((m) => m.Presentation),
+  },
+  {
     path: '**',
     redirectTo: '',
   },

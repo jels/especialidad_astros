@@ -11,7 +11,13 @@
     radial-gradient(1px 1px at 86% 56%, rgba(196, 181, 253, 0.65), transparent),
     radial-gradient(1px 1px at 28% 48%, rgba(103, 232, 249, 0.55), transparent),
     linear-gradient(180deg, rgba(15, 23, 42, 0.4), rgba(2, 6, 23, 0.92));
-  background-size: 280px 240px, 360px 320px, 420px 380px, 480px 440px, 320px 300px, 100% 100%;
+  background-size:
+    280px 240px,
+    360px 320px,
+    420px 380px,
+    480px 440px,
+    320px 300px,
+    100% 100%;
 }
 
 .preset {
@@ -34,4 +40,89 @@
   border-color: rgba(103, 232, 249, 0.5);
   background: rgba(34, 211, 238, 0.14);
   color: #cffafe;
+}
+
+/* Modo presentación: solo el simulador, a pantalla completa */
+:host(.moon-presentation) {
+  display: block;
+  height: 100%;
+}
+
+:host(.moon-presentation) .section-shell {
+  height: 100%;
+  padding: 0;
+}
+
+:host(.moon-presentation) .wrap {
+  display: flex;
+  height: 100%;
+  max-width: none;
+  padding: 0;
+}
+
+:host(.moon-presentation) .moon-stage {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  margin-top: 0;
+  gap: 0;
+}
+
+:host(.moon-presentation) .moon-scene-card {
+  display: flex;
+  height: 100%;
+  min-height: 0;
+  flex: 1;
+  flex-direction: column;
+}
+
+:host(.moon-presentation) .moon-scene {
+  position: relative;
+  min-height: 0;
+  flex: 1;
+}
+
+:host(.moon-presentation) .moon-scene-svg {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  width: 100%;
+}
+
+:host(.moon-presentation) .moon-scene-controls {
+  padding: 0.65rem 0.9rem 0.8rem;
+}
+
+@media (max-width: 639px) {
+  :host(.moon-presentation) .moon-scene-card {
+    border-radius: 1rem;
+  }
+}
+
+@media (max-width: 1023px) {
+  :host(.moon-presentation) .moon-header-copy {
+    display: none;
+  }
+
+  :host(.moon-presentation) .moon-presets {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  :host(.moon-presentation) .moon-presets::-webkit-scrollbar {
+    display: none;
+  }
+
+  :host(.moon-presentation) .moon-presets .preset {
+    flex: 0 0 auto;
+  }
+
+  :host(.moon-presentation) .moon-copy {
+    display: none;
+  }
+
+  :host(.moon-presentation) .moon-scene-controls {
+    padding-top: 0.55rem;
+  }
 }

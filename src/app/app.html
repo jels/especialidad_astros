@@ -1,6 +1,7 @@
 <div class="relative z-10 flex min-h-screen flex-col">
   <app-starfield />
 
+  @if (!presentationMode()) {
   <!-- Barra de progreso de lectura -->
   <div class="fixed inset-x-0 top-0 z-[70] h-[3px] bg-white/5">
     <div
@@ -64,6 +65,18 @@
           </svg>
           <span class="hidden sm:inline">Índice</span>
         </button>
+        <a
+          routerLink="/presentacion"
+          class="group flex items-center gap-2 rounded-full border border-white/12 bg-white/[0.04] px-3 py-2.5 text-xs font-semibold text-slate-300 transition-all duration-300 hover:border-violet-300/40 hover:bg-violet-300/10 hover:text-white xl:px-4"
+          aria-label="Abrir modo presentación"
+        >
+          <svg class="h-4 w-4 text-violet-300" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <rect x="2.5" y="3.5" width="15" height="10" rx="1.8" stroke="currentColor" stroke-width="1.4" />
+            <path d="M10 13.5v3M7 16.8h6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" />
+            <path d="M8.2 6.6l4.2 2.1-4.2 2.1z" fill="currentColor" />
+          </svg>
+          <span class="hidden lg:inline">Presentación</span>
+        </a>
         <a routerLink="/misiones/test-final" class="btn-primary hidden !px-5 !py-2.5 text-xs sm:inline-flex">
           Test final
           <span aria-hidden="true">→</span>
@@ -124,6 +137,18 @@
             </span>
             <span class="text-slate-600 transition-all group-hover:translate-x-1 group-hover:text-cyan-300">→</span>
           </a>
+          <a
+            routerLink="/presentacion"
+            (click)="closeMenu()"
+            class="glass glass-hover group flex items-center gap-4 border-violet-300/25 bg-violet-400/[0.06] p-4 sm:col-span-2 sm:p-5"
+          >
+            <span class="grid h-11 w-11 shrink-0 place-items-center rounded-2xl border border-violet-300/20 bg-violet-300/10 text-lg text-violet-200">▶</span>
+            <span class="min-w-0 flex-1">
+              <span class="block text-sm font-semibold text-white">Modo presentación</span>
+              <span class="mt-0.5 block text-xs text-slate-500">Slides interactivas para proyectar en clase</span>
+            </span>
+            <span class="text-violet-300 transition-all group-hover:translate-x-1">→</span>
+          </a>
           @for (item of menuMissions; track item.slug) {
             <a
               [routerLink]="['/misiones', item.slug]"
@@ -150,11 +175,13 @@
       </div>
     </div>
   }
+  }
 
   <main class="relative flex-1">
     <router-outlet />
   </main>
 
+  @if (!presentationMode()) {
   <footer class="border-t border-white/10 bg-black/20">
     <div class="wrap py-8 sm:py-12">
       <div class="grid gap-8 md:grid-cols-[1.2fr_1fr_1fr] md:gap-10">
@@ -202,4 +229,5 @@
       </div>
     </div>
   </footer>
+  }
 </div>

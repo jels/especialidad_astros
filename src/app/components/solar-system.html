@@ -229,11 +229,11 @@
                 {{ selectedPlanet().type }}
               </span>
             </div>
-            <div
-              class="planet-preview absolute right-7 bottom-4 h-16 w-16 rounded-full"
-              [style.background]="'radial-gradient(circle at 33% 28%, ' + selectedPlanet().palette[0] + ', ' + selectedPlanet().palette[1] + ' 55%, ' + selectedPlanet().palette[2] + ' 100%)'"
-              [class.ringed]="selectedPlanet().ring"
-            ></div>
+            <img
+              class="planet-photo-thumb absolute right-4 bottom-2 h-24 w-24 object-contain"
+              [src]="'planets/' + selectedPlanet().id + '.jpg'"
+              [alt]="'Fotografía real de ' + selectedPlanet().name"
+            />
           </div>
 
           <div class="border-t border-white/10 p-4">

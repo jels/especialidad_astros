@@ -12,9 +12,73 @@
     radial-gradient(1px 1px at 55% 82%, rgba(255, 255, 255, 0.5), transparent),
     radial-gradient(1px 1px at 21% 52%, rgba(103, 232, 249, 0.6), transparent),
     linear-gradient(180deg, rgba(15, 23, 42, 0.45), rgba(2, 6, 23, 0.9));
-  background-size: 260px 220px, 340px 300px, 400px 380px, 460px 420px, 520px 460px, 300px 280px, 100% 100%;
+  background-size:
+    260px 220px,
+    340px 300px,
+    400px 380px,
+    460px 420px,
+    520px 460px,
+    300px 280px,
+    100% 100%;
 }
 
 .segmented button {
   white-space: nowrap;
+}
+
+/* Modo presentación: solo el simulador, a pantalla completa */
+:host(.eclipse-presentation) {
+  display: block;
+  height: 100%;
+}
+
+:host(.eclipse-presentation) .section-shell {
+  height: 100%;
+  padding: 0;
+}
+
+:host(.eclipse-presentation) .wrap {
+  display: flex;
+  height: 100%;
+  max-width: none;
+  padding: 0;
+}
+
+:host(.eclipse-presentation) .eclipse-stage {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  margin-top: 0;
+  gap: 0;
+}
+
+:host(.eclipse-presentation) .eclipse-scene-card {
+  display: flex;
+  height: 100%;
+  min-height: 0;
+  flex: 1;
+  flex-direction: column;
+}
+
+:host(.eclipse-presentation) .eclipse-scene-sky {
+  position: relative;
+  min-height: 0;
+  flex: 1;
+}
+
+:host(.eclipse-presentation) .eclipse-scene-sky svg {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  width: 100%;
+}
+
+:host(.eclipse-presentation) .eclipse-scene-controls {
+  padding: 0.65rem 0.9rem 0.8rem;
+}
+
+@media (max-width: 639px) {
+  :host(.eclipse-presentation) .eclipse-scene-card {
+    border-radius: 1rem;
+  }
 }

@@ -6,6 +6,8 @@ Responde de forma visual los diez puntos del trabajo práctico de Astronomía co
 
 La portada funciona como centro de misiones. Cada punto tiene su propia URL y su propia página, con un botón **Empezar misión** desde el inicio y navegación anterior/siguiente al final de cada recorrido.
 
+También incluye un **modo presentación** pensado para proyectar en clase: 14 diapositivas con controles interactivos, tres datos clave por tema, navegación por teclado y pantalla completa.
+
 ## Cómo ejecutar
 
 ```bash
@@ -22,6 +24,26 @@ npm run build
 ```
 
 Los archivos quedan en `dist/exploradores-del-cielo/browser`.
+
+## Modo presentación
+
+Disponible en `/presentacion` desde el botón **Presentación** del header o desde el menú Índice.
+
+- 14 diapositivas: portada, 11 temas, ronda “Mito o dato” y cierre.
+- Cada diapositiva ocupa el ancho y alto disponibles: el panel visual se estira para llenar la pantalla.
+- Cada diapositiva tiene un interactivo y un panel con tres datos puntuales.
+- Las visuales dinámicas arrancan automáticamente al entrar: los simuladores de **eclipses**, **mareas** y **danza cósmica** de las misiones (con sus órbitas, sombras y controles), lluvia de meteoros, órbita de la luz, sistema solar, amanecer/atardecer de Venus y movimiento del cenit y el nadir. Todas tienen botón de pausa.
+- El sistema solar conserva el **mapa orbital en movimiento** de la misión: toca un planeta y se abre su ficha con foto real; al cerrar, el sistema vuelve a moverse.
+- **Cinco estrellas fijas** usa el mapa estelar interactivo de la misión.
+- **Constelaciones** recorre automáticamente las seis constelaciones, en orden; se puede pausar y elegir una manualmente.
+- La Vía Láctea incluye las dos vistas de la misión: **cielo a simple vista** con contaminación lumínica y **galaxia vista desde arriba**.
+- El sistema solar usa fotografías reales de NASA/JPL y un botón **Escala con la Tierra** para comparar tamaños relativos.
+- Constelaciones muestra los esquemas grandes, con etiquetas y estrellas principales.
+- Navegación con `←`, `→`, `Espacio`, `PageUp`, `PageDown`, `Home` y `End`.
+- `F` activa o desactiva pantalla completa.
+- En móvil se puede deslizar horizontalmente para cambiar de diapositiva.
+- El header y el footer del sitio se ocultan durante la presentación para dejar todo el espacio al contenido.
+- Los botones de la presentación permiten salir o volver al inicio.
 
 ## Rutas principales
 
@@ -41,6 +63,7 @@ Los archivos quedan en `dist/exploradores-del-cielo/browser`.
 | `/misiones/cenit-y-nadir` | Misión 11 · Cenit y nadir |
 | `/misiones/test-final` | Test final de 13 preguntas |
 | `/test-final` | Redirección al test final |
+| `/presentacion` | Presentación interactiva para proyectar |
 
 ## Contenido y recorrido
 
@@ -62,13 +85,15 @@ Los archivos quedan en `dist/exploradores-del-cielo/browser`.
 ## Detalles técnicos
 
 - **Angular standalone** con signals, control flow (`@if`, `@for`) y **Angular Router**.
-- **Carga diferida** de la portada y de las páginas de misión.
+- **Carga diferida** de la portada, de las páginas de misión y de la presentación.
 - **Tailwind CSS 4** mediante `@tailwindcss/postcss`.
 - **SVG a mano** para todos los diagramas astronómicos y constelaciones.
 - **Canvas 2D** para el cielo estrellado global y la lluvia de meteoros.
+- **Fotografías planetarias locales** de NASA/JPL (vía Wikimedia Commons) para la presentación y la ficha del sistema solar.
 - **Router con scroll al inicio** y restauración de posición; títulos de página dinámicos.
+- **Modo presentación** con navegación por teclado, swipe táctil, autoplay con pausa, pantalla completa y ocultamiento del shell del sitio.
 - **IntersectionObserver** para revelar secciones y pausar animaciones fuera de pantalla.
-- **Diseño responsive** probado en 320, 390 y 1440 px, sin scroll horizontal.
+- **Diseño responsive** probado en 320, 390, 700, 1024, 1366 y 1920 px, sin scroll horizontal.
 - **Accesibilidad**: controles nativos, etiquetas ARIA, foco visible, textos alternativos y respeto por `prefers-reduced-motion`.
 - Tipografías: Unbounded y Space Grotesk (Google Fonts).
 
@@ -80,7 +105,8 @@ src/app/
 ├── app.routes.ts              # portada y páginas de misión
 ├── pages/
 │   ├── home/                  # portada con hero, pasos y las 11 tarjetas de misión
-│   └── mission-page/          # layout de misión y navegación anterior/siguiente
+│   ├── mission-page/          # layout de misión y navegación anterior/siguiente
+│   └── presentation/          # modo presentación: 14 diapositivas interactivas
 ├── components/
 │   ├── eclipse-lab           # misión 01
 │   ├── meteor-shower         # misión 02
@@ -108,4 +134,5 @@ src/app/
 - Las distancias y tamaños de los cuerpos no están a escala; cada simulador lo aclara.
 - Las constelaciones son esquemas orientativos: el cielo cambia según fecha, hora y latitud.
 - Los datos astronómicos son aproximaciones educativas actualizadas a 2026.
+- Las fotografías de planetas provienen de NASA/JPL y están disponibles en Wikimedia Commons. Son material de dominio público o licencias compatibles; los créditos corresponden a las misiones originales.
 - Las gafas para eclipses solares deben estar certificadas ISO 12312-2. Nunca mires al Sol directamente.

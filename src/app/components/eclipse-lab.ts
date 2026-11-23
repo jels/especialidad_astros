@@ -1,4 +1,4 @@
-import { Component, OnDestroy, computed, signal } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, computed, input, signal } from '@angular/core';
 import { RevealDirective } from '../directives/reveal';
 
 type Scenario = 'solar' | 'lunar';
@@ -8,8 +8,11 @@ type Scenario = 'solar' | 'lunar';
   imports: [RevealDirective],
   templateUrl: './eclipse-lab.html',
   styleUrl: './eclipse-lab.css',
+  host: { '[class.eclipse-presentation]': 'presentation()' },
 })
-export class EclipseLab implements OnDestroy {
+export class EclipseLab implements AfterViewInit, OnDestroy {
+  readonly presentation = input(false);
+
   protected readonly scenario = signal<Scenario>('solar');
   protected readonly position = signal(50);
   protected readonly playing = signal(false);
@@ -34,18 +37,14 @@ export class EclipseLab implements OnDestroy {
     return 'none';
   });
 
-  protected readonly matchesScenario = computed(
-    () => this.state() === this.scenario(),
-  );
+  protected readonly matchesScenario = computed(() => this.state() === this.scenario());
 
   protected readonly solarCone = computed(() => {
     const m = this.moon();
     return `${m.x},${m.y - 15} ${m.x},${m.y + 15} 662,312 662,268`;
   });
 
-  protected readonly moonTransform = computed(
-    () => `translate(${this.moon().x} ${this.moon().y})`,
-  );
+  protected readonly moonTransform = computed(() => `translate(${this.moon().x} ${this.moon().y})`);
 
   protected readonly angleLabel = computed(() => Math.round(this.position() * 3.6));
 
@@ -97,6 +96,11 @@ export class EclipseLab implements OnDestroy {
       this.stopOrbit();
       return;
     }
+    this.startOrbit();
+  }
+
+  private startOrbit(): void {
+    if (this.playing()) return;
     this.playing.set(true);
     this.last = performance.now();
     const tick = (time: number) => {
@@ -112,6 +116,12 @@ export class EclipseLab implements OnDestroy {
   private stopOrbit(): void {
     this.playing.set(false);
     cancelAnimationFrame(this.raf);
+  }
+
+  ngAfterViewInit(): void {
+    if (this.presentation() && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      this.startOrbit();
+    }
   }
 
   ngOnDestroy(): void {

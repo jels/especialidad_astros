@@ -1,4 +1,4 @@
-import { Component, OnDestroy, computed, signal } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, computed, input, signal } from '@angular/core';
 import { RevealDirective } from '../directives/reveal';
 
 @Component({
@@ -6,8 +6,11 @@ import { RevealDirective } from '../directives/reveal';
   imports: [RevealDirective],
   templateUrl: './moon-tides.html',
   styleUrl: './moon-tides.css',
+  host: { '[class.moon-presentation]': 'presentation()' },
 })
-export class MoonTides implements OnDestroy {
+export class MoonTides implements AfterViewInit, OnDestroy {
+  readonly presentation = input(false);
+
   protected readonly phase = signal(0);
   protected readonly playing = signal(false);
   protected readonly scaleOpen = signal(false);
@@ -16,7 +19,9 @@ export class MoonTides implements OnDestroy {
   private raf = 0;
   private last = 0;
 
-  protected readonly tideFactor = computed(() => Math.abs(Math.cos((this.phase() * Math.PI) / 180)));
+  protected readonly tideFactor = computed(() =>
+    Math.abs(Math.cos((this.phase() * Math.PI) / 180)),
+  );
 
   protected readonly moonAngle = computed(() => this.phase() + 180);
 
@@ -80,6 +85,11 @@ export class MoonTides implements OnDestroy {
       this.stop();
       return;
     }
+    this.start();
+  }
+
+  private start(): void {
+    if (this.playing()) return;
     this.playing.set(true);
     this.last = performance.now();
     const tick = (time: number) => {
@@ -95,6 +105,12 @@ export class MoonTides implements OnDestroy {
   private stop(): void {
     this.playing.set(false);
     cancelAnimationFrame(this.raf);
+  }
+
+  ngAfterViewInit(): void {
+    if (this.presentation() && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      this.start();
+    }
   }
 
   ngOnDestroy(): void {

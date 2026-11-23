@@ -12,7 +12,14 @@
     radial-gradient(1px 1px at 64% 88%, rgba(103, 232, 249, 0.5), transparent),
     radial-gradient(1.2px 1.2px at 24% 46%, rgba(255, 255, 255, 0.4), transparent),
     linear-gradient(180deg, rgba(10, 14, 35, 0.55), rgba(2, 5, 16, 0.96));
-  background-size: 300px 260px, 380px 340px, 440px 400px, 500px 460px, 340px 320px, 260px 240px, 100% 100%;
+  background-size:
+    300px 260px,
+    380px 340px,
+    440px 400px,
+    500px 460px,
+    340px 320px,
+    260px 240px,
+    100% 100%;
 }
 
 .comparison-card {
@@ -37,4 +44,77 @@
 
 .comparison-star {
   background: linear-gradient(140deg, rgba(251, 191, 36, 0.09), rgba(255, 255, 255, 0.02) 60%);
+}
+
+/* Modo presentación: solo el mapa estelar, a pantalla completa */
+:host(.stars-presentation) {
+  display: block;
+  height: 100%;
+}
+
+:host(.stars-presentation) .section-shell {
+  height: 100%;
+  padding: 0;
+}
+
+:host(.stars-presentation) .wrap {
+  display: flex;
+  height: 100%;
+  max-width: none;
+  padding: 0;
+}
+
+:host(.stars-presentation) .stars-stage {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  min-height: 0;
+  margin-top: 0;
+  gap: 0;
+}
+
+:host(.stars-presentation) .stars-map-card {
+  display: flex;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  flex: 1;
+  flex-direction: column;
+}
+
+:host(.stars-presentation) .stars-scene {
+  position: relative;
+  min-height: 0;
+  flex: 1;
+}
+
+:host(.stars-presentation) .stars-scene-svg {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  width: 100%;
+}
+
+:host(.stars-presentation) .stars-map-card > div:first-child {
+  padding: 0.7rem 0.9rem;
+}
+
+:host(.stars-presentation) .stars-map-footer {
+  padding: 0.55rem 0.9rem;
+}
+
+:host(.stars-presentation) .stars-map-note {
+  display: none;
+}
+
+@media (max-width: 639px) {
+  :host(.stars-presentation) .stars-map-card {
+    border-radius: 1rem;
+  }
+}
+
+@media (max-width: 1023px) {
+  :host(.stars-presentation) .stars-header-sub {
+    display: none;
+  }
 }

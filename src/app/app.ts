@@ -1,5 +1,13 @@
-import { AfterViewInit, Component, HostListener, signal } from '@angular/core';
-import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import {
+  AfterViewInit,
+  Component,
+  HostListener,
+  inject,
+  signal,
+} from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { filter } from 'rxjs';
 import { Starfield } from './components/starfield';
 import { ALL_MISSIONS } from './data/missions';
 
@@ -10,9 +18,12 @@ import { ALL_MISSIONS } from './data/missions';
   styleUrl: './app.css',
 })
 export class App implements AfterViewInit {
+  private readonly router = inject(Router);
+
   protected readonly menuOpen = signal(false);
   protected readonly progress = signal(0);
   protected readonly scrolled = signal(false);
+  protected readonly presentationMode = signal(this.router.url.startsWith('/presentacion'));
 
   protected readonly quickNav = [
     { slug: 'eclipses', label: 'Eclipses' },
@@ -27,6 +38,18 @@ export class App implements AfterViewInit {
   protected readonly footerSecondary = ALL_MISSIONS.slice(6);
 
   private ticking = false;
+
+  constructor() {
+    this.router.events
+      .pipe(
+        filter((event) => event instanceof NavigationEnd),
+        takeUntilDestroyed(),
+      )
+      .subscribe(() => {
+        this.presentationMode.set(this.router.url.startsWith('/presentacion'));
+        if (this.menuOpen()) this.closeMenu();
+      });
+  }
 
   ngAfterViewInit(): void {
     this.updateScrollState();

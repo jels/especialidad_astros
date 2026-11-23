@@ -1,4 +1,4 @@
-import { Component, computed, signal } from '@angular/core';
+import { Component, computed, input, signal } from '@angular/core';
 import { RevealDirective } from '../directives/reveal';
 
 interface FixedStar {
@@ -20,8 +20,11 @@ interface FixedStar {
   imports: [RevealDirective],
   templateUrl: './fixed-stars.html',
   styleUrl: './fixed-stars.css',
+  host: { '[class.stars-presentation]': 'presentation()' },
 })
 export class FixedStars {
+  readonly presentation = input(false);
+
   protected readonly selectedId = signal('sirio');
   protected readonly showNames = signal(true);
 
@@ -36,7 +39,8 @@ export class FixedStars {
       distance: '8,6 años luz',
       color: '#e0f2fe',
       glow: 'rgba(147,197,253,.9)',
-      howTo: 'Sigue las tres estrellas del cinturón de Orión hacia abajo y a la izquierda. En el hemisferio sur brilla alto en las noches de verano.',
+      howTo:
+        'Sigue las tres estrellas del cinturón de Orión hacia abajo y a la izquierda. En el hemisferio sur brilla alto en las noches de verano.',
       fact: 'Es la estrella más brillante del cielo nocturno. No es la más luminosa de todas, sino una de las más cercanas y jóvenes.',
     },
     {
@@ -49,7 +53,8 @@ export class FixedStars {
       distance: '310 años luz',
       color: '#fef9c3',
       glow: 'rgba(253,230,138,.8)',
-      howTo: 'En el cielo austral aparece bastante baja, al sur. Si ves a Sirio, Canopo suele estar más abajo y a la derecha.',
+      howTo:
+        'En el cielo austral aparece bastante baja, al sur. Si ves a Sirio, Canopo suele estar más abajo y a la derecha.',
       fact: 'Es la segunda estrella más brillante vista desde la Tierra y fue usada durante siglos como referencia para la navegación.',
     },
     {
@@ -62,7 +67,8 @@ export class FixedStars {
       distance: '4,37 años luz',
       color: '#fef3c7',
       glow: 'rgba(254,243,199,.85)',
-      howTo: 'Está muy cerca de la Cruz del Sur. A simple vista parece una sola estrella brillante, apenas a la izquierda de la cruz.',
+      howTo:
+        'Está muy cerca de la Cruz del Sur. A simple vista parece una sola estrella brillante, apenas a la izquierda de la cruz.',
       fact: 'Es el sistema estelar más cercano al Sol. En realidad son tres estrellas: Alfa Centauri A, B y Próxima Centauri.',
     },
     {
@@ -75,7 +81,8 @@ export class FixedStars {
       distance: '139 años luz',
       color: '#dbeafe',
       glow: 'rgba(191,219,254,.8)',
-      howTo: 'Cierra el largo “río” de Eridano. En el hemisferio sur es fácil de ver en las noches de primavera, alta hacia el sur.',
+      howTo:
+        'Cierra el largo “río” de Eridano. En el hemisferio sur es fácil de ver en las noches de primavera, alta hacia el sur.',
       fact: 'Gira tan rápido que su ecuador se “abomba”: no es una esfera perfecta, sino una de las estrellas más achatadas conocidas.',
     },
     {
@@ -88,7 +95,8 @@ export class FixedStars {
       distance: '321 años luz',
       color: '#e0f2fe',
       glow: 'rgba(165,243,252,.8)',
-      howTo: 'Es la estrella que está en la punta inferior de la Cruz del Sur. La cruz sirve como brújula: su eje largo apunta hacia el polo sur celeste.',
+      howTo:
+        'Es la estrella que está en la punta inferior de la Cruz del Sur. La cruz sirve como brújula: su eje largo apunta hacia el polo sur celeste.',
       fact: 'Acrux también es un sistema múltiple: lo que vemos como una estrella son al menos dos estrellas muy calientes que orbitan juntas.',
     },
   ];
